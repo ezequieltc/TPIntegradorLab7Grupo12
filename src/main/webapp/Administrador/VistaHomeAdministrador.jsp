@@ -5,10 +5,9 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
     <title>BancArg - Home Administrador</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
+  	<link rel="stylesheet" type="text/css" href="../css/layout.css" />
+  	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" 
+  	rel="stylesheet">
     <style>
       body {
         background-color: #e0f0ff;
@@ -63,7 +62,7 @@
       <h2 class="text-center">BancArg</h2>
       <a href="#">Alta Usuarios</a>
       <a href="#">Alta Cuentas</a>
-      <a href="#">Autorización Préstamos</a>
+      <a href="#">Autorizacion Prestamos</a>
       <a href="#">Informes/Reportes</a>
     </div>
 
