@@ -61,7 +61,7 @@
 			<div id="registrationForm" class="w-100">
 				<div class="step">
 					<h4>Información de la Cuenta</h4>
-					<form>
+					<form action="ServletCuentas" method="POST">
 						<div class="row">
 							<div class="col-md-6">
 								<div class="form-group">
@@ -73,7 +73,7 @@
 									<label for="tipoCuenta">Tipo de Cuenta</label> <select
 										id="tipoCuenta" class="form-control">
 										<option value="cajaAhorro">Caja de Ahorro</option>
-										<option value="cuentaCorriente">CuentaCorriente</option>
+										<option value="cuentaCorriente">Cuenta Corriente</option>
 									</select>
 								</div>
 								<div class="form-group">
@@ -99,13 +99,16 @@
 							</div>
 						</div>
 						<div class="step-actions">
-							<button type="button" class="btn btn-success" id="crearCuenta">Crear Cuenta</button>
+							<button type="submit" class="btn btn-success" id="crearCuenta">Crear Cuenta</button>
 						</div>
 					</form>
-				</div>
+				</div> 
+			</div>
+		</div> 
+	</div> 
 
-				<footer class="footer">
-					<p>&copy; 2024 BancArg. Todos los derechos reservados.</p>
-				</footer>
+	<footer class="footer">
+		<p>&copy; 2024 BancArg. Todos los derechos reservados.</p>
+	</footer>
 </body>
 </html>
