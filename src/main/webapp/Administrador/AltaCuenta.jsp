@@ -61,7 +61,7 @@
 			<div id="registrationForm" class="w-100">
 				<div class="step">
 					<h4>Información de la Cuenta</h4>
-					<form action="ServletCuentas" method="POST">
+					<form action="${pageContext.request.contextPath}/ServletCuentas" method="POST">
 						<div class="row">
 							<div class="col-md-6">
 								<div class="form-group">
