@@ -110,7 +110,7 @@ public class Main {
         personas = personaDao.readAll();
         for (Persona persona : personas) {
             System.out.println("ID: " + persona.getId() +
-                    ", Usuario: " + persona.getUsuario().getUsuario() +
+                    ", Persona: " + persona.getUsuario().getUsuario() +
                     ", Tipo de Sexo: " + persona.getTipoSexo().getDescripcion() +
                     ", DNI: " + persona.getDni() +
                     ", CUIL: " + persona.getCuil() +
