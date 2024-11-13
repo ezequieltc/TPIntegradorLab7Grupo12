@@ -7,6 +7,8 @@ import Dominio.Persona;
 public interface IPersonaDao {
 	public boolean insert(Persona persona);
 	public boolean delete(Persona persona);
+	public boolean update(Persona persona);
+	public Persona getPersona(int id);
 	public ArrayList<Persona> readAll();
 	public int calcularSiguienteId();
 }

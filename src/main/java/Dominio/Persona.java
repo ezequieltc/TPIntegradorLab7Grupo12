@@ -7,7 +7,7 @@ public class Persona {
     private int id;
     private Usuario usuario;
     private TipoSexo tipoSexo;
-    private int dni;
+    private String dni;
     private String cuil;
     private String nombre;
     private String apellido;
@@ -22,7 +22,7 @@ public class Persona {
 
     public Persona() {}
 
-    public Persona(int id, Usuario usuario, TipoSexo tipoSexo, int dni, String cuil, String nombre, String apellido, 
+    public Persona(int id, Usuario usuario, TipoSexo tipoSexo, String dni, String cuil, String nombre, String apellido, 
                    String nacionalidad, Date fechaNacimiento, String direccion, String localidad, String provincia, 
                    String email, String telefono, boolean estado) {
         this.id = id;
@@ -66,11 +66,11 @@ public class Persona {
         this.tipoSexo = tipoSexo;
     }
 
-    public int getDni() {
+    public String getDni() {
         return dni;
     }
 
-    public void setDni(int dni) {
+    public void setDni(String dni) {
         this.dni = dni;
     }
 

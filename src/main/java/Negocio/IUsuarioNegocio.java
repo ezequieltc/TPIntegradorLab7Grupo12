@@ -7,5 +7,6 @@ import Dominio.Usuario;
 public interface IUsuarioNegocio {
 	public boolean insert(Usuario usuario);
 	public boolean delete(Usuario usuario);
+	public boolean update(Usuario usuario);
 	public ArrayList<Usuario> readAll();
 }
