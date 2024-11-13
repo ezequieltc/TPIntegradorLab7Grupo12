@@ -1,19 +1,12 @@
-import Dao.IUsuarioDao;
-import DaoImpl.UsuarioDaoImpl;
-import Dominio.Usuario;
-import Dominio.TipoUsuario;
+import Dao.*;
+import DaoImpl.*;
+import Dominio.*;
 
 import java.util.ArrayList;
 import java.util.Date;
 
-import Dao.IUsuarioDao;
-import DaoImpl.UsuarioDaoImpl;
-import DaoImpl.TipoUsuarioDaoImpl;  // Asegúrate de tener el Dao de TipoUsuario
-import Dominio.Usuario;
-import Dominio.TipoUsuario;
 
-import java.util.ArrayList;
-import java.util.Date;
+import DaoImpl.TipoUsuarioDaoImpl;
 
 public class Main {
 
@@ -67,5 +60,71 @@ public class Main {
                     ", Fecha de Creación: " + usuario.getFechaCreacion() +
                     ", Estado: " + (usuario.isEstado() ? "Activo" : "Inactivo"));
         }
+        
+        //persona
+        
+        IPersonaDao personaDao = new PersonaDaoImpl();
+        TipoSexoDaoImpl tipoSexoDao = new TipoSexoDaoImpl();
+        
+
+        TipoSexo tipoSexo = tipoSexoDao.getTipoSexo(1);
+        Usuario usuario = usuarioDao.getUsuario(1);
+
+        if (tipoSexo == null || usuario == null) {
+            System.out.println("El tipo de sexo o el usuario no existen en la base de datos.");
+            return;
+        }
+
+        Persona nuevaPersona = new Persona(0, usuario, tipoSexo, "12345678", "20123456789", "Juan", "Pérez", 
+                                           "Argentina", new Date(), "Av. Siempre Viva 123", "Ciudad", 
+                                           "Provincia", "juan.perez@example.com", "123456789", true);
+
+        if (personaDao.insert(nuevaPersona)) {
+            System.out.println("Persona agregada exitosamente");
+        } else {
+            System.out.println("Error al agregar persona");
+        }
+
+        ArrayList<Persona> personas = personaDao.readAll();
+        if (!personas.isEmpty()) {
+            Persona personaABorrar = personas.get(personas.size() - 1);
+            personaABorrar.setEstado(false);
+            if (personaDao.delete(personaABorrar)) {
+                System.out.println("Persona dada de baja exitosamente");
+            } else {
+                System.out.println("Error al dar de baja persona");
+            }
+        }
+
+        if (!personas.isEmpty()) {
+            Persona personaAActualizar = personas.get(personas.size() - 1);
+            personaAActualizar.setNombre("Juan Actualizado");
+            if (personaDao.update(personaAActualizar)) {
+                System.out.println("Persona actualizada exitosamente");
+            } else {
+                System.out.println("Error al actualizar persona");
+            }
+        }
+
+        System.out.println("Listado de todas las personas:");
+        personas = personaDao.readAll();
+        for (Persona persona : personas) {
+            System.out.println("ID: " + persona.getId() +
+                    ", Usuario: " + persona.getUsuario().getUsuario() +
+                    ", Tipo de Sexo: " + persona.getTipoSexo().getDescripcion() +
+                    ", DNI: " + persona.getDni() +
+                    ", CUIL: " + persona.getCuil() +
+                    ", Nombre: " + persona.getNombre() +
+                    ", Apellido: " + persona.getApellido() +
+                    ", Nacionalidad: " + persona.getNacionalidad() +
+                    ", Fecha de Nacimiento: " + persona.getFechaNacimiento() +
+                    ", Dirección: " + persona.getDireccion() +
+                    ", Localidad: " + persona.getLocalidad() +
+                    ", Provincia: " + persona.getProvincia() +
+                    ", Email: " + persona.getEmail() +
+                    ", Teléfono: " + persona.getTelefono() +
+                    ", Estado: " + (persona.isEstado() ? "Activo" : "Inactivo"));
+        }
     }
+    
 }

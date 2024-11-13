@@ -39,21 +39,20 @@ public class PersonaDaoImpl implements IPersonaDao {
 		try
 		{
 			statement = conexion.prepareStatement(insert);
-	        statement.setInt(1, persona.getId());
-	        statement.setInt(2, persona.getUsuario().getId());  
-	        statement.setInt(3, persona.getTipoSexo().getId());
-	        statement.setString(4, persona.getDni());
-	        statement.setString(5, persona.getCuil());
-	        statement.setString(6, persona.getNombre());
-	        statement.setString(7, persona.getApellido());
-	        statement.setString(8, persona.getNacionalidad());
-	        statement.setDate(9, new java.sql.Date(persona.getFechaNacimiento().getTime()));
-	        statement.setString(10, persona.getDireccion());
-	        statement.setString(11, persona.getLocalidad());
-	        statement.setString(12, persona.getProvincia());
-	        statement.setString(13, persona.getEmail());
-	        statement.setString(14, persona.getTelefono());
-	        statement.setBoolean(15, persona.isEstado());
+	        statement.setInt(1, persona.getUsuario().getId());  
+	        statement.setInt(2, persona.getTipoSexo().getId());
+	        statement.setString(3, persona.getDni());
+	        statement.setString(4, persona.getCuil());
+	        statement.setString(5, persona.getNombre());
+	        statement.setString(6, persona.getApellido());
+	        statement.setString(7, persona.getNacionalidad());
+	        statement.setDate(8, new java.sql.Date(persona.getFechaNacimiento().getTime()));
+	        statement.setString(9, persona.getDireccion());
+	        statement.setString(10, persona.getLocalidad());
+	        statement.setString(11, persona.getProvincia());
+	        statement.setString(12, persona.getEmail());
+	        statement.setString(13, persona.getTelefono());
+	        statement.setBoolean(14, persona.isEstado());
 			if(statement.executeUpdate() > 0)
 			{
 				conexion.commit();
@@ -103,21 +102,21 @@ public class PersonaDaoImpl implements IPersonaDao {
 		try
 		{
 			statement = conexion.prepareStatement(update);
-	        statement.setInt(1, persona.getId());
-	        statement.setInt(2, persona.getUsuario().getId());  
-	        statement.setInt(3, persona.getTipoSexo().getId());
-	        statement.setString(4, persona.getDni());
-	        statement.setString(5, persona.getCuil());
-	        statement.setString(6, persona.getNombre());
-	        statement.setString(7, persona.getApellido());
-	        statement.setString(8, persona.getNacionalidad());
-	        statement.setDate(9, new java.sql.Date(persona.getFechaNacimiento().getTime()));
-	        statement.setString(10, persona.getDireccion());
-	        statement.setString(11, persona.getLocalidad());
-	        statement.setString(12, persona.getProvincia());
-	        statement.setString(13, persona.getEmail());
-	        statement.setString(14, persona.getTelefono());
-	        statement.setBoolean(15, persona.isEstado());
+	        statement.setInt(1, persona.getUsuario().getId());  
+	        statement.setInt(2, persona.getTipoSexo().getId());
+	        statement.setString(3, persona.getDni());
+	        statement.setString(4, persona.getCuil());
+	        statement.setString(5, persona.getNombre());
+	        statement.setString(6, persona.getApellido());
+	        statement.setString(7, persona.getNacionalidad());
+	        statement.setDate(8, new java.sql.Date(persona.getFechaNacimiento().getTime()));
+	        statement.setString(9, persona.getDireccion());
+	        statement.setString(10, persona.getLocalidad());
+	        statement.setString(11, persona.getProvincia());
+	        statement.setString(12, persona.getEmail());
+	        statement.setString(13, persona.getTelefono());
+	        statement.setBoolean(14, persona.isEstado());
+	        statement.setInt(15, persona.getId());
 			if(statement.executeUpdate() > 0)
 			{
 				conexion.commit();
