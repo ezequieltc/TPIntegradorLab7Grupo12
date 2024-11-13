@@ -36,4 +36,12 @@ public class CuentaNegocioImpl implements ICuentaNegocio {
     public ArrayList<Cuenta> readAll() {
         return cuentaDao.readAll();
     }
+    
+    
+    public int calcularSiguienteId() {
+        int id = cuentaDao.calcularSiguienteId();
+        return id;
+    }
+    
+    
 }

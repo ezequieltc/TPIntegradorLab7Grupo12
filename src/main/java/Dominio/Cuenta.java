@@ -93,7 +93,7 @@ public class Cuenta {
 
 	@Override
 	public String toString() {
-		return "Cuenta [id=" + id + ", persona=" + persona + ", tipoCuenta=" + tipoCuenta + ", numeroCuenta="
+		return "Cuenta [id=" + id + ", persona=" + persona.getNombre() + persona.getApellido() + ", tipoCuenta=" + tipoCuenta.getDescripcion() + ", numeroCuenta="
 				+ numeroCuenta + ", cbu=" + cbu + ", saldo=" + saldo + ", fechaCreacion=" + fechaCreacion + ", estado="
 				+ estado + "]";
 	}

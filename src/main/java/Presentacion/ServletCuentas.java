@@ -78,13 +78,13 @@ public class ServletCuentas extends HttpServlet {
 			if(cliente == null) {
 				throw new Exception("La persona no existe");
 			}
-			
+			for (Cuenta cuentasTmp : cuentasList) {
+				System.out.println(cuentasList.toString());
+			}
 			for (Cuenta cuentaTemp : cuentasList ) {
+					System.out.println(cuentasList.toString());
 					if(cuentaTemp.estado) {
-						//System.out.println("El cliente es: " + cliente.getUsuario().getId());
-						//System.out.println("La cuenta es : " + cuentaTemp.getPersona().getUsuario().getId());
-						System.out.println("El id de cuenta :" + cuentaTemp.getId());
-						System.out.println("El nombre del Usuario es: " + cuentaTemp.getPersona().getNombre());
+
 						if(cuentaTemp.getPersona().getUsuario().getId() == cliente.getUsuario().getId()) {
 							System.out.println("Entre aca");
 							cantCuentas++;
@@ -93,13 +93,13 @@ public class ServletCuentas extends HttpServlet {
 				}
 
 			if(cantCuentas < 3) {
-				System.out.println("Este usuario tiene: " + cantCuentas + " cuentas.");
+				//System.out.println("Este usuario tiene: " + cantCuentas + " cuentas.");
 				//cuenta.setCbu(cbu);
 				cuenta.setEstado(true);
 				SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
 				Date fechaCreacion = formatoFecha.parse(fechaAltaCuenta);
 				cuenta.setFechaCreacion(fechaCreacion);
-				cuenta.setId(cuentasList.size()+1);
+				cuenta.setId(cuentaNegocioTemp.calcularSiguienteId());
 				//cuenta.setNumeroCuenta(numeroCuenta);
 				for(TipoCuenta tipoCuentas : tipoCuentaList) {
 					if(tipoCuentas.getDescripcion().equals(tipoCuenta)) {
@@ -108,13 +108,13 @@ public class ServletCuentas extends HttpServlet {
 				}
 				cuenta.setPersona(cliente);
 				cuenta.setSaldo(Integer.parseInt(saldo));
-				System.out.println(cuenta.toString());
-				//try {
-				//	cuentaNegocioTemp.insert(cuenta);
-				//}
-				//catch (Exception e) {
-				//	System.out.println(e.getMessage());
-				//}
+				//System.out.println(cuenta.toString());
+				try {
+					cuentaNegocioTemp.insert(cuenta);
+				}
+				catch (Exception e) {
+					System.out.println(e.getMessage());
+				}
 			
 				request.setAttribute("mostrarPopUp", true);
 				request.setAttribute("popUpStatus", "success");
@@ -132,8 +132,6 @@ public class ServletCuentas extends HttpServlet {
 			request.setAttribute("mostrarPopUp", true);
 		}
 		
-		//request.setAttribute("mostrarPopUp", true);
-		//request.setAttribute("popUpStatus", "success"); // o "error" si ocurrió un error
 		RequestDispatcher rd = request.getRequestDispatcher("/Administrador/Cuentas/AltaCuenta.jsp");   
         rd.forward(request, response); 
 	}

@@ -17,7 +17,8 @@ public class CuentaDaoImpl implements ICuentaDao {
     private static final String insert = "INSERT INTO cuentas(id_cliente, id_tipo_cuenta, numero_cuenta, cbu, saldo, fecha_creacion, estado) VALUES(?, ?, ?, ?, ?, ?, ?)";
     private static final String delete = "UPDATE cuentas SET estado = ? WHERE id_cuenta = ?";
     private static final String update = "UPDATE cuentas SET id_cliente = ?, id_tipo_cuenta = ?, numero_cuenta = ?, cbu = ?, saldo = ?, fecha_creacion = ?, estado = ? WHERE id_cuenta = ?";
-    private static final String readall = "SELECT * FROM cuentas";
+    //private static final String readall = "SELECT * FROM cuentas";
+    private static final String readall = "select * from cuentas c inner join personas p on p.id_usuario = c.id_cliente order by c.id_cuenta";
     private static final String read = "SELECT id_cuenta, id_cliente, id_tipo_cuenta, numero_cuenta, cbu, saldo, fecha_creacion, estado FROM cuentas WHERE id_cuenta = ?";
     private static final String siguiente = "SELECT MAX(id_cuenta) FROM cuentas";
     
@@ -31,12 +32,20 @@ public class CuentaDaoImpl implements ICuentaDao {
 
     @Override
     public boolean insert(Cuenta cuenta) {
+    	long numeroDeCuenta = 0 ;
+    	long CBU = 0;
         PreparedStatement statement;
         Connection conexion = Conexion.getConexion().getSQLConexion();
         boolean isInsertExitoso = false;
+        ArrayList<Cuenta> cuentasAll;
+        cuentasAll = readAll();
+        numeroDeCuenta = Long.parseLong(cuentasAll.get(cuentasAll.size()-1).numeroCuenta)+1;
+        cuenta.setNumeroCuenta(String.valueOf(numeroDeCuenta));
+        CBU = Long.parseLong(cuentasAll.get(cuentasAll.size()-1).getCbu()) + 1;
+        cuenta.setCbu(String.valueOf(CBU));
         try {
             statement = conexion.prepareStatement(insert);
-            statement.setInt(1, cuenta.getPersona().getId());
+            statement.setInt(1, cuenta.getPersona().getUsuario().getId());
             statement.setInt(2, cuenta.getTipoCuenta().getId());
             statement.setString(3, cuenta.getNumeroCuenta());
             statement.setString(4, cuenta.getCbu());
@@ -122,7 +131,6 @@ public class CuentaDaoImpl implements ICuentaDao {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        //System.out.println(cuentas.toString());
         return cuentas;
     }
 
@@ -136,41 +144,41 @@ public class CuentaDaoImpl implements ICuentaDao {
         Date fechaCreacion = resultSet.getDate("fecha_creacion");
         boolean estado = resultSet.getBoolean("estado");
 
-        Persona persona = personaDao.getPersona(idCliente);
+        Persona persona = personaDao.getPersona(resultSet.getInt("id_persona"));
         TipoCuenta tipoCuenta = tipoCuentaDao.getTipoCuenta(idTipoCuenta);
         return new Cuenta(id, persona, tipoCuenta, numeroCuenta, cbu, saldo, fechaCreacion, estado);
     }
 
     @Override
     public Cuenta getCuenta(int id) {
-        Cuenta cuenta = null;
-        try {
-            Connection conexion = Conexion.getConexion().getSQLConexion();
-            PreparedStatement ps = conexion.prepareStatement(read);
-            ps.setInt(1, id);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                cuenta = getCuentaFromResultSet(rs);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return cuenta;
+    	Cuenta cuenta = null;
+    	try {
+    		Connection conexion = Conexion.getConexion().getSQLConexion();
+    		PreparedStatement ps = conexion.prepareStatement(read);
+    		ps.setInt(1, id);
+    		ResultSet rs = ps.executeQuery();
+    		if (rs.next()) {
+    			cuenta = getCuentaFromResultSet(rs);
+    		}
+    	} catch (SQLException e) {
+    		e.printStackTrace();
+    	}
+    	return cuenta;
     }
-
+    
     @Override
     public int calcularSiguienteId() {
-        int ultimoId = 0;
-        Connection conexion = Conexion.getConexion().getSQLConexion();
-        try {
-            PreparedStatement statement = conexion.prepareStatement(siguiente);
-            ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                ultimoId = resultSet.getInt(1);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return ultimoId + 1;
+    	int ultimoId = 0;
+    	Connection conexion = Conexion.getConexion().getSQLConexion();
+    	try {
+    		PreparedStatement statement = conexion.prepareStatement(siguiente);
+    		ResultSet resultSet = statement.executeQuery();
+    		if (resultSet.next()) {
+    			ultimoId = resultSet.getInt(1);
+    		}
+    	} catch (SQLException e) {
+    		e.printStackTrace();
+    	}
+    	return ultimoId + 1;
     }
 }
