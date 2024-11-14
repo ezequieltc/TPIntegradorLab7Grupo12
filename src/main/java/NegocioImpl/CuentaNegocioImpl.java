@@ -37,7 +37,14 @@ public class CuentaNegocioImpl implements ICuentaNegocio {
         return cuentaDao.readAll();
     }
     
-    
+    public Cuenta getCuenta(int id) {
+    	Cuenta cuenta = cuentaDao.getCuenta(id);
+    	return cuenta;
+    }
+    public Cuenta getCuenta(String numeroCuenta, String CBU) {
+    	Cuenta cuenta = cuentaDao.getCuenta(numeroCuenta,CBU);
+    	return cuenta;
+    }
     public int calcularSiguienteId() {
         int id = cuentaDao.calcularSiguienteId();
         return id;

@@ -20,6 +20,8 @@ public class CuentaDaoImpl implements ICuentaDao {
     //private static final String readall = "SELECT * FROM cuentas";
     private static final String readall = "select * from cuentas c inner join personas p on p.id_usuario = c.id_cliente order by c.id_cuenta";
     private static final String read = "SELECT id_cuenta, id_cliente, id_tipo_cuenta, numero_cuenta, cbu, saldo, fecha_creacion, estado FROM cuentas WHERE id_cuenta = ?";
+    private static final String readCBU = "SELECT c.id_cuenta, c.id_cliente, c.id_tipo_cuenta, c.numero_cuenta, c.cbu, c.saldo, c.fecha_creacion, c.estado, p.id_persona FROM cuentas c inner join personas p on p.id_usuario = c.id_cliente WHERE cbu = ?";
+    private static final String readNumeroCuenta = "SELECT c.id_cuenta, c.id_cliente, c.id_tipo_cuenta, c.numero_cuenta, c.cbu, c.saldo, c.fecha_creacion, c.estado, p.id_persona FROM cuentas c inner join personas p on p.id_usuario = c.id_cliente WHERE numero_cuenta = ?";
     private static final String siguiente = "SELECT MAX(id_cuenta) FROM cuentas";
     
     private PersonaDaoImpl personaDao;
@@ -93,7 +95,7 @@ public class CuentaDaoImpl implements ICuentaDao {
         boolean isUpdateExitoso = false;
         try {
             statement = conexion.prepareStatement(update);
-            statement.setInt(1, cuenta.getPersona().getId());
+            statement.setInt(1, cuenta.getPersona().getUsuario().getId());
             statement.setInt(2, cuenta.getTipoCuenta().getId());
             statement.setString(3, cuenta.getNumeroCuenta());
             statement.setString(4, cuenta.getCbu());
@@ -165,6 +167,37 @@ public class CuentaDaoImpl implements ICuentaDao {
     	}
     	return cuenta;
     }
+    
+    @Override
+    public Cuenta getCuenta(String numeroCuenta, String cbu) {
+    	Cuenta cuenta = null;
+    	Connection conexion = Conexion.getConexion().getSQLConexion();
+    	try {
+    	if(!numeroCuenta.isEmpty()) {
+    		PreparedStatement ps = conexion.prepareStatement(readNumeroCuenta);
+    		ps.setString(1, numeroCuenta);
+    		ResultSet rs = ps.executeQuery();
+    		if (rs.next()) {
+    			cuenta = getCuentaFromResultSet(rs);
+    		}
+    	}
+    	if(!cbu.isEmpty()) {
+    		PreparedStatement ps = conexion.prepareStatement(readCBU);
+    		ps.setString(1, cbu);
+    		ResultSet rs = ps.executeQuery();
+    		if (rs.next()) {
+    			cuenta = getCuentaFromResultSet(rs);
+    		}
+    	}
+    	}
+    	catch(SQLException e) {
+    		e.printStackTrace();
+    	}
+    	
+    	
+    	return cuenta;
+    }
+    
     
     @Override
     public int calcularSiguienteId() {

@@ -55,27 +55,24 @@ public class ServletCuentas extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		//doGet(request, response);        
+		PersonaNegocioImpl personaNegocioTemp = new PersonaNegocioImpl();
+		CuentaNegocioImpl cuentaNegocioTemp = new CuentaNegocioImpl();
+		TipoCuentaNegocioImpl tipoCuentaTemp = new TipoCuentaNegocioImpl();
+		ArrayList<Persona> personasList;
+		ArrayList<Cuenta> cuentasList;
+		ArrayList<TipoCuenta> tipoCuentaList;
+		personasList = personaNegocioTemp.readAll();
+		cuentasList = cuentaNegocioTemp.readAll();
+		tipoCuentaList = tipoCuentaTemp.readAll();
 		if(request.getParameter("crearCuenta")!= null) {
 			
 			String dniUsuario = request.getParameter("dniUsuario");
 			String tipoCuenta = request.getParameter("tipoCuenta");
 			String fechaAltaCuenta = request.getParameter("fechaAltaCuenta");
-			//String numeroCuenta = request.getParameter("numeroCuenta");
-			//String cbu = request.getParameter("cbu");
 			String saldo = request.getParameter("saldo");
 			Persona cliente = null;
 			int cantCuentas = 0;
-			PersonaNegocioImpl personaNegocioTemp = new PersonaNegocioImpl();
-			CuentaNegocioImpl cuentaNegocioTemp = new CuentaNegocioImpl();
-			TipoCuentaNegocioImpl tipoCuentaTemp = new TipoCuentaNegocioImpl();
 			Cuenta cuenta = new Cuenta();
-			ArrayList<Persona> personasList;
-			ArrayList<Cuenta> cuentasList;
-			ArrayList<TipoCuenta> tipoCuentaList;
-			personasList = personaNegocioTemp.readAll();
-			cuentasList = cuentaNegocioTemp.readAll();
-			tipoCuentaList = tipoCuentaTemp.readAll();
-			//System.out.println(cuentaNegocioTemp.readAll());
 			try {
 				for(Persona persona : personasList) {
 					if (persona.getDni().equals(dniUsuario)) {
@@ -90,25 +87,20 @@ public class ServletCuentas extends HttpServlet {
 					System.out.println(cuentasList.toString());
 				}
 				for (Cuenta cuentaTemp : cuentasList ) {
-					System.out.println(cuentasList.toString());
 					if(cuentaTemp.estado) {
 						
 						if(cuentaTemp.getPersona().getUsuario().getId() == cliente.getUsuario().getId()) {
-							System.out.println("Entre aca");
 							cantCuentas++;
 						}
 					}
 				}
 				
 				if(cantCuentas < 3) {
-					//System.out.println("Este usuario tiene: " + cantCuentas + " cuentas.");
-					//cuenta.setCbu(cbu);
 					cuenta.setEstado(true);
 					SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
 					Date fechaCreacion = formatoFecha.parse(fechaAltaCuenta);
 					cuenta.setFechaCreacion(fechaCreacion);
 					cuenta.setId(cuentaNegocioTemp.calcularSiguienteId());
-					//cuenta.setNumeroCuenta(numeroCuenta);
 					for(TipoCuenta tipoCuentas : tipoCuentaList) {
 						if(tipoCuentas.getDescripcion().equals(tipoCuenta)) {
 							cuenta.setTipoCuenta(tipoCuentas);
@@ -116,7 +108,6 @@ public class ServletCuentas extends HttpServlet {
 					}
 					cuenta.setPersona(cliente);
 					cuenta.setSaldo(Integer.parseInt(saldo));
-					//System.out.println(cuenta.toString());
 					try {
 						cuentaNegocioTemp.insert(cuenta);
 					}
@@ -143,23 +134,81 @@ public class ServletCuentas extends HttpServlet {
 			RequestDispatcher rd = request.getRequestDispatcher("/Administrador/Cuentas/AltaCuenta.jsp");   
 			rd.forward(request, response); 
 		}
+
+		Cuenta cuentaTemp = new Cuenta();
+		if(request.getParameter("botonBuscarCuenta") != null){
+			System.out.println("Buscar");
+			String buscarCBU = request.getParameter("busquedaCBU");
+			String busquedaNumeroCuenta = request.getParameter("busquedaNumeroCuenta");
+			if(busquedaNumeroCuenta != null) {
+				cuentaTemp = cuentaNegocioTemp.getCuenta(busquedaNumeroCuenta,"");
+			}
+			else {
+				cuentaTemp = cuentaNegocioTemp.getCuenta("",buscarCBU);
+				
+			}
+			request.setAttribute("cuenta", cuentaTemp);
+			RequestDispatcher rd = request.getRequestDispatcher("/Administrador/Cuentas/ModificarEliminarCuentas.jsp");   
+			rd.forward(request, response);
+		}
 		if(request.getParameter("modificarCuenta") != null){
-			System.out.println("Modificar");
+			try {
+			String busquedaNumeroCuenta = request.getParameter("editNumeroCuenta");
+			tipoCuentaList = tipoCuentaTemp.readAll();
+			cuentaTemp = cuentaNegocioTemp.getCuenta(busquedaNumeroCuenta,"");
+			String tipoCuenta = request.getParameter("editTipoCuenta");
+			for(TipoCuenta tipoCuentas : tipoCuentaList) {
+				if(tipoCuentas.getDescripcion().equals(tipoCuenta)) {
+					cuentaTemp.setTipoCuenta(tipoCuentas);
+				}
+			}
+			cuentaTemp.setSaldo(Integer.parseInt(request.getParameter("editSaldo")));
+			SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
+
+			Date fechaCreacion = formatoFecha.parse(request.getParameter("editFechaAltaCuenta"));
+			cuentaTemp.setFechaCreacion(fechaCreacion);
+			cuentaNegocioTemp.update(cuentaTemp);
+				}
+			catch (Exception e) {
+				System.out.println(e.getMessage());
+			}
 			RequestDispatcher rd = request.getRequestDispatcher("/Administrador/Cuentas/ModificarEliminarCuentas.jsp");   
 			rd.forward(request, response);
 		}
 		
 		if(request.getParameter("eliminarCuenta") != null){
+			String busquedaNumeroCuenta = request.getParameter("editNumeroCuenta");
+			tipoCuentaList = tipoCuentaTemp.readAll();
+			cuentaTemp = cuentaNegocioTemp.getCuenta(busquedaNumeroCuenta,"");
+			if(request.getParameter("editEstadoCuenta").equals("activa")) {
+				cuentaTemp.setEstado(false);
+			}
+			try {
+				cuentaNegocioTemp.update(cuentaTemp);
+				}
+			catch (Exception e) {
+				System.out.println(e.getMessage());
+			}
 			System.out.println("Eliminar");
 			RequestDispatcher rd = request.getRequestDispatcher("/Administrador/Cuentas/ModificarEliminarCuentas.jsp");   
 			rd.forward(request, response);
 		}
-		if(request.getParameter("botonBuscarCuenta") != null){
-			System.out.println("Buscar");
-			String buscar = request.getParameter("busqueda");
-			System.out.println(buscar);
+		if(request.getParameter("reactivarCuenta") != null){
+			String busquedaNumeroCuenta = request.getParameter("editNumeroCuenta");
+			tipoCuentaList = tipoCuentaTemp.readAll();
+			cuentaTemp = cuentaNegocioTemp.getCuenta(busquedaNumeroCuenta,"");
+			if(request.getParameter("editEstadoCuenta").equals("inactiva")) {
+				cuentaTemp.setEstado(true);
+			}
+			try {
+				cuentaNegocioTemp.update(cuentaTemp);
+				}
+			catch (Exception e) {
+				System.out.println(e.getMessage());
+			}
 			RequestDispatcher rd = request.getRequestDispatcher("/Administrador/Cuentas/ModificarEliminarCuentas.jsp");   
 			rd.forward(request, response);
+		
 		}
 	}
 
