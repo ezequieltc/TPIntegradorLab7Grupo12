@@ -44,29 +44,30 @@
       <div class="step step-1">
         <h4>Información Personal</h4>
         <form action="ServletModificarUsuario" method="get">
+        <input type="hidden" name="id" value="${persona.getId()}">
           <div class="row">
             <div class="col-md-6">
               <div class="form-group">
                 <label for="dni">DNI</label>
-                <input type="text" id="dniUser" class="form-control" value="${persona.dni }" readonly>
+                <input type="text" name="dni" class="form-control" readonly value="${persona.getDni()}">
               </div>
               <div class="form-group">
-                <label for="cuil">CUIL</label>
-                <input type="text" id="cuilUser" class="form-control"readonly>
+                <label for="cuil">Cuil</label>
+                <input type="text" name="cuil" class="form-control"readonly value="${persona.getCuil()}">
               </div>
               <div class="form-group">
                 <label for="nombre">Nombre</label>
-                <input type="text" id="nombreUser" class="form-control" readonly>
+                <input type="text" name="nombre" class="form-control" readonly value="${persona.getNombre()}">
               </div>
               <div class="form-group">
                 <label for="apellido">Apellido</label>
-                <input type="text" id="apellidoUser" class="form-control"readonly>
+                <input type="text" name="apellido" class="form-control"readonly value="${persona.getApellido()}">
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-group">
                 <label for="sexo">Sexo</label>
-                <select id="sexo" class="form-control">
+                <select name="sexo" class="form-control">
                   <option value="masculino">Masculino</option>
                   <option value="femenino">Femenino</option>
                   <option value="otro">Otro</option>
@@ -74,11 +75,11 @@
               </div>
               <div class="form-group">
                 <label for="nacionalidad">Nacionalidad</label>
-                <input type="text" id="nacionalidadUser" class="form-control" readonly>
+                <input type="text" name="nacionalidad" class="form-control" readonly value="${persona.getNacionalidad()}">
               </div>
               <div class="form-group">
                 <label for="fechaNacimiento">Fecha de Nacimiento</label>
-                <input type="date" id="fechaNacimientoUser" class="form-control" readonly>
+                <input type="date" name="fechaNacimiento" class="form-control" readonly value="${persona.getFechaNacimiento()}">
               </div>
             </div>
           </div>
@@ -88,39 +89,42 @@
     <div id="registrationForm" class="w-100">
       <div class="step step-1">
         <h4>Información de Contacto</h4>
-        <form>
+        
           <div class="row">
             <div class="col-md-6">
               <div class="form-group">
                 <label for="direccion">Dirección</label>
-                <input type="text" id="direccionUser" class="form-control">
+                <input type="text" name="direccion" class="form-control" value="${persona.getDireccion()}">
               </div>
               <div class="form-group">
                 <label for="localidad">Localidad</label>
-                <input type="text" id="localidadUser" class="form-control">
+                <input type="text" name="localidad" class="form-control" value="${persona.getLocalidad()}">
               </div>
               <div class="form-group">
                 <label for="provincia">Provincia</label>
-                <input type="text" id="provinciaUser" class="form-control">
+                <input type="text" name="provincia" class="form-control" value="${persona.getProvincia()}">
               </div>
 
             </div>
             <div class="col-md-6">
               <div class="form-group">
                 <label for="email">Correo Electrónico</label>
-                <input type="text" id="emailUser" class="form-control">
+                <input type="text" name="email" class="form-control" value="${persona.getEmail()}">
               </div>
               <div class="form-group">
                 <label for="telefono">Teléfono</label>
-                <input type="date" id="telefonoUser" class="form-control" readonly>
+                <input type="text" name="telefono" class="form-control" value="${persona.getTelefono()}">
               </div>
             </div>
           </div>
           <div class="step-actions" style="margin-top: 10px">
-            <button type="button" class="btn btn-success" id="btnConfirmarModificacionUsuario">Guardar Cambios</button>
+            <button type="submit" class="btn btn-success" name="btnConfirmarModificacionUsuario">Guardar Cambios</button>
             <a href="${pageContext.request.contextPath}/ServletUsuarios" class="btn btn-danger">Cancelar</a>
           </div>
-        </form>
+        
       </div>
+      </div>
+      </div>
+      </form>
 </body>
 </html>

@@ -51,12 +51,12 @@ public class ServletUsuarios extends HttpServlet {
 	    }
 	    
 	    if(request.getParameter("btnModificarUsuario") != null) {
-			int id = Integer.parseInt(request.getParameter("id"));
+			int id = Integer.parseInt(request.getParameter("id"))-1;
 			
 			Persona persona = personaNegocio.getPersona(id);
 			
 			request.setAttribute("persona", persona);
-			RequestDispatcher rd = request.getRequestDispatcher("/Administrador/Usuarios/ModificarUsuario.jsp");
+			RequestDispatcher rd = request.getRequestDispatcher("/ServletModificarUsuario");
 			rd.forward(request, response);
 		}
 
@@ -82,7 +82,7 @@ public class ServletUsuarios extends HttpServlet {
     		
     		request.setAttribute("lista", personas);
     		
-    		RequestDispatcher rd = request.getRequestDispatcher("/Administrador/Usuarios/ListarModificarEliminarUsuarios.jsp");   
+    		RequestDispatcher rd = request.getRequestDispatcher("/Adiministrador/Usuarios/ListarModificarEliminarUsuarios.jsp");   
             rd.forward(request, response);
         }
 		
