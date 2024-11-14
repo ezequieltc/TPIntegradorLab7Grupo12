@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 import Dao.ITipoSexoDao;
 import Dominio.TipoSexo;
-
+import servicios.ddbb.*;
 public class TipoSexoDaoImpl implements ITipoSexoDao {
 
     private Conexion conn = null;

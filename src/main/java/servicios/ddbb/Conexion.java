@@ -1,4 +1,4 @@
-package DaoImpl;
+package servicios.ddbb;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

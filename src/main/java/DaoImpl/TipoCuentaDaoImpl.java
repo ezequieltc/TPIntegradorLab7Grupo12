@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 import Dao.ITipoCuentaDao;
 import Dominio.TipoCuenta;
-
+import servicios.ddbb.*;
 public class TipoCuentaDaoImpl implements ITipoCuentaDao {
 
     private Conexion conn = null;
