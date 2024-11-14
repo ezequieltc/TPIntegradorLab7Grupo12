@@ -39,7 +39,13 @@ public class SvLogin extends HttpServlet {
 		if(user.equals("admin@gmail.com") && pass.equals("admin")){
 			HttpSession session = request.getSession(true);
 			session.setAttribute("usuario", user);
-			response.sendRedirect("Administrador/VistaHomeAdministrador.jsp");
+			session.setAttribute("isAdmin", true);
+			response.sendRedirect("SvSidebar");
+		} else if (user.equals("user@gmail.com") && pass.equals("user")) {
+			HttpSession session = request.getSession(true);
+			session.setAttribute("usuario", user);
+			session.setAttribute("isAdmin", false);
+			response.sendRedirect("SvSidebar");
 		} else {
 			response.sendRedirect("Login.jsp");
 		}

@@ -8,6 +8,9 @@
     if(usuario==null) {
         response.sendRedirect(request.getContextPath() + "/Login.jsp");
     }
+    
+    String[] sidebarNames = (String[]) session.getAttribute("sidebarNames");
+    String[] sidebarLinks = (String[]) session.getAttribute("sidebarLinks");
    
 %> 
 <body>
@@ -27,10 +30,19 @@
 
 <div class="d-flex">
   <div class="sidebar">
-    <a href="#">Alta Usuarios</a>
-    <a href="#">Alta Cuentas</a>
-    <a href="#">Autorizacion Prestamos</a>
-    <a href="#">Informes/Reportes</a>
+  	<ul class="nav flex-column">
+        <% 
+            if (sidebarNames != null && sidebarLinks != null) {
+                for (int i = 0; i < sidebarNames.length; i++) { 
+        %>
+            <li class="nav-item">
+                <a class="nav-link" href="<%= sidebarLinks[i] %>"><%= sidebarNames[i] %></a>
+            </li>
+        <% 
+                } 
+            }
+        %>
+    </ul>
   </div>
  
   
