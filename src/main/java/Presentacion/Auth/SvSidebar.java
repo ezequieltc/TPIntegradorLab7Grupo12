@@ -25,10 +25,11 @@ public class SvSidebar extends HttpServlet {
         String[] sidebarLinks;
 
         if (isAdmin) {
-            sidebarNames = new String[]{"Inicio", "Usuarios", "Configuración", "Cerrar Sesión"};
+            sidebarNames = new String[]{"Inicio", "Usuarios", "Configuración", "Cuentas", "Cerrar Sesión"};
             sidebarLinks = new String[]{request.getContextPath() + "/home.jsp",
                                         request.getContextPath() + "/users.jsp",
                                         request.getContextPath() + "/settings.jsp",
+                                        request.getContextPath() + "/Administrador/Cuentas.jsp",
                                         request.getContextPath() + "/logout"};
         } else {
             sidebarNames = new String[]{"Inicio", "Perfil", "Soporte", "Cerrar Sesión"};

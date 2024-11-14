@@ -13,7 +13,6 @@
     String[] sidebarLinks = (String[]) session.getAttribute("sidebarLinks");
    
 %> 
-<body>
 <nav class="navbar">
   <a class="navbar-brand" href="#">BancArg</a>
   <div class="justify-content-end">
