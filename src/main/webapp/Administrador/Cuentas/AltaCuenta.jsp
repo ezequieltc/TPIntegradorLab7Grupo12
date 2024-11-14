@@ -2,11 +2,27 @@
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="es">
+
+<%
+
+	String mensajeExito = (String) session.getAttribute("mensajeExito");
+	String mensajeError = (String) session.getAttribute("mensajeError");
+	Boolean mostrarPopUp = (Boolean) session.getAttribute("mostrarPopUp");
+	String popUpStatus = (String) session.getAttribute("popUpStatus");
+	
+	// Limpiar los atributos de la sesión para que no se muestren después de un refresh
+	session.removeAttribute("mensajeExito");
+	session.removeAttribute("mensajeError");
+	session.removeAttribute("mostrarPopUp");
+	session.removeAttribute("popUpStatus");
+%>
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BancArg - Alta de Cuenta</title>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/layout.css" />
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/modal.css" />
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
 <style>
 .step {
@@ -33,26 +49,8 @@
 .transferForm {
 	height: calc(100% - 100px);
 }
-.modal-content.success {
-    background-color: #d4edda;
-    border-color: #c3e6cb;
-}
-.modal-header.success {
-    background-color: #28a745;
-    color: white;
-}
-.modal-content.error {
-    background-color: #f8d7da;
-    border-color: #f5c6cb;
-}
-.modal-header.error {
-    background-color: #dc3545;
-    color: white;
-}
 </style>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+
 
 </head>
 <body>
@@ -127,7 +125,7 @@
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
 				<div class="modal-body">
-					¡Cuenta creada exitosamente!
+					<%= mensajeExito != null ? mensajeExito : "¡Cuenta creada exitosamente!" %>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
@@ -144,7 +142,7 @@
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
 				<div class="modal-body">
-					<%= request.getAttribute("mensajeError") != null ? request.getAttribute("mensajeError") : "Hubo un error al crear la cuenta. Por favor, inténtelo nuevamente." %>
+					<%= mensajeError != null ? mensajeError : "Hubo un error al crear la cuenta. Por favor, inténtelo nuevamente." %>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
@@ -153,17 +151,22 @@
 		</div>
 	</div>
 
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+
 <script>
 // Script para mostrar modales de éxito o error
 $(document).ready(function(){
-    <% if (request.getAttribute("mostrarPopUp") != null && "success".equals(request.getAttribute("popUpStatus"))) { %>
-        var successModal = new bootstrap.Modal(document.getElementById('successModal'));
-        successModal.show();
-    <% } else if (request.getAttribute("mostrarPopUp") != null && "error".equals(request.getAttribute("popUpStatus"))) { %>
-        var errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
-        errorModal.show();
-    <% } %>
-});
+       <% if (mostrarPopUp != null && "success".equals(popUpStatus)) { %>
+           var successModal = new bootstrap.Modal(document.getElementById('successModal'));
+           successModal.show();
+       <% } else if (mostrarPopUp != null && "error".equals(popUpStatus)) { %>
+           var errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
+           errorModal.show();
+       <% } %>
+   });
 
 // Validación de formulario
 (function () {
