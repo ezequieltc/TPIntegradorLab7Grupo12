@@ -92,7 +92,8 @@ $(document).ready(function() {
     <div class="d-flex">
         <div class="sidebar">
             <a href="#">Inicio</a> 
-            <a href="${pageContext.request.contextPath}/Administrador/Cuentas.jsp">Cuentas</a>
+            <a href="#">Cuentas</a> 
+            <a href="#">Usuarios</a>
             <a href="#">Transferencias</a>
             <a href="#">Préstamos</a> 
             <a href="#">Ajustes</a>
@@ -108,7 +109,7 @@ $(document).ready(function() {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <input type="text" id="busqueda" class="form-control" name="busqueda" placeholder="Buscar por número de cuenta o CBU" required>
+                                <input type="text" id="searchInput" class="form-control" name="searchInput" placeholder="Buscar por número de cuenta o CBU" required>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -125,7 +126,7 @@ $(document).ready(function() {
                         </div>
                     </div>
                     <div class="step-actions">
-                        <button type="submit" name="botonBuscarCuenta" id="botonBuscarCuenta" class="btn btn-primary">Buscar</button>
+                        <button type="submit" class="btn btn-primary">Buscar</button>
                     </div>
                 </form>
             </div>
@@ -164,8 +165,8 @@ $(document).ready(function() {
                             </div>
                         </div>
                         <div class="step-actions">
-                            <button type="submit" class="btn btn-warning" name="modificarCuenta" id="modificarCuenta">Modificar Cuenta</button>
-                            <button type="submit" class="btn btn-danger" name="eliminarCuenta" id="eliminarCuenta">Eliminar Cuenta</button>
+                            <button type="submit" class="btn btn-warning" id="modificarCuenta">Modificar Cuenta</button>
+                            <button type="submit" class="btn btn-danger" id="eliminarCuenta">Eliminar Cuenta</button>
                         </div>
                     </form>
                 </div>
