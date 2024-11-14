@@ -58,7 +58,7 @@ public class Main {
                     ", Usuario: " + usuario.getUsuario() +
                     ", Contraseña: " + usuario.getContrasena() +
                     ", Fecha de Creación: " + usuario.getFechaCreacion() +
-                    ", Estado: " + (usuario.isEstado() ? "Activo" : "Inactivo"));
+                    ", Estado: " + (usuario.getEstado() ? "Activo" : "Inactivo"));
         }
         
         //persona

@@ -12,5 +12,6 @@ public interface IUsuarioDao {
 	public boolean update(Usuario usuario);
 	public PaginatedResponse<Usuario> readAll(int pagina);
 	public Usuario getUsuario(int id);
+	public Usuario getUsuario(String user);
 	public int calcularSiguienteId();
 }

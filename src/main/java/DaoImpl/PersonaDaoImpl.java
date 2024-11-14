@@ -12,6 +12,7 @@ import Dao.IPersonaDao;
 import Dominio.Persona;
 import Dominio.TipoSexo;
 import Dominio.Usuario;
+import Dominio.DTO.PaginatedResponse;
 import servicios.ddbb.*;
 public class PersonaDaoImpl implements IPersonaDao {
 

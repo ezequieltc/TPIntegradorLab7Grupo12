@@ -38,5 +38,11 @@ public class UsuarioNegocioImpl implements IUsuarioNegocio{
 		return usuarioDao.readAll(pagina);
 	}
 
+	//@Override
+	/*public ArrayList<Usuario> readAll() {
+		// TODO Auto-generated method stub
+		return null;
+	}*/
+
 
 }

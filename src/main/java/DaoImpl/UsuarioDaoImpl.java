@@ -20,6 +20,7 @@ public class UsuarioDaoImpl implements IUsuarioDao {
 //    private static final String readall = "select * from usuarios where estado = 1 limit ? offset ?";
     private static final String readall = "select * from usuarios";
     private static final String read = "select id_usuario, id_tipo_usuario, usuario, contrasena, fecha_creacion, estado from usuarios where id_usuario = ?";
+    private static final String readLogin = "select id_usuario, id_tipo_usuario, usuario, contrasena, fecha_creacion, estado from usuarios where usuario = ?";
     private static final String siguiente = "select max(id_usuario) from usuarios";
 
     
@@ -40,7 +41,7 @@ public class UsuarioDaoImpl implements IUsuarioDao {
             statement.setString(2, usuario.getUsuario());
             statement.setString(3, usuario.getContrasena());
             statement.setDate(4, new java.sql.Date(usuario.getFechaCreacion().getTime()));
-            statement.setBoolean(5, usuario.isEstado());
+            statement.setBoolean(5, usuario.getEstado());
             
             if (statement.executeUpdate() > 0) {
                 conexion.commit();
@@ -88,7 +89,7 @@ public class UsuarioDaoImpl implements IUsuarioDao {
             statement.setString(2, usuario.getUsuario());
             statement.setString(3, usuario.getContrasena());
             statement.setDate(4, new java.sql.Date(usuario.getFechaCreacion().getTime()));
-            statement.setBoolean(5, usuario.isEstado());
+            statement.setBoolean(5, usuario.getEstado());
             statement.setInt(6, usuario.getId());
             
             if (statement.executeUpdate() > 0) {
@@ -163,6 +164,32 @@ public class UsuarioDaoImpl implements IUsuarioDao {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
 
+            if (rs.next()) {
+                usuario = new Usuario();
+                usuario.setId(rs.getInt("id_usuario"));
+                int tipoUsuarioId = rs.getInt("id_tipo_usuario");
+                TipoUsuario tipoUsuario = tipoUsuarioDao.getTipoUsuario(tipoUsuarioId);
+                usuario.setTipoUsuario(tipoUsuario);
+                usuario.setUsuario(rs.getString("usuario"));
+                usuario.setContrasena(rs.getString("contrasena"));
+                usuario.setFechaCreacion(rs.getDate("fecha_creacion"));
+                usuario.setEstado(rs.getBoolean("estado"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return usuario;
+    }
+    
+    //Metodo para el login
+    public Usuario getUsuario(String user) {
+        Usuario usuario = null;
+        try {
+            Conexion conn = Conexion.getConexion();
+            Connection connection = conn.getSQLConexion();
+            PreparedStatement ps = connection.prepareStatement(readLogin);
+            ps.setString(1, user);
+            ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 usuario = new Usuario();
                 usuario.setId(rs.getInt("id_usuario"));

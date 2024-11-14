@@ -61,11 +61,12 @@ public class Usuario {
         this.fechaCreacion = fechaCreacion;
     }
 
-    public boolean isEstado() {
+    public boolean getEstado() {
         return estado;
     }
 
     public void setEstado(boolean estado) {
         this.estado = estado;
     }
+    
 }
