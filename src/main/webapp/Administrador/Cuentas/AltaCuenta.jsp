@@ -68,7 +68,7 @@
 	<div class="d-flex">
 		<div class="sidebar">
 			<a href="#">Inicio</a> 
-			<a href="#">Cuentas</a> 
+			<a href="${pageContext.request.contextPath}/Administrador/Cuentas.jsp">Cuentas</a> 
 			<a href="#">Usuarios</a>
 			<a href="#">Transferencias</a>
 			<a href="#">Préstamos</a> 
@@ -110,7 +110,7 @@
 							</div>
 						</div>
 						<div class="step-actions">
-							<button type="submit" class="btn btn-success" id="crearCuenta">Crear Cuenta</button>
+							<button type="submit" class="btn btn-success" name="crearCuenta" id="crearCuenta" >Crear Cuenta</button>
 						</div>
 					</form>
 				</div>

@@ -80,7 +80,7 @@
 	<div class="d-flex">
 		<div class="sidebar">
 			<a href="#">Inicio</a> 
-			<a href="#">Cuentas</a> 
+			<a href="${pageContext.request.contextPath}/Administrador/Cuentas.jsp">Cuentas</a>
 			<a href="#">Usuarios</a>
 			<a href="#">Transferencias</a>
 			<a href="#">Préstamos</a> 
@@ -95,7 +95,7 @@
 					<div class="button-container mt-5">
             			<a href="./Cuentas/AltaCuenta.jsp" class="btn btn-primary">Alta Cuenta</a>
             			<a href="./Cuentas/ModificarEliminarCuentas.jsp" class="btn btn-warning">Modificar/Eliminar Cuenta</a>
-            			<a href="./Cuentas/ListarCuentas.jsp" class="btn btn-info">Listar Cuentas</a>
+            			<a href="${pageContext.request.contextPath}/ServletCuentas" class="btn btn-info">Listar Cuentas</a>
         			</div>
 				</div>
 			</div>

@@ -1,4 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="Dominio.Cuenta" %>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -7,9 +9,12 @@
 <title>BancArg - Listado de Cuentas</title>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/layout.css" />
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.css" />
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+<script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
 <style>
     .table-container {
         padding: 40px;
@@ -24,7 +29,44 @@
         width: 100%;
         padding: 5px;
         box-sizing: border-box;
+        text-align: center;
+    	vertical-align: middle;
+        
     }
+    table th, table td {
+    text-align: center; /* Centra el texto */
+    vertical-align: middle; /* Alinea verticalmente los contenidos */
+}
+    .step {
+          padding: 40px;
+          background-color: #ffffff;
+          border-radius: 5px;
+          box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+          width: 100%;
+          min-height: 450px;
+          position: relative;
+    }
+
+    .step .form-group,
+    .step .beneficiary-details {
+          margin-bottom: 20px;
+      }
+
+      .step .step-actions {
+          position: absolute;
+          bottom: 20px;
+          right: 20px;
+      }
+      h2 {
+      	float:left;
+      }
+	  .btn {
+	  margin-top: 25px;
+	  	float: right;
+	  }
+      .transferForm {
+          height: calc(100% - 100px);
+      }
 </style>
 </head>
 <body>
@@ -40,8 +82,7 @@
 <div class="d-flex">
     <div class="sidebar">
         <a href="#">Inicio</a> 
-        <a href="#">Cuentas</a> 
-        <a href="#">Usuarios</a>
+        <a href="${pageContext.request.contextPath}/Administrador/Cuentas.jsp">Cuentas</a> 
         <a href="#">Transferencias</a>
         <a href="#">Préstamos</a> 
         <a href="#">Ajustes</a>
@@ -50,106 +91,58 @@
     <div class="content-container">
         <h2 class="my-4">Listado de Cuentas</h2>
         <div class="table-container">
-            <table class="table table-bordered table-striped">
-                <thead>
-                    <tr>
-                        <th><input type="text" placeholder="DNI Usuario" onkeyup="filterTable(0)"></th>
-                        <th><input type="text" placeholder="Tipo de Cuenta" onkeyup="filterTable(1)"></th>
-                        <th><input type="text" placeholder="Fecha de Alta" onkeyup="filterTable(2)"></th>
-                        <th><input type="text" placeholder="Número de Cuenta" onkeyup="filterTable(3)"></th>
-                        <th><input type="text" placeholder="CBU" onkeyup="filterTable(4)"></th>
-                        <th><input type="text" placeholder="Saldo" onkeyup="filterTable(5)"></th>
-                    </tr>
-                    <tr>
-                        <th>DNI Usuario</th>
-                        <th>Tipo de Cuenta</th>
-                        <th>Fecha de Alta</th>
-                        <th>Número de Cuenta</th>
-                        <th>CBU</th>
-                        <th>Saldo</th>
-                    </tr>
-                </thead>
-                <tbody id="accountsTable">
-                    <!-- Aquí irán los datos de las cuentas traídas desde la base de datos -->
-                    <%-- Ejemplo estático para ilustración --%>
-                    <tr><td>12345678</td><td>Caja de Ahorro</td><td>2024-01-01</td><td>00012345</td><td>1234567890123456789012</td><td>15000</td></tr>
-                    <tr><td>87654321</td><td>Cuenta Corriente</td><td>2024-02-15</td><td>00054321</td><td>9876543210987654321098</td><td>20000</td></tr>
-                    <!-- Fin de ejemplo -->
-                </tbody>
-            </table>
-            <div class="pagination">
-                <button onclick="prevPage()" id="btn_prev">Anterior</button>
-                <button onclick="nextPage()" id="btn_next">Siguiente</button>
-                Página: <span id="page"></span>
-            </div>
+            	<table id="example" class="display" style="width:85%">
+		        <thead>
+		            <tr>
+		                <th>ID Cuenta</th>
+		                <th>ID Cliente</th>
+		                <th>Tipo de Cuenta</th>
+		                <th>Numero de Cuenta</th>
+		                <th>CBU</th>
+		                <th>Saldo</th>
+		                <th>Fecha de Creación</th>
+		                <th>Activa</th>
+		            </tr>
+		        </thead>
+		        <tbody>
+		        	<% ArrayList<Cuenta>cuentasList = new ArrayList<Cuenta>();
+		        	 cuentasList = (ArrayList<Cuenta>)request.getAttribute("cuentasList");
+		        	 for(Cuenta cuentaTemp : cuentasList){ %>
+		        	<tr>
+		                <td><%= cuentaTemp.getId() %></td>
+		                <td><%= cuentaTemp.getPersona().getUsuario().getId()%></td>
+		                <td><%= cuentaTemp.getTipoCuenta().getDescripcion() %></td>
+		                <td><%= cuentaTemp.getNumeroCuenta() %></td>
+		                <td><%= cuentaTemp.getCbu() %></td>
+		                <td>$<%= cuentaTemp.getSaldo() %></td>
+		                <td><%= cuentaTemp.getFechaCreacion() %></td>
+		                <% if(cuentaTemp.isEstado()){ %>
+		                	<td>Activa</td>
+		                <%}else{ %>
+		                	<td>Desactivada</td>
+		                <%} %>
+		            </tr>
+		            <% } %>
+		        </tbody>
+		    </table>
         </div>
     </div> 
 </div>
-
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-// Paginación
-let current_page = 1;
-let records_per_page = 10;
-
-function prevPage() {
-    if (current_page > 1) {
-        current_page--;
-        changePage(current_page);
+new DataTable('#example', {
+    language: {
+        info: 'Mostrando pagina _PAGE_ de _PAGES_',
+        infoEmpty: 'No hay resultados disponibles',
+        infoFiltered: '(filtrados desde _MAX_ resultados totales)',
+        lengthMenu: ' _MENU_ Resultados por Pagina',
+        zeroRecords: 'Ups! Parece que no hay nada',
+        search: 'Buscar'
     }
-}
-
-function nextPage() {
-    if (current_page < numPages()) {
-        current_page++;
-        changePage(current_page);
-    }
-}
-
-function changePage(page) {
-    const table = document.getElementById("accountsTable");
-    const rows = table.getElementsByTagName("tr");
-    const page_span = document.getElementById("page");
-
-    if (page < 1) page = 1;
-    if (page > numPages()) page = numPages();
-
-    for (let i = 0; i < rows.length; i++) {
-        rows[i].style.display = "none";
-    }
-
-    for (let i = (page - 1) * records_per_page; i < (page * records_per_page) && i < rows.length; i++) {
-        rows[i].style.display = "table-row";
-    }
-    page_span.innerHTML = page;
-}
-
-function numPages() {
-    return Math.ceil(document.getElementById("accountsTable").getElementsByTagName("tr").length / records_per_page);
-}
-
-window.onload = function () {
-    changePage(1);
-};
-
-// Filtrado por columna
-function filterTable(columnIndex) {
-    const input = document.getElementsByTagName("input")[columnIndex];
-    const filter = input.value.toUpperCase();
-    const table = document.getElementById("accountsTable");
-    const rows = table.getElementsByTagName("tr");
-
-    for (let i = 0; i < rows.length; i++) {
-        const cells = rows[i].getElementsByTagName("td");
-        if (cells) {
-            const cellText = cells[columnIndex].textContent || cells[columnIndex].innerText;
-            rows[i].style.display = cellText.toUpperCase().indexOf(filter) > -1 ? "" : "none";
-        }
-    }
-}
+});
 </script>
 
 <footer class="footer">
     <p>&copy; 2024 BancArg. Todos los derechos reservados.</p>
 </footer>
-</body>
-</html>
