@@ -93,6 +93,7 @@ $(document).ready(function() {
         <div class="sidebar">
             <a href="#">Inicio</a> 
             <a href="#">Cuentas</a> 
+            <a href="#">Usuarios</a>
             <a href="#">Transferencias</a>
             <a href="#">Préstamos</a> 
             <a href="#">Ajustes</a>
