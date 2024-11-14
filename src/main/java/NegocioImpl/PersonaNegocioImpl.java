@@ -19,9 +19,9 @@ public class PersonaNegocioImpl implements IPersonaNegocio{
 	}
 
 	@Override
-	public boolean delete(Persona persona) {
+	public boolean delete(int id) {
 	    boolean estado = false;
-	    estado = personaDao.delete(persona);
+	    estado = personaDao.delete(id);
 	    return estado;
 	}
 
@@ -35,6 +35,11 @@ public class PersonaNegocioImpl implements IPersonaNegocio{
 	@Override
 	public ArrayList<Persona> readAll() {
 	    return personaDao.readAll();
+	}
+
+	@Override
+	public Persona getPersona(int id) {
+		return personaDao.getPersona(id);
 	}
 
 }

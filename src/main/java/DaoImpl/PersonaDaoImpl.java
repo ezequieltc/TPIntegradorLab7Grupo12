@@ -16,10 +16,10 @@ public class PersonaDaoImpl implements IPersonaDao {
 
 	private static final String insert = "insert into personas(id_usuario, id_sexo, dni, cuil, nombre, apellido, nacionalidad, fecha_nacimiento, "
 			+ "direccion, localidad, provincia, email, telefono, estado) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-	private static final String delete = "update personas set estado = ? WHERE id_persona = ?";
+	private static final String delete = "update personas set estado = ? WHERE id_usuario = ?";
 	private static final String update = "update personas set id_usuario = ?, id_sexo = ?, dni = ?, cuil = ?, nombre = ?, apellido = ?, "
 	        + "nacionalidad = ?, fecha_nacimiento = ?, direccion = ?, localidad = ?, provincia = ?, email = ?, telefono = ?, estado = ? WHERE id_persona = ?";
-	private static final String readall = "select * from personas";
+	private static final String readall = "select * from personas where estado = 1";
 	private static final String read = "select id_persona, id_usuario, id_sexo, dni, cuil, nombre, apellido, nacionalidad, fecha_nacimiento,"
 			+ "direccion, localidad, provincia, email, telefono, estado from personas where id_persona = ?";
 	private static final String siguiente = "select max(id_persona) from personas";
@@ -73,7 +73,7 @@ public class PersonaDaoImpl implements IPersonaDao {
 	}
 
 	@Override
-	public boolean delete(Persona persona) {
+	public boolean delete(int id) {
 		PreparedStatement statement;
 		Connection conexion = Conexion.getConexion().getSQLConexion();
 		boolean isdeleteExitoso = false;
@@ -81,7 +81,7 @@ public class PersonaDaoImpl implements IPersonaDao {
 		{
 			statement = conexion.prepareStatement(delete);
 			statement.setBoolean(1, false);
-			statement.setString(2, Integer.toString(persona.getId()));
+			statement.setString(2, Integer.toString(id));
 			if(statement.executeUpdate() > 0)
 			{
 				conexion.commit();
@@ -94,6 +94,8 @@ public class PersonaDaoImpl implements IPersonaDao {
 		}
 		return isdeleteExitoso;
 	}
+
+
 	
 	public boolean update(Persona persona) {
 		PreparedStatement statement;

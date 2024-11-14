@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ page import="Dominio.Persona" %>
 <%@ page import="java.util.ArrayList" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -102,13 +103,14 @@
                    {
                 	   %>
                    <tr>
+                   <form action="ServletUsuarios" method="get">
 				           <td><%=persona.getId()%></td>
-				           <td><%=persona.getUsuario().getId()%></td>
+				           <td><%=persona.getUsuario().getId()%> <input type="hidden" name="id" value="<%=persona.getUsuario().getId() %>"></td>
 				           <td><%=persona.getDni() %></td>
 				           <td><%=persona.getCuil() %></td>
 				           <td><%=persona.getNombre() %></td>
 				           <td><%=persona.getApellido() %></td>
-				           <td><%=persona.getTipoSexo().getDescripcion()%></td>
+				           <td><%=persona.getTipoSexo().getDescripcion() %></td>
 				           <td><%=persona.getNacionalidad() %></td>
 				           <td><%=persona.getFechaNacimiento() %></td>
 				           <td><%=persona.getDireccion() %></td>
@@ -116,6 +118,11 @@
 				           <td><%=persona.getProvincia() %></td>
 				           <td><%=persona.getEmail() %></td>
 				           <td><%=persona.getTelefono()%></td>
+				           <form action="ServletModificarUsuario" action="get">
+				           		<td><input type="submit" name="btnModificarUsuario" class="btn btn-success" value="Modificar"></td>		           
+				           </form>
+				           <td><input type="submit" name="btnEliminarUsuario" class="btn btn-danger" value="Eliminar"></td>
+  				</form>
 				       </tr>    
 				    <%
                    }

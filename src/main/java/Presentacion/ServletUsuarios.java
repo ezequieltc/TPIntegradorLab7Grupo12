@@ -40,12 +40,31 @@ public class ServletUsuarios extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		PersonaNegocioImpl personaNegocio = new PersonaNegocioImpl();
-		ArrayList<Persona> personas = personaNegocio.readAll();
-		
-		request.setAttribute("lista", personas);
-		
-		RequestDispatcher rd = request.getRequestDispatcher("/Administrador/Usuarios/ListarModificarEliminarUsuarios.jsp");   
-        rd.forward(request, response);
+
+	    if (request.getParameter("btnEliminarUsuario") != null) {
+	        int id = Integer.parseInt(request.getParameter("id"));
+
+	        personaNegocio.delete(id);
+
+	        response.sendRedirect(request.getContextPath() + "/Administrador/Usuarios/ListarModificarEliminarUsuarios.jsp");
+	        return; 
+	    }
+	    
+	    if(request.getParameter("btnModificarUsuario") != null) {
+			int id = Integer.parseInt(request.getParameter("id"));
+			
+			Persona persona = personaNegocio.getPersona(id);
+			
+			request.setAttribute("persona", persona);
+			RequestDispatcher rd = request.getRequestDispatcher("/Administrador/Usuarios/ModificarUsuario.jsp");
+			rd.forward(request, response);
+		}
+
+	    ArrayList<Persona> personas = personaNegocio.readAll();
+	    request.setAttribute("lista", personas);
+
+	    RequestDispatcher rd = request.getRequestDispatcher("/Administrador/Usuarios/ListarModificarEliminarUsuarios.jsp");
+	    rd.forward(request, response);
 		
 	}
 
@@ -54,13 +73,19 @@ public class ServletUsuarios extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		IPersonaDao personaDao = new PersonaDaoImpl();
-		ArrayList<Persona> personas = personaDao.readAll();
+		if(request.getParameter("btnEliminarUsuario") != null) {
+        	
+        	PersonaNegocioImpl personaNegocio = new PersonaNegocioImpl();
+    		ArrayList<Persona> personas = personaNegocio.readAll();
+    		int id = Integer.parseInt(request.getParameter("id").toString());
+        	personaNegocio.delete(id);
+    		
+    		request.setAttribute("lista", personas);
+    		
+    		RequestDispatcher rd = request.getRequestDispatcher("/Administrador/Usuarios/ListarModificarEliminarUsuarios.jsp");   
+            rd.forward(request, response);
+        }
 		
-		request.setAttribute("lista", personas);
-		
-		RequestDispatcher rd = request.getRequestDispatcher("/Administrador/Usuarios/ListarModificarEliminarUsuarios.jsp");   
-        rd.forward(request, response);
 		doGet(request, response);
 	}
 
