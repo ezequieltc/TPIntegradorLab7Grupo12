@@ -12,6 +12,43 @@
     .navbar-nav .nav-link {
       color: #fff !important;
     }
+    
+    .header-user{
+    display: flex;
+    align-items: center;
+    color: #FFF;
+    gap: 15px;
+    flex-wrap: wrap;
+    }
+    
+    .logout-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 15px;
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+	}
+
+	.logout-button:hover {
+	    background-color: #c0392b;
+	}
+	
+	.logout-button:active {
+	    background-color: #a93226;
+	}
+	
+	.icon-logout {
+	    width: 20px;
+	    height: 20px;
+	    fill: currentColor;
+	}
     .sidebar {
       background-color: #007bff;
       height: calc(100vh - 56px); /* Restar la altura de la navbar */
@@ -39,4 +76,4 @@
       position: fixed;
       bottom: 0;
       width: 100%;
-    }
+    } 
