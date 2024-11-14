@@ -92,17 +92,19 @@
     <div class="content">
 		<div id="boxLogin">
 			<h3>Inicio de Sesión</h3>
-			<div class="form-floating col-8 mb-4">
-			  <input type="email" class="form-control" id="floatingInput" placeholder="nombre@mail.com">
-			  <label for="floatingInput">Usuario</label>
-			</div>
-			<div class="form-floating col-8">
-			  <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
-			  <label for="floatingPassword">Password</label>
-			</div>
-			<button type="button" class="btn btn-primary">Acceder</button>
-			<br><br>
-			<a href="">¿Olvido su contraseña?</a>
+			<form action="SvLogin" method="post">
+				<div class="form-floating col-8 mb-4">
+				  <input name="user" type="email" class="form-control" id="floatingInput" placeholder="nombre@mail.com">
+				  <label for="floatingInput">Usuario</label>
+				</div>
+				<div class="form-floating col-8">
+				  <input name="pass" type="password" class="form-control" id="floatingPassword" placeholder="Password">
+				  <label for="floatingPassword">Password</label>
+				</div>
+				<button type="submit" class="btn btn-primary">Acceder</button>
+				<br><br>
+				<a href="">¿Olvido su contraseña?</a>
+			</form>
 		</div>
 
     </div>
@@ -111,23 +113,7 @@
       <p>&copy; 2024 BancArg. Todos los derechos reservados.</p>
     </footer>
 
-    <script>
-        document.querySelectorAll(".table-row").forEach(function(row) {
-            row.addEventListener("click", function(event) {
-                const menu = document.getElementById("accountOptionsMenu");
-
-                menu.style.display = "block";
-                menu.style.top = event.clientY + "px";
-                menu.style.left = event.clientX + "px";
-
-                document.addEventListener("click", function hideMenu(e) {
-                    if (!menu.contains(e.target) && !row.contains(e.target)) {
-                        menu.style.display = "none";
-                        document.removeEventListener("click", hideMenu);
-                    }
-                });
-            });
-        });
-    </script>
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>

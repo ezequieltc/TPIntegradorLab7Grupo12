@@ -58,10 +58,10 @@ public class ServletCuentas extends HttpServlet {
 		PersonaNegocioImpl personaNegocioTemp = new PersonaNegocioImpl();
 		CuentaNegocioImpl cuentaNegocioTemp = new CuentaNegocioImpl();
 		TipoCuentaNegocioImpl tipoCuentaTemp = new TipoCuentaNegocioImpl();
-		ArrayList<Persona> personasList;
+		List<Persona> personasList;
 		ArrayList<Cuenta> cuentasList;
 		ArrayList<TipoCuenta> tipoCuentaList;
-		personasList = personaNegocioTemp.readAll();
+		personasList = personaNegocioTemp.readAll(0).getData();
 		cuentasList = cuentaNegocioTemp.readAll();
 		tipoCuentaList = tipoCuentaTemp.readAll();
 		if(request.getParameter("crearCuenta")!= null) {
@@ -83,12 +83,9 @@ public class ServletCuentas extends HttpServlet {
 				if(cliente == null) {
 					throw new Exception("La persona no existe");
 				}
-				for (Cuenta cuentasTmp : cuentasList) {
-					System.out.println(cuentasList.toString());
-				}
+				
 				for (Cuenta cuentaTemp : cuentasList ) {
-					if(cuentaTemp.estado) {
-						
+					if(cuentaTemp.estado) {						
 						if(cuentaTemp.getPersona().getUsuario().getId() == cliente.getUsuario().getId()) {
 							cantCuentas++;
 						}
@@ -137,7 +134,6 @@ public class ServletCuentas extends HttpServlet {
 
 		Cuenta cuentaTemp = new Cuenta();
 		if(request.getParameter("botonBuscarCuenta") != null){
-			System.out.println("Buscar");
 			String buscarCBU = request.getParameter("busquedaCBU");
 			String busquedaNumeroCuenta = request.getParameter("busquedaNumeroCuenta");
 			if(busquedaNumeroCuenta != null) {
@@ -153,9 +149,9 @@ public class ServletCuentas extends HttpServlet {
 		}
 		if(request.getParameter("modificarCuenta") != null){
 			try {
-			String busquedaNumeroCuenta = request.getParameter("editNumeroCuenta");
+			int cuentaID= Integer.parseInt(request.getParameter("idCuenta"));
 			tipoCuentaList = tipoCuentaTemp.readAll();
-			cuentaTemp = cuentaNegocioTemp.getCuenta(busquedaNumeroCuenta,"");
+			cuentaTemp = cuentaNegocioTemp.getCuenta(cuentaID);
 			String tipoCuenta = request.getParameter("editTipoCuenta");
 			for(TipoCuenta tipoCuentas : tipoCuentaList) {
 				if(tipoCuentas.getDescripcion().equals(tipoCuenta)) {
@@ -170,42 +166,58 @@ public class ServletCuentas extends HttpServlet {
 			cuentaNegocioTemp.update(cuentaTemp);
 				}
 			catch (Exception e) {
-				System.out.println(e.getMessage());
+				request.setAttribute("mensajeError", "Ocurrió un error: e.getMessage()");
+				request.setAttribute("popUpStatus", "error");
+				request.setAttribute("mostrarPopUp", true);
+				//System.out.println(e.getMessage());
 			}
+			request.setAttribute("mensajeExito", "¡Cuenta actualizada correctamente!");
+			request.setAttribute("mostrarPopUp", true);
+			request.setAttribute("popUpStatus", "success");
 			RequestDispatcher rd = request.getRequestDispatcher("/Administrador/Cuentas/ModificarEliminarCuentas.jsp");   
 			rd.forward(request, response);
 		}
 		
 		if(request.getParameter("eliminarCuenta") != null){
-			String busquedaNumeroCuenta = request.getParameter("editNumeroCuenta");
-			tipoCuentaList = tipoCuentaTemp.readAll();
-			cuentaTemp = cuentaNegocioTemp.getCuenta(busquedaNumeroCuenta,"");
+			int cuentaID= Integer.parseInt(request.getParameter("idCuenta"));
+			cuentaTemp = cuentaNegocioTemp.getCuenta(cuentaID);		
 			if(request.getParameter("editEstadoCuenta").equals("activa")) {
 				cuentaTemp.setEstado(false);
 			}
 			try {
-				cuentaNegocioTemp.update(cuentaTemp);
+				cuentaNegocioTemp.delete(cuentaTemp);
 				}
 			catch (Exception e) {
-				System.out.println(e.getMessage());
+				request.setAttribute("mensajeError", "Ocurrió un error: e.getMessage()");
+				request.setAttribute("popUpStatus", "error");
+				request.setAttribute("mostrarPopUp", true);
+				//System.out.println(e.getMessage());
 			}
-			System.out.println("Eliminar");
+			request.setAttribute("mensajeExito", "¡Cuenta eliminada correctamente!");
+			request.setAttribute("mostrarPopUp", true);
+			request.setAttribute("popUpStatus", "success");
 			RequestDispatcher rd = request.getRequestDispatcher("/Administrador/Cuentas/ModificarEliminarCuentas.jsp");   
 			rd.forward(request, response);
 		}
 		if(request.getParameter("reactivarCuenta") != null){
-			String busquedaNumeroCuenta = request.getParameter("editNumeroCuenta");
-			tipoCuentaList = tipoCuentaTemp.readAll();
-			cuentaTemp = cuentaNegocioTemp.getCuenta(busquedaNumeroCuenta,"");
-			if(request.getParameter("editEstadoCuenta").equals("inactiva")) {
+			int cuentaID= Integer.parseInt(request.getParameter("idCuenta"));
+			cuentaTemp = cuentaNegocioTemp.getCuenta(cuentaID);		
+			System.out.println(cuentaTemp);
+			if(cuentaTemp.isEstado() == false) {
 				cuentaTemp.setEstado(true);
 			}
 			try {
 				cuentaNegocioTemp.update(cuentaTemp);
 				}
 			catch (Exception e) {
-				System.out.println(e.getMessage());
+				request.setAttribute("mensajeError", "Ocurrió un error: e.getMessage()");
+				request.setAttribute("popUpStatus", "error");
+				request.setAttribute("mostrarPopUp", true);
+				//System.out.println(e.getMessage());
 			}
+			request.setAttribute("mensajeExito", "¡Cuenta reactivada correctamente!");
+			request.setAttribute("mostrarPopUp", true);
+			request.setAttribute("popUpStatus", "success");
 			RequestDispatcher rd = request.getRequestDispatcher("/Administrador/Cuentas/ModificarEliminarCuentas.jsp");   
 			rd.forward(request, response);
 		

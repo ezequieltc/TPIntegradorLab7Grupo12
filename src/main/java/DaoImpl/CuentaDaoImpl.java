@@ -20,7 +20,7 @@ public class CuentaDaoImpl implements ICuentaDao {
     private static final String update = "UPDATE cuentas SET id_cliente = ?, id_tipo_cuenta = ?, numero_cuenta = ?, cbu = ?, saldo = ?, fecha_creacion = ?, estado = ? WHERE id_cuenta = ?";
     //private static final String readall = "SELECT * FROM cuentas";
     private static final String readall = "select * from cuentas c inner join personas p on p.id_usuario = c.id_cliente order by c.id_cuenta";
-    private static final String read = "SELECT id_cuenta, id_cliente, id_tipo_cuenta, numero_cuenta, cbu, saldo, fecha_creacion, estado FROM cuentas WHERE id_cuenta = ?";
+    private static final String read = "SELECT c.id_cuenta, c.id_cliente, c.id_tipo_cuenta, c.numero_cuenta, c.cbu, c.saldo, c.fecha_creacion, c.estado, p.id_persona FROM cuentas c inner join personas p on p.id_usuario = c.id_cliente WHERE id_cuenta = ?";
     private static final String readCBU = "SELECT c.id_cuenta, c.id_cliente, c.id_tipo_cuenta, c.numero_cuenta, c.cbu, c.saldo, c.fecha_creacion, c.estado, p.id_persona FROM cuentas c inner join personas p on p.id_usuario = c.id_cliente WHERE cbu = ?";
     private static final String readNumeroCuenta = "SELECT c.id_cuenta, c.id_cliente, c.id_tipo_cuenta, c.numero_cuenta, c.cbu, c.saldo, c.fecha_creacion, c.estado, p.id_persona FROM cuentas c inner join personas p on p.id_usuario = c.id_cliente WHERE numero_cuenta = ?";
     private static final String siguiente = "SELECT MAX(id_cuenta) FROM cuentas";
@@ -32,6 +32,7 @@ public class CuentaDaoImpl implements ICuentaDao {
         this.personaDao = new PersonaDaoImpl();
         this.tipoCuentaDao = new TipoCuentaDaoImpl();
     }
+    
 
     @Override
     public boolean insert(Cuenta cuenta) {
@@ -42,9 +43,14 @@ public class CuentaDaoImpl implements ICuentaDao {
         boolean isInsertExitoso = false;
         ArrayList<Cuenta> cuentasAll;
         cuentasAll = readAll();
-        numeroDeCuenta = Long.parseLong(cuentasAll.get(cuentasAll.size()-1).numeroCuenta)+1;
+        if(cuentasAll.isEmpty()) {
+        	numeroDeCuenta = 1000;
+        	CBU = 1000000000000001L;  	
+        } else {
+        	numeroDeCuenta = Long.parseLong(cuentasAll.get(cuentasAll.size()-1).numeroCuenta)+1;
+        	CBU = Long.parseLong(cuentasAll.get(cuentasAll.size()-1).getCbu()) + 1;
+        }
         cuenta.setNumeroCuenta(String.valueOf(numeroDeCuenta));
-        CBU = Long.parseLong(cuentasAll.get(cuentasAll.size()-1).getCbu()) + 1;
         cuenta.setCbu(String.valueOf(CBU));
         try {
             statement = conexion.prepareStatement(insert);
@@ -69,6 +75,7 @@ public class CuentaDaoImpl implements ICuentaDao {
         }
         return isInsertExitoso;
     }
+
 
     @Override
     public boolean delete(Cuenta cuenta) {

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import Dao.IUsuarioDao;
 import DaoImpl.UsuarioDaoImpl;
 import Dominio.Usuario;
+import Dominio.DTO.PaginatedResponse;
 import Negocio.IUsuarioNegocio;
 
 public class UsuarioNegocioImpl implements IUsuarioNegocio{
@@ -32,9 +33,9 @@ public class UsuarioNegocioImpl implements IUsuarioNegocio{
 	}
 	
 	@Override
-	public ArrayList<Usuario> readAll() {
+	public PaginatedResponse<Usuario> readAll(int pagina) {
 		
-		return usuarioDao.readAll();
+		return usuarioDao.readAll(pagina);
 	}
 
 

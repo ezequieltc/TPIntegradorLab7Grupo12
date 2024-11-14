@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ page import="Dominio.Persona" %>
 <%@ page import="java.util.ArrayList" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -69,6 +70,7 @@
                         <th><input type="text" placeholder="Provincia" onkeyup="filterTable(11)"></th>
                         <th><input type="text" placeholder="E-mail" onkeyup="filterTable(12)"></th>
                         <th><input type="text" placeholder="Telefono" onkeyup="filterTable(13)"></th>
+                        <th><input type="text" placeholder="Estado" onkeyup="filterTable(14)"></th>
                     </tr>
                     <tr>
                         <th>ID Usuario</th>
@@ -85,6 +87,7 @@
                         <th>Provincia</th>
                         <th>E-Mail</th>
                         <th>Teléfono</th>
+                        <th>Estado</th>
                     </tr>
                 </thead>
                 <% 
@@ -102,13 +105,14 @@
                    {
                 	   %>
                    <tr>
+                   <form action="ServletUsuarios" method="get">
 				           <td><%=persona.getId()%></td>
-				           <td><%=persona.getUsuario().getId()%></td>
+				           <td><%=persona.getUsuario().getId()%> <input type="hidden" name="id" value="<%=persona.getUsuario().getId() %>"></td>
 				           <td><%=persona.getDni() %></td>
 				           <td><%=persona.getCuil() %></td>
 				           <td><%=persona.getNombre() %></td>
 				           <td><%=persona.getApellido() %></td>
-				           <td><%=persona.getTipoSexo().getDescripcion()%></td>
+				           <td><%=persona.getTipoSexo().getDescripcion() %></td>
 				           <td><%=persona.getNacionalidad() %></td>
 				           <td><%=persona.getFechaNacimiento() %></td>
 				           <td><%=persona.getDireccion() %></td>
@@ -116,6 +120,12 @@
 				           <td><%=persona.getProvincia() %></td>
 				           <td><%=persona.getEmail() %></td>
 				           <td><%=persona.getTelefono()%></td>
+				           <td><%=persona.isEstado() ? "Activa" : "Baja"%></td>
+				           <form action="ServletModificarUsuario" action="get">
+				           		<td><input type="submit" name="btnModificarUsuario" class="btn btn-success" value="Modificar"></td>		           
+				           <td><input type="submit" name="btnEliminarUsuario" class="btn btn-danger" value="Eliminar"></td>
+				           </form>
+  				</form>
 				       </tr>    
 				    <%
                    }
