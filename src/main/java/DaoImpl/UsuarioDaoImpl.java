@@ -18,7 +18,7 @@ public class UsuarioDaoImpl implements IUsuarioDao {
     private static final String delete = "update usuarios set estado = ? where id_usuario = ?";
     private static final String update = "update usuarios SET id_tipo_usuario = ?, usuario = ?, contrasena = ?, fecha_creacion = ?, estado = ? where id_usuario = ?";
 //    private static final String readall = "select * from usuarios where estado = 1 limit ? offset ?";
-    private static final String readall = "select * from usuarios where estado = 1";
+    private static final String readall = "select * from usuarios";
     private static final String read = "select id_usuario, id_tipo_usuario, usuario, contrasena, fecha_creacion, estado from usuarios where id_usuario = ?";
     private static final String siguiente = "select max(id_usuario) from usuarios";
 

@@ -89,7 +89,7 @@ public class Main {
         if (!personas.isEmpty()) {
             Persona personaABorrar = personas.get(personas.size() - 1);
             personaABorrar.setEstado(false);
-            if (personaDao.delete(personaABorrar.getId())) {
+            if (!personaDao.delete(personaABorrar.getId())) {
                 System.out.println("Persona dada de baja exitosamente");
             } else {
                 System.out.println("Error al dar de baja persona");

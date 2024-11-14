@@ -70,6 +70,7 @@
                         <th><input type="text" placeholder="Provincia" onkeyup="filterTable(11)"></th>
                         <th><input type="text" placeholder="E-mail" onkeyup="filterTable(12)"></th>
                         <th><input type="text" placeholder="Telefono" onkeyup="filterTable(13)"></th>
+                        <th><input type="text" placeholder="Estado" onkeyup="filterTable(14)"></th>
                     </tr>
                     <tr>
                         <th>ID Usuario</th>
@@ -86,6 +87,7 @@
                         <th>Provincia</th>
                         <th>E-Mail</th>
                         <th>Teléfono</th>
+                        <th>Estado</th>
                     </tr>
                 </thead>
                 <% 
@@ -118,10 +120,11 @@
 				           <td><%=persona.getProvincia() %></td>
 				           <td><%=persona.getEmail() %></td>
 				           <td><%=persona.getTelefono()%></td>
+				           <td><%=persona.isEstado() ? "Activa" : "Baja"%></td>
 				           <form action="ServletModificarUsuario" action="get">
 				           		<td><input type="submit" name="btnModificarUsuario" class="btn btn-success" value="Modificar"></td>		           
-				           </form>
 				           <td><input type="submit" name="btnEliminarUsuario" class="btn btn-danger" value="Eliminar"></td>
+				           </form>
   				</form>
 				       </tr>    
 				    <%

@@ -46,7 +46,7 @@ public class ServletUsuarios extends HttpServlet {
 
 	        personaNegocio.delete(id);
 
-	        response.sendRedirect(request.getContextPath() + "/Administrador/Usuarios/ListarModificarEliminarUsuarios.jsp");
+	        response.sendRedirect(request.getContextPath() + "/ServletUsuarios");
 	        return; 
 	    }
 	    
