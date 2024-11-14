@@ -60,7 +60,7 @@ public class ServletUsuarios extends HttpServlet {
 			rd.forward(request, response);
 		}
 
-	    ArrayList<Persona> personas = personaNegocio.readAll();
+	    List<Persona> personas = personaNegocio.readAll(0).getData();
 	    request.setAttribute("lista", personas);
 
 	    RequestDispatcher rd = request.getRequestDispatcher("/Administrador/Usuarios/ListarModificarEliminarUsuarios.jsp");
@@ -76,7 +76,7 @@ public class ServletUsuarios extends HttpServlet {
 		if(request.getParameter("btnEliminarUsuario") != null) {
         	
         	PersonaNegocioImpl personaNegocio = new PersonaNegocioImpl();
-    		ArrayList<Persona> personas = personaNegocio.readAll();
+    		List<Persona> personas = personaNegocio.readAll(0).getData();
     		int id = Integer.parseInt(request.getParameter("id").toString());
         	personaNegocio.delete(id);
     		

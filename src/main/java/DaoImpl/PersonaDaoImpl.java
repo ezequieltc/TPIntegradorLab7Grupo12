@@ -11,6 +11,7 @@ import Dao.IPersonaDao;
 import Dominio.Persona;
 import Dominio.TipoSexo;
 import Dominio.Usuario;
+import Dominio.DTO.PaginatedResponse;
 
 public class PersonaDaoImpl implements IPersonaDao {
 
@@ -20,9 +21,11 @@ public class PersonaDaoImpl implements IPersonaDao {
 	private static final String update = "update personas set id_usuario = ?, id_sexo = ?, dni = ?, cuil = ?, nombre = ?, apellido = ?, "
 	        + "nacionalidad = ?, fecha_nacimiento = ?, direccion = ?, localidad = ?, provincia = ?, email = ?, telefono = ?, estado = ? WHERE id_persona = ?";
 	private static final String readall = "select * from personas where estado = 1";
+	//private static final String readall = "select * from personas where estado = 1 limit ? offset ?";
 	private static final String read = "select id_persona, id_usuario, id_sexo, dni, cuil, nombre, apellido, nacionalidad, fecha_nacimiento,"
 			+ "direccion, localidad, provincia, email, telefono, estado from personas where id_persona = ?";
 	private static final String siguiente = "select max(id_persona) from personas";
+	private static final String count = "select count(*) as total FROM personas";
 	private TipoSexoDaoImpl tipoSexoDao;
 	private UsuarioDaoImpl usuarioDao;
 	
@@ -139,14 +142,18 @@ public class PersonaDaoImpl implements IPersonaDao {
 	}
 
 	@Override
-	public ArrayList<Persona> readAll() {
+	public PaginatedResponse<Persona> readAll(int pagina) {
 		PreparedStatement statement;
 		ResultSet resultSet;
 		ArrayList<Persona> personas = new ArrayList<Persona>();
 		Conexion conexion = Conexion.getConexion();
+		final int limit = 5;
+//		int offset = limit * (pagina-1);
 		try 
 		{
 			statement = conexion.getSQLConexion().prepareStatement(readall);
+//			statement.setInt(1, limit);
+//			statement.setInt(2, offset);
 			resultSet = statement.executeQuery();
 			while(resultSet.next())
 			{
@@ -157,8 +164,23 @@ public class PersonaDaoImpl implements IPersonaDao {
 		{
 			e.printStackTrace();
 		}
-		return personas;
+		
+		int totalRegistros = getTotalRegistros(conexion);
+		
+		return new PaginatedResponse<Persona>(personas, totalRegistros, pagina, limit);
 	}
+	
+    private int getTotalRegistros(Conexion conexion) {
+        try (PreparedStatement countStatement = conexion.getSQLConexion().prepareStatement(count);
+             ResultSet countResult = countStatement.executeQuery()) {
+            if (countResult.next()) {
+                return countResult.getInt("total");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
 	
 	private Persona getPersona(ResultSet resultSet) throws SQLException {
 	    int id = resultSet.getInt("id_persona");

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import Dao.IPersonaDao;
 import DaoImpl.PersonaDaoImpl;
 import Dominio.Persona;
+import Dominio.DTO.PaginatedResponse;
 import Negocio.IPersonaNegocio;
 
 public class PersonaNegocioImpl implements IPersonaNegocio{
@@ -33,8 +34,8 @@ public class PersonaNegocioImpl implements IPersonaNegocio{
 	}
 
 	@Override
-	public ArrayList<Persona> readAll() {
-	    return personaDao.readAll();
+	public PaginatedResponse<Persona> readAll(int pagina) {
+	    return personaDao.readAll(pagina);
 	}
 
 	@Override

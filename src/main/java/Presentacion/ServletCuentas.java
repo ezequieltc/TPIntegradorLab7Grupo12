@@ -58,10 +58,10 @@ public class ServletCuentas extends HttpServlet {
 		PersonaNegocioImpl personaNegocioTemp = new PersonaNegocioImpl();
 		CuentaNegocioImpl cuentaNegocioTemp = new CuentaNegocioImpl();
 		TipoCuentaNegocioImpl tipoCuentaTemp = new TipoCuentaNegocioImpl();
-		ArrayList<Persona> personasList;
+		List<Persona> personasList;
 		ArrayList<Cuenta> cuentasList;
 		ArrayList<TipoCuenta> tipoCuentaList;
-		personasList = personaNegocioTemp.readAll();
+		personasList = personaNegocioTemp.readAll(0).getData();
 		cuentasList = cuentaNegocioTemp.readAll();
 		tipoCuentaList = tipoCuentaTemp.readAll();
 		if(request.getParameter("crearCuenta")!= null) {

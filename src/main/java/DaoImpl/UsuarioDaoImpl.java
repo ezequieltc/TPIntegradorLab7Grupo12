@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import Dao.IUsuarioDao;
 import Dominio.Usuario;
+import Dominio.DTO.PaginatedResponse;
 import Dominio.TipoUsuario;
 
 
@@ -16,7 +17,8 @@ public class UsuarioDaoImpl implements IUsuarioDao {
     private static final String insert = "insert into usuarios(id_tipo_usuario, usuario, contrasena, fecha_creacion, estado) values (?, ?, ?, ?, ?)";
     private static final String delete = "update usuarios set estado = ? where id_usuario = ?";
     private static final String update = "update usuarios SET id_tipo_usuario = ?, usuario = ?, contrasena = ?, fecha_creacion = ?, estado = ? where id_usuario = ?";
-    private static final String readall = "select * from usuarios";
+//    private static final String readall = "select * from usuarios where estado = 1 limit ? offset ?";
+    private static final String readall = "select * from usuarios where estado = 1";
     private static final String read = "select id_usuario, id_tipo_usuario, usuario, contrasena, fecha_creacion, estado from usuarios where id_usuario = ?";
     private static final String siguiente = "select max(id_usuario) from usuarios";
 
@@ -104,21 +106,40 @@ public class UsuarioDaoImpl implements IUsuarioDao {
         return isUpdateExitoso;
     }
     @Override
-    public ArrayList<Usuario> readAll() {
+    public PaginatedResponse<Usuario> readAll(int pagina) {
         PreparedStatement statement;
         ResultSet resultSet;
         ArrayList<Usuario> usuarios = new ArrayList<>();
         Conexion conexion = Conexion.getConexion();
+        final int limit = 5;
+//        int offset = limit * (pagina - 1);
         try {
             statement = conexion.getSQLConexion().prepareStatement(readall);
+//            statement.setInt(1, limit);
+//            statement.setInt(2, offset);
             resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 usuarios.add(getUsuario(resultSet));
             }
+            
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return usuarios;
+        int totalRegistros = getTotalRegistros(conexion);
+        return new PaginatedResponse<Usuario>(usuarios, totalRegistros, pagina, limit);
+    }
+    
+    private int getTotalRegistros(Conexion conexion) {
+        String countQuery = "SELECT COUNT(*) AS total FROM usuarios";
+        try (PreparedStatement countStatement = conexion.getSQLConexion().prepareStatement(countQuery);
+             ResultSet countResult = countStatement.executeQuery()) {
+            if (countResult.next()) {
+                return countResult.getInt("total");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     private Usuario getUsuario(ResultSet resultSet) throws SQLException {

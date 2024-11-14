@@ -4,7 +4,7 @@ import Dominio.*;
 
 import java.util.ArrayList;
 import java.util.Date;
-
+import java.util.List;
 
 import DaoImpl.TipoUsuarioDaoImpl;
 
@@ -29,7 +29,7 @@ public class Main {
             System.out.println("Error al agregar usuario");
         }
 
-        ArrayList<Usuario> usuarios = usuarioDao.readAll();
+        List<Usuario> usuarios = usuarioDao.readAll(1).getData();
         if (!usuarios.isEmpty()) {
             Usuario usuarioABorrar = usuarios.get(usuarios.size() - 1);
             usuarioABorrar.setEstado(false);
@@ -51,7 +51,7 @@ public class Main {
         }
 
         System.out.println("Listado de todos los usuarios:");
-        usuarios = usuarioDao.readAll();
+        usuarios = usuarioDao.readAll(1).getData();
         for (Usuario usuario : usuarios) {
             System.out.println("ID: " + usuario.getId() +
                     ", Tipo de Usuario: " + usuario.getTipoUsuario().getDescripcion() + 
@@ -85,11 +85,11 @@ public class Main {
             System.out.println("Error al agregar persona");
         }
 
-        ArrayList<Persona> personas = personaDao.readAll();
+        List<Persona> personas = personaDao.readAll(1).getData();
         if (!personas.isEmpty()) {
             Persona personaABorrar = personas.get(personas.size() - 1);
             personaABorrar.setEstado(false);
-            if (personaDao.delete(personaABorrar)) {
+            if (personaDao.delete(personaABorrar.getId())) {
                 System.out.println("Persona dada de baja exitosamente");
             } else {
                 System.out.println("Error al dar de baja persona");
@@ -107,7 +107,7 @@ public class Main {
         }
 
         System.out.println("Listado de todas las personas:");
-        personas = personaDao.readAll();
+        personas = personaDao.readAll(1).getData();
         for (Persona persona : personas) {
             System.out.println("ID: " + persona.getId() +
                     ", Persona: " + persona.getUsuario().getUsuario() +
