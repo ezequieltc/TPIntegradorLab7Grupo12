@@ -1,3 +1,4 @@
+<%@page import="servicios.ddbb.*"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -79,6 +80,7 @@
     </style>
   </head>
   <body>
+  <% DbConexion db = new DbConexion(); %>
     <div class="sidebar">
       <h2 class="text-center">BancArg</h2>
     </div>

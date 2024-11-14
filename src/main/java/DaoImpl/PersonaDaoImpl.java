@@ -1,6 +1,7 @@
 package DaoImpl;
 
 import java.sql.Connection;
+import servicios.ddbb.*;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,8 +12,7 @@ import Dao.IPersonaDao;
 import Dominio.Persona;
 import Dominio.TipoSexo;
 import Dominio.Usuario;
-import Dominio.DTO.PaginatedResponse;
-
+import servicios.ddbb.*;
 public class PersonaDaoImpl implements IPersonaDao {
 
 	private static final String insert = "insert into personas(id_usuario, id_sexo, dni, cuil, nombre, apellido, nacionalidad, fecha_nacimiento, "
