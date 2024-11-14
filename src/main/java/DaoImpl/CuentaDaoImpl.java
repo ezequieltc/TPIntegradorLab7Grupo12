@@ -31,6 +31,7 @@ public class CuentaDaoImpl implements ICuentaDao {
         this.personaDao = new PersonaDaoImpl();
         this.tipoCuentaDao = new TipoCuentaDaoImpl();
     }
+    
 
     @Override
     public boolean insert(Cuenta cuenta) {
@@ -41,9 +42,14 @@ public class CuentaDaoImpl implements ICuentaDao {
         boolean isInsertExitoso = false;
         ArrayList<Cuenta> cuentasAll;
         cuentasAll = readAll();
-        numeroDeCuenta = Long.parseLong(cuentasAll.get(cuentasAll.size()-1).numeroCuenta)+1;
+        if(cuentasAll.isEmpty()) {
+        	numeroDeCuenta = 1000;
+        	CBU = 1000000000000001L;  	
+        } else {
+        	numeroDeCuenta = Long.parseLong(cuentasAll.get(cuentasAll.size()-1).numeroCuenta)+1;
+        	CBU = Long.parseLong(cuentasAll.get(cuentasAll.size()-1).getCbu()) + 1;
+        }
         cuenta.setNumeroCuenta(String.valueOf(numeroDeCuenta));
-        CBU = Long.parseLong(cuentasAll.get(cuentasAll.size()-1).getCbu()) + 1;
         cuenta.setCbu(String.valueOf(CBU));
         try {
             statement = conexion.prepareStatement(insert);
@@ -68,6 +74,7 @@ public class CuentaDaoImpl implements ICuentaDao {
         }
         return isInsertExitoso;
     }
+
 
     @Override
     public boolean delete(Cuenta cuenta) {

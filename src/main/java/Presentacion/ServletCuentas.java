@@ -83,12 +83,9 @@ public class ServletCuentas extends HttpServlet {
 				if(cliente == null) {
 					throw new Exception("La persona no existe");
 				}
-				for (Cuenta cuentasTmp : cuentasList) {
-					System.out.println(cuentasList.toString());
-				}
+				
 				for (Cuenta cuentaTemp : cuentasList ) {
-					if(cuentaTemp.estado) {
-						
+					if(cuentaTemp.estado) {						
 						if(cuentaTemp.getPersona().getUsuario().getId() == cliente.getUsuario().getId()) {
 							cantCuentas++;
 						}
@@ -137,7 +134,6 @@ public class ServletCuentas extends HttpServlet {
 
 		Cuenta cuentaTemp = new Cuenta();
 		if(request.getParameter("botonBuscarCuenta") != null){
-			System.out.println("Buscar");
 			String buscarCBU = request.getParameter("busquedaCBU");
 			String busquedaNumeroCuenta = request.getParameter("busquedaNumeroCuenta");
 			if(busquedaNumeroCuenta != null) {
