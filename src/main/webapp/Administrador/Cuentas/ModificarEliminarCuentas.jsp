@@ -19,7 +19,7 @@
 	session.removeAttribute("popUpStatus");
 %>
 <head>
-	<jsp:include page="../../components/header.jsp"/>
+	<%@include file="../../components/header.jsp"%>
 	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -39,7 +39,7 @@
 	        }
 	        .step-actions {
 	            position: absolute;
-	            bottom: 20px;
+	          
 	            right: 20px;
 	        }
 	</style>
@@ -49,7 +49,7 @@
 
  
 <body>
-	<jsp:include page="../../components/pre-body.jsp"/>
+	<%@include file="../../components/pre-body.jsp"%>
         <h2 class="my-4">Gestión de Cuentas</h2>
 
         <div class="step">
@@ -83,7 +83,9 @@
                     Cuenta cuentaDatos = (Cuenta) request.getAttribute("cuenta");
                     if (cuentaDatos != null) {
                 %>
+                
                 <form class="needs-validation" action="${pageContext.request.contextPath}/ServletCuentas" method="POST">
+                    <div style="padding-bottom:50px;">
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
@@ -114,7 +116,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="editSaldo">Saldo</label>
-                                <input type="number" id="editSaldo" name="editSaldo" class="form-control" required value="<%= cuentaDatos.getSaldo() %>">
+                                <input type="number" id="editSaldo" name="editSaldo" class="form-control" min="0" required value="<%= cuentaDatos.getSaldo() %>">
                             </div>
                             <div class="form-group">
                                 <label for="editEstadoCuenta">Estado Cuenta</label>
@@ -134,12 +136,11 @@
                             <button type="submit" class="btn btn-success" name="reactivarCuenta" id="reactivarCuenta" onclick="return confirm('¿Está seguro de que desea reactivar esta cuenta?')">Reactivar Cuenta</button>
                         <% } %>
                     </div>
+                    </div>
                 </form>
                 <% } %>
             </div>
         </div>
-        
-	<jsp:include page="../../components/post-body.jsp"/>
    	<div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content success">
@@ -174,7 +175,7 @@
 		</div>
 	</div>
 	
-	<jsp:include page="../../components/post-body.jsp"/>
+	<%@include file="../../components/post-body.jsp"%>
     
     <script>
     $(document).ready(function(){

@@ -3,13 +3,10 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BancArg - Gestion de Cuentas</title>
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/layout.css" />
-<link
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-	rel="stylesheet" />
+<%@include file="../../components/header.jsp"%>
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 <style>
 .step {
 	padding: 40px;
@@ -68,26 +65,7 @@
 
 </head>
 <body>
-	<nav class="navbar navbar-expand-lg">
-		<a class="navbar-brand" href="#">BancArg</a>
-		<div class="collapse navbar-collapse justify-content-end">
-			<ul class="navbar-nav">
-				<li class="nav-item"><a class="nav-link" href="#">Usuario: Administrador</a></li>
-			</ul>
-		</div>
-	</nav>
-
-	<div class="d-flex">
-		<div class="sidebar">
-			<a href="#">Inicio</a> 
-			<a href="${pageContext.request.contextPath}/Administrador/Cuentas.jsp">Cuentas</a>
-			<a href="#">Usuarios</a>
-			<a href="#">Transferencias</a>
-			<a href="#">Préstamos</a> 
-			<a href="#">Ajustes</a>
-		</div>
-
-		<div class="content-container">
+<%@include file="../../components/pre-body.jsp"%>
 			<h2 class="my-4">Cuentas</h2>
 			<div id="registrationForm" class="w-100">
 				<div class="step">
@@ -99,11 +77,6 @@
         			</div>
 				</div>
 			</div>
-		</div> 
-	</div>
-
-	<footer class="footer">
-		<p>&copy; 2024 BancArg. Todos los derechos reservados.</p>
-	</footer>
+	<%@include file="../../components/post-body.jsp"%>
 </body>
 </html>
