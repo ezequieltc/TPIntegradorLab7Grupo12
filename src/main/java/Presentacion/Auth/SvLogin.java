@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import Dominio.Persona;
+import excepciones.UsuarioBloqueado;
 import servicios.auth.AuthServices;
 
 /**
@@ -39,7 +40,12 @@ public class SvLogin extends HttpServlet {
 		String pass = request.getParameter("pass");
 		AuthServices authService = new AuthServices();
 		 
-		Persona persona = authService.login(user, pass);
+		Persona persona = null;
+		try {
+			persona = authService.login(user, pass);
+		} catch (UsuarioBloqueado e) {
+			e.printStackTrace();
+		}
 		
 		if(persona != null){
 			HttpSession session = request.getSession(true);
