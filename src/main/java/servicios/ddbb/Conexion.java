@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+
 public class Conexion {
 	public static Conexion instancia;
 	private Connection connection;
@@ -22,9 +23,10 @@ public class Conexion {
 		}
 	}
 	
-	
 	public static Conexion getConexion()   
-	{								
+	{		
+
+				
 		if(instancia == null)
 		{
 			instancia = new Conexion();
@@ -49,4 +51,6 @@ public class Conexion {
 		}
 		instancia = null;
 	}
+	
+
 }
