@@ -5,14 +5,18 @@ import servicios.ddbb.*;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 
 import Dao.IPersonaDao;
 import Dominio.Persona;
 import Dominio.TipoSexo;
+import Dominio.TipoUsuario;
 import Dominio.Usuario;
 import Dominio.DTO.PaginatedResponse;
+import NegocioImpl.UsuarioNegocioImpl;
 import servicios.ddbb.*;
 public class PersonaDaoImpl implements IPersonaDao {
 
@@ -44,6 +48,28 @@ public class PersonaDaoImpl implements IPersonaDao {
 		boolean isInsertExitoso = false;
 		try
 		{
+			UsuarioNegocioImpl usuarioNeg = new UsuarioNegocioImpl();
+			Usuario usuarioTemp = new Usuario();
+			try{
+				SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
+				Date fechaCreacion = formatoFecha.parse("2024-10-12");
+				usuarioTemp.setFechaCreacion(fechaCreacion);
+			}
+			catch (Exception e) {
+				
+			}
+			usuarioTemp.setEstado(true);
+			TipoUsuario tipoUserTemp = new TipoUsuario("cliente");
+			tipoUserTemp.setId(2);
+					
+			usuarioTemp.setTipoUsuario(tipoUserTemp);
+			usuarioTemp.setContrasena(persona.getUsuario().getContrasena());
+			usuarioTemp.setUsuario(persona.getUsuario().getUsuario());
+			usuarioTemp.setId(usuarioNeg.calcularSiguienteId());
+			
+			usuarioNeg.insert(usuarioTemp);
+			persona.setUsuario(usuarioTemp);
+			persona.setEstado(true);
 			statement = conexion.prepareStatement(insert);
 	        statement.setInt(1, persona.getUsuario().getId());  
 	        statement.setInt(2, persona.getTipoSexo().getId());

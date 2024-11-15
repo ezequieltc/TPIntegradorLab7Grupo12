@@ -37,6 +37,10 @@ public class UsuarioNegocioImpl implements IUsuarioNegocio{
 		
 		return usuarioDao.readAll(pagina);
 	}
+	
+	public int calcularSiguienteId() {
+		return usuarioDao.calcularSiguienteId();
+	}
 
 	//@Override
 	/*public ArrayList<Usuario> readAll() {
