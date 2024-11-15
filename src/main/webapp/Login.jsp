@@ -80,7 +80,6 @@
     </style>
   </head>
   <body>
-  <% DbConexion db = new DbConexion(); %>
     <div class="sidebar">
       <h2 class="text-center">BancArg</h2>
     </div>
@@ -94,7 +93,7 @@
 			<h3>Inicio de Sesión</h3>
 			<form action="SvLogin" method="post">
 				<div class="form-floating col-8 mb-4">
-				  <input name="user" type="email" class="form-control" id="floatingInput" placeholder="nombre@mail.com">
+				  <input name="user" class="form-control" id="floatingInput" placeholder="Usuario">
 				  <label for="floatingInput">Usuario</label>
 				</div>
 				<div class="form-floating col-8">
