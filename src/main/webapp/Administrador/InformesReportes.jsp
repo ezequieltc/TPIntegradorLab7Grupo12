@@ -6,40 +6,38 @@
     // Establecer el título de la página
     request.setAttribute("pageTitle", "Informes y Reportes");
   %>
-<head>
   <%@include  file="../components/header.jsp"%>
+<head>
   <style>
     .step {
-        padding: 40px;
-        background-color: #ffffff;
-        border-radius: 5px;
-        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-        width: 100%;
-        min-height: 500px;
-        
-        overflow-y: auto;
-        position: relative;
-    }
+          padding: 40px;
+          background-color: #ffffff;
+          border-radius: 5px;
+          box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+          width: 100%;
+          min-height: 450px;
+          position: relative;
+      }
 
-    .step .form-group {
-        margin-bottom: 20px;
-    }
+      .step .form-group,
+      .step .beneficiary-details {
+          margin-bottom: 20px;
+      }
 
-    .step .step-actions {
-        position: absolute;
-        bottom: 20px;
-        right: 20px;
-    }
+      .step .step-actions {
+          position: absolute;
+          bottom: 20px;
+          right: 20px;
+      }
 
-    .transferForm {
-        height: calc(100% - 100px);
-    }
+      .transferForm {
+          height: calc(100% - 100px);
+      }
 </style>
 </head>
 <body>
-  	<jsp:include page="../components/pre-body.jsp"/>
+  	<%@include  file="../components/pre-body.jsp"%>
   	<h2 class="my-4">Informes y Reportes</h2>
-	<div id="reportsForm" class="w-100">
 	  <div class="step">
 	    <h4>Generar Informes y Reportes</h4>
 	    <form>
@@ -67,7 +65,7 @@
 	      </div>
 	    </form>
 	  </div>
-	</div>
+
 	<div class="modal fade" id="infoModal1" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
 	  <div class="modal-dialog modal-lg">
 	    <div class="modal-content">
@@ -104,6 +102,6 @@
 	    </div>
 	  </div>
 	</div>
-	<jsp:include page="../components/post-body.jsp"/>
+	<%@include  file="../components/post-body.jsp"%>
 </body>
 </html>

@@ -41,21 +41,22 @@ public class SvSidebar extends HttpServlet {
     private List<MenuItem> getAdminMenu(HttpServletRequest request) {
         List<MenuItem> cuentasSubMenu = List.of(
             new MenuItem("Alta Cuenta", request.getContextPath() + "/Administrador/Cuentas/AltaCuenta.jsp"),
-            new MenuItem("Modificar Cuenta", request.getContextPath() + "/Administrador/Cuentas/ModificacionCuenta.jsp"),
+            new MenuItem("Modificar Cuenta", request.getContextPath() + "/Administrador/Cuentas/ModificarEliminarCuentas.jsp"),
             new MenuItem("Listar Cuentas", request.getContextPath() + "/Administrador/Cuentas/ListarCuentas.jsp")
         );
 
         List<MenuItem> prestamosSubMenu = List.of(
-            new MenuItem("Alta Préstamo", request.getContextPath() + "/Administrador/Prestamos/AltaPrestamo.jsp")
+            new MenuItem("Alta Préstamo", request.getContextPath() + "/Administrador/Prestamos/AutorizarPrestamo.jsp")
         );
 
         List<MenuItem> usuariosSubMenu = List.of(
-            new MenuItem("Alta Usuario", request.getContextPath() + "/Administrador/Usuarios/AltaUsuario.jsp"),
-            new MenuItem("Modificar Usuario", request.getContextPath() + "/Administrador/Usuarios/ModificacionUsuario.jsp")
+            new MenuItem("Alta Usuario", request.getContextPath() + "/Administrador/Usuarios/AltaUsuarios.jsp"),
+            new MenuItem("Modificar Usuario", request.getContextPath() + "/Administrador/Usuarios/ListarModificarEliminarUsuarios.jsp"),
+            new MenuItem("Modificar Usuario", request.getContextPath() + "/Administrador/Usuarios/ModificarUsuario.jsp")
         );
 
         return List.of(
-            new MenuItem("Inicio", request.getContextPath() + "/home.jsp"),
+            new MenuItem("Inicio", request.getContextPath() + "/Administrador/VistaHomeAdministrador.jsp"),
             new MenuItem("Informes y Reportes", request.getContextPath() + "/Administrador/InformesReportes.jsp"),
             new MenuItem("Cuentas", cuentasSubMenu),
             new MenuItem("Préstamos", prestamosSubMenu),

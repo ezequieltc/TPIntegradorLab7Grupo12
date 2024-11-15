@@ -1,12 +1,14 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BancArg - Autorizar Préstamo</title>
-  <link rel="stylesheet" type="text/css" href="../../css/layout.css" />
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <style>
+  <%
+    // Establecer el tÃ­tulo de la pÃ¡gina
+    request.setAttribute("pageTitle", "Autorizar Prestamo");
+  %>
+ <head>
+  <%@include  file="../../components/header.jsp"%>
+    <style>
     .main-content {
       flex: 1;
       padding: 2rem;
@@ -55,31 +57,11 @@
     }
   </style>
 </head>
+
+
 <body>
-<nav class="navbar">
-  <a class="navbar-brand" href="#">BancArg</a>
-  <div class="justify-content-end">
-    <ul class="navbar-nav">
-      <li class="nav-item">
-        <a class="nav-link" href="#">Usuario: Administrador</a>
-      </li>
-    </ul>
-  </div>
-</nav>
-
-<div class="d-flex">
-  <div class="sidebar">
-    <a href="#">Inicio</a>
-    <a href="#">Cuentas</a>
-    <a href="#">Transferencias</a>
-    <a href="#">Préstamos</a>
-    <a href="#">Ajustes</a>
-  </div>
-
-
-    <div class="main-content">
-      <h2 class="text-center text-primary mb-4">Listado de Préstamos para Autorizar</h2>
-  <div class="content-container">
+	<%@include  file="../../components/pre-body.jsp"%>
+  <h2 class="text-center text-primary mb-4">Listado de PrÃ©stamos para Autorizar</h2>
     <div class="filtro-container">
       <select>
         <option value="">ID</option>
@@ -107,7 +89,7 @@
       </select>
       <select>
         <option value="">Titular</option>
-        <option value="Juan Pérez">Juan Pérez</option>
+        <option value="Juan PÃ©rez">Juan PÃ©rez</option>
         <option value="Rodrigo Gimenez">Rodrigo Gimenez</option>
         <option value="Romina Gomez">Romina Gomez</option>
       </select>
@@ -137,13 +119,13 @@
             <td>$80,000</td>
             <td>12</td>
             <td>Cuenta Ahorro - 150234</td>
-            <td>Juan Pérez</td>
+            <td>Juan PÃ©rez</td>
             <td><span class="listaPrestamos status-para-autorizar">Para autorizar</span></td>
             <td>
               <div class="d-flex align-items-center justify-content-center">
                 <button class="btn btn-success btn-sm me-2">Autorizar</button>
                 <button class="btn btn-danger btn-sm">Rechazar</button>
-                <button class="btn btn-info btn-sm ms-2" data-bs-toggle="modal" data-bs-target="#infoModal1">Más información</button>
+                <button class="btn btn-info btn-sm ms-2" data-bs-toggle="modal" data-bs-target="#infoModal1">MÃ¡s informaciÃ³n</button>
               </div>
             </td>
           </tr>
@@ -157,7 +139,7 @@
             <td>
               <div class="d-flex align-items-center justify-content-center">
                 <button class="btn btn-danger btn-sm">Modificar</button>
-                <button class="btn btn-info btn-sm ms-2">Más información</button>
+                <button class="btn btn-info btn-sm ms-2">MÃ¡s informaciÃ³n</button>
               </div>
             </td>
           </tr>
@@ -171,31 +153,28 @@
             <td>
               <div class="d-flex align-items-center justify-content-center">
                 <button class="btn btn-danger btn-sm">Modificar</button>
-                <button class="btn btn-info btn-sm ms-2">Más información</button>
+                <button class="btn btn-info btn-sm ms-2">MÃ¡s informaciÃ³n</button>
               </div>
             </td>
           </tr>
         </tbody>
       </table>
-    </div>
-  </div>
-</div>
-
+      
 <!-- ESTA INFORMACION ESTA AGREGADA A MANO. EL MODAL SE VA A COMPLETAR CON LA INFORMACION QUE OBTIENE DE LA BASE DE DATOS. -->
 <div class="modal fade" id="infoModal1" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="infoModalLabel">Información de Contacto - Juan Pérez</h5>
+        <h5 class="modal-title" id="infoModalLabel">InformaciÃ³n de Contacto - Juan PÃ©rez</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <p><strong>DNI:</strong> 12.345.678</p>
         <p><strong>CUIL:</strong> 20-12345678-9</p>
         <p><strong>Nombre:</strong> Juan</p>
-        <p><strong>Apellido:</strong> Pérez</p>
-        <p><strong>Teléfono:</strong> 1234-5678</p>
-        <p><strong>Correo Electrónico:</strong> juan.perez@example.com</p>
+        <p><strong>Apellido:</strong> PÃ©rez</p>
+        <p><strong>TelÃ©fono:</strong> 1234-5678</p>
+        <p><strong>Correo ElectrÃ³nico:</strong> juan.perez@example.com</p>
         <h6>Historial de Pagos de Cuotas</h6>
         <table class="table">
           <thead>
@@ -230,10 +209,6 @@
     </div>
   </div>
 </div>
-<footer class="footer">
-  <p>&copy; 2024 BancArg. Todos los derechos reservados.</p>
-</footer>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<%@include  file="../../components/post-body.jsp"%>
 </body>
 </html>

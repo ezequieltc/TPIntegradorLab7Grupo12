@@ -2,15 +2,12 @@
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="es">
+  <%
+    // Establecer el título de la página
+    request.setAttribute("pageTitle", "Alta Usuarios");
+  %>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BancArg - Alta de Usuario</title>
-  <link rel="stylesheet" type="text/css" href="../../css/layout.css" />
-  <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-    rel="stylesheet"
-  />
+<%@include  file="../../components/header.jsp"%>
   <style>
       .step {
           padding: 40px;
@@ -41,28 +38,7 @@
   </style>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg">
-  <a class="navbar-brand" href="#">BancArg</a>
-  <div class="collapse navbar-collapse justify-content-end">
-    <ul class="navbar-nav">
-      <li class="nav-item">
-        <a class="nav-link" href="#">Usuario: Pepito Pistolero</a>
-      </li>
-    </ul>
-  </div>
-</nav>
-
-<div class="d-flex">
-  <div class="sidebar">
-    <a href="#">Inicio</a>
-    <a href="#">Cuentas</a>
-    <a href="#">Usuarios</a>
-    <a href="#">Transferencias</a>
-    <a href="#">Préstamos</a>
-    <a href="#">Ajustes</a>
-  </div>
-
-  <div class="content-container">
+<%@include  file="../../components/pre-body.jsp"%>
     <h2 class="my-4">Alta de Usuario</h2>
     <div id="registrationForm" class="w-100">
       <!-- Paso 1: Información Personal -->
@@ -169,15 +145,10 @@
         </form>
       </div>
     </div>
-  </div>
-</div>
 
-<footer class="footer">
-  <p>&copy; 2024 BancArg. Todos los derechos reservados.</p>
-</footer>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<%@include  file="../../components/post-body.jsp"%>
 <script>
   document.getElementById('nextStep1').addEventListener('click', function() {
     document.querySelector('.step-1').classList.add('d-none');
