@@ -33,7 +33,9 @@ public class AuthServices {
 			}
 		}
 		if(!setIntentosFallidos(usuario)) {
-			throw new UsuarioBloqueado("Usuario bloqueado");
+			usuario.setEstado(false);
+			userDAO.update(usuario);
+			throw new UsuarioBloqueado("Se bloquea usuario por reintentos fallidos");
 		}
 		return persona;	
 	}

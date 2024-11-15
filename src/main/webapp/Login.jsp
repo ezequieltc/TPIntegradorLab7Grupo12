@@ -80,7 +80,7 @@
     </style>
   </head>
   <body>
-  <% Conexion db = Conexion.getConexion(); %>
+
     <div class="sidebar">
       <h2 class="text-center">BancArg</h2>
     </div>
