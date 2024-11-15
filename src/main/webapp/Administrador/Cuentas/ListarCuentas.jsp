@@ -89,6 +89,7 @@
 		        	<% ArrayList<Cuenta>cuentasList = new ArrayList<Cuenta>();
 		        	
 		        	 cuentasList = (ArrayList<Cuenta>) session.getAttribute("cuentasList");
+		        	 if (cuentasList != null){
 		        	 for(Cuenta cuentaTemp : cuentasList){ %>
 		        	<tr>
 		                <td><%= cuentaTemp.getId() %></td>
@@ -107,7 +108,8 @@
 		                	<td>Desactivada</td>
 		                <%} %>
 		            </tr>
-		            <% } %>
+		            <% }
+		        	 } %>
 		        </tbody>
 		    </table>
         </div>

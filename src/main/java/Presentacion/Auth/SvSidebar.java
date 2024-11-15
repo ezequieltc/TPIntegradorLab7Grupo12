@@ -1,7 +1,9 @@
 package Presentacion.Auth;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -30,7 +32,6 @@ public class SvSidebar extends HttpServlet {
         }
 
         session.setAttribute("sidebarMenu", menuItems);
-        
         if (isAdmin) {
             response.sendRedirect("Administrador/VistaHomeAdministrador.jsp");
         } else {
@@ -39,23 +40,22 @@ public class SvSidebar extends HttpServlet {
     }
 
     private List<MenuItem> getAdminMenu(HttpServletRequest request) {
-        List<MenuItem> cuentasSubMenu = List.of(
+        List<MenuItem> cuentasSubMenu = Arrays.asList(
             new MenuItem("Alta Cuenta", request.getContextPath() + "/Administrador/Cuentas/AltaCuenta.jsp"),
             new MenuItem("Modificar Cuenta", request.getContextPath() + "/Administrador/Cuentas/ModificarEliminarCuentas.jsp"),
-            new MenuItem("Listar Cuentas", request.getContextPath() + "/Administrador/Cuentas/ListarCuentas.jsp")
+            new MenuItem("Listar Cuentas", request.getContextPath() + "/ServletCuentas")
         );
 
-        List<MenuItem> prestamosSubMenu = List.of(
+        List<MenuItem> prestamosSubMenu = Arrays.asList(
             new MenuItem("Alta Préstamo", request.getContextPath() + "/Administrador/Prestamos/AutorizarPrestamo.jsp")
         );
 
-        List<MenuItem> usuariosSubMenu = List.of(
+        List<MenuItem> usuariosSubMenu = Arrays.asList(
             new MenuItem("Alta Usuario", request.getContextPath() + "/Administrador/Usuarios/AltaUsuarios.jsp"),
-            new MenuItem("Modificar Usuario", request.getContextPath() + "/Administrador/Usuarios/ListarModificarEliminarUsuarios.jsp"),
-            new MenuItem("Modificar Usuario", request.getContextPath() + "/Administrador/Usuarios/ModificarUsuario.jsp")
+            new MenuItem("Listar Usuarios", request.getContextPath() + "/ServletUsuarios")
         );
 
-        return List.of(
+        return Arrays.asList(
             new MenuItem("Inicio", request.getContextPath() + "/Administrador/VistaHomeAdministrador.jsp"),
             new MenuItem("Informes y Reportes", request.getContextPath() + "/Administrador/InformesReportes.jsp"),
             new MenuItem("Cuentas", cuentasSubMenu),
@@ -66,21 +66,21 @@ public class SvSidebar extends HttpServlet {
     }
 
     private List<MenuItem> getUserMenu(HttpServletRequest request) {
-        List<MenuItem> preferenciasSubMenu = List.of(
+        List<MenuItem> preferenciasSubMenu = Arrays.asList(
             new MenuItem("Preferencias Usuario", request.getContextPath() + "/Usuario/PreferenciasUsuario.jsp")
         );
 
-        List<MenuItem> prestamosSubMenu = List.of(
+        List<MenuItem> prestamosSubMenu = Arrays.asList(
             new MenuItem("Préstamos", request.getContextPath() + "/Usuario/Prestamos.jsp"),
             new MenuItem("Solicitar Préstamo", request.getContextPath() + "/Usuario/SolicitarPrestamo.jsp")
         );
 
-        List<MenuItem> transferenciasSubMenu = List.of(
+        List<MenuItem> transferenciasSubMenu = Arrays.asList(
             new MenuItem("Transferencias", request.getContextPath() + "/Usuario/Transferencias.jsp"),
             new MenuItem("Nueva Transferencia", request.getContextPath() + "/Usuario/NuevaTransferencia.jsp")
         );
 
-        return List.of(
+        return Arrays.asList(
             new MenuItem("Inicio", request.getContextPath() + "/home.jsp"),
             new MenuItem("Preferencias", preferenciasSubMenu),
             new MenuItem("Préstamos", prestamosSubMenu),

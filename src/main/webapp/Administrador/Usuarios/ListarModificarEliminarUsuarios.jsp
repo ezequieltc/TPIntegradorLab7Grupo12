@@ -5,14 +5,12 @@
 
 <!DOCTYPE html>
 <html>
+  <%
+    // Establecer el título de la página
+    request.setAttribute("pageTitle", "Listado Usuarios");
+  %>
 <head>
-<meta charset="UTF-8">
-<title>BancArg - Listado de Usuarios</title>
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/layout.css" />
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+<%@include  file="../../components/header.jsp"%>
 <style>
     .table-container {
         padding: 40px;
@@ -31,115 +29,95 @@
 </style>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg">
-    <a class="navbar-brand" href="#">BancArg</a>
-    <div class="collapse navbar-collapse justify-content-end">
-        <ul class="navbar-nav">
-            <li class="nav-item"><a class="nav-link" href="#">Usuario: Administrador</a></li>
-        </ul>
-    </div>
-</nav>
-
-<div class="d-flex">
-    <div class="sidebar">
-        <a href="#">Inicio</a> 
-        <a href="#">Cuentas</a> 
-        <a href="${pageContext.request.contextPath}/ServletUsuarios">Usuarios</a>
-        <a href="#">Transferencias</a>
-        <a href="#">Préstamos</a> 
-        <a href="#">Ajustes</a>
-    </div>
-    
-<div class="content-container">
-        <h2 class="my-4">Listado de Usuarios</h2>
-        <div class="table-container">
-            <table class="table table-bordered table-striped">
-                <thead>
-                    <tr>
-                        <th><input type="text" placeholder="ID Usuario" onkeyup="filterTable(0)"></th>
-                        <th><input type="text" placeholder="Usuario" onkeyup="filterTable(1)"></th>
-                        <th><input type="text" placeholder="DNI Usuario" onkeyup="filterTable(2)"></th>
-                        <th><input type="text" placeholder="CUIL" onkeyup="filterTable(3)"></th>
-                        <th><input type="text" placeholder="Nombre" onkeyup="filterTable(4)"></th>
-                        <th><input type="text" placeholder="Apellido" onkeyup="filterTable(5)"></th>
-                        <th><input type="text" placeholder="Sexo" onkeyup="filterTable(6)"></th>
-                        <th><input type="text" placeholder="Nacionalidad" onkeyup="filterTable(7)"></th>
-                        <th><input type="text" placeholder="Fecha de Nacimiento" onkeyup="filterTable(8)"></th>
-                        <th><input type="text" placeholder="Direccion" onkeyup="filterTable(9)"></th>
-                        <th><input type="text" placeholder="Localidad" onkeyup="filterTable(10)"></th>
-                        <th><input type="text" placeholder="Provincia" onkeyup="filterTable(11)"></th>
-                        <th><input type="text" placeholder="E-mail" onkeyup="filterTable(12)"></th>
-                        <th><input type="text" placeholder="Telefono" onkeyup="filterTable(13)"></th>
-                        <th><input type="text" placeholder="Estado" onkeyup="filterTable(14)"></th>
-                    </tr>
-                    <tr>
-                        <th>ID Usuario</th>
-                        <th>Usuario</th>
-                        <th>DNI</th>
-                        <th>CUIL</th>
-                        <th>Nombre</th>
-                        <th>Apellido</th>
-                        <th>Sexo</th>
-                        <th>Nacionalidad</th>
-                        <th>Fecha Nac.</th>
-                        <th>Dirección</th>
-                        <th>Localidad</th>
-                        <th>Provincia</th>
-                        <th>E-Mail</th>
-                        <th>Teléfono</th>
-                        <th>Estado</th>
-                    </tr>
-                </thead>
-                <% 
-               		ArrayList<Persona> personas = null;
-               		if(request.getAttribute("lista") != null){
-              	   
-              	   	personas = (ArrayList<Persona>)request.getAttribute("lista");   
-                   }
-                   %>
-                <tbody id="usersTable">
-                   
-                   <% 
-                   if(personas != null)
-                   for(Persona persona : personas)
-                   {
-                	   %>
-                   <tr>
-                   <form action="ServletUsuarios" method="get">
-				           <td><%=persona.getId()%></td>
-				           <td><%=persona.getUsuario().getId()%> <input type="hidden" name="id" value="<%=persona.getUsuario().getId() %>"></td>
-				           <td><%=persona.getDni() %></td>
-				           <td><%=persona.getCuil() %></td>
-				           <td><%=persona.getNombre() %></td>
-				           <td><%=persona.getApellido() %></td>
-				           <td><%=persona.getTipoSexo().getDescripcion() %></td>
-				           <td><%=persona.getNacionalidad() %></td>
-				           <td><%=persona.getFechaNacimiento() %></td>
-				           <td><%=persona.getDireccion() %></td>
-				           <td><%=persona.getLocalidad() %></td>
-				           <td><%=persona.getProvincia() %></td>
-				           <td><%=persona.getEmail() %></td>
-				           <td><%=persona.getTelefono()%></td>
-				           <td><%=persona.isEstado() ? "Activa" : "Baja"%></td>
-				           <form action="ServletModificarUsuario" action="get">
-				           		<td><input type="submit" name="btnModificarUsuario" class="btn btn-success" value="Modificar"></td>		           
-				           <td><input type="submit" name="btnEliminarUsuario" class="btn btn-danger" value="Eliminar"></td>
-				           </form>
-  				</form>
-				       </tr>    
-				    <%
-                   }
-				    %>       
-                </tbody>
-            </table>
-            <div class="pagination">
-                <button onclick="prevPage()" id="btn_prev" class="btn btn-primary" style="margin: 5px">Anterior</button>
-                <button onclick="nextPage()" id="btn_next" class="btn btn-primary" style="margin: 5px">Siguiente</button>
-                Página: <span id="page"></span>
-            </div>
-        </div>
-    </div> 
-    
+<%@include  file="../../components/pre-body.jsp"%>
+   <h2 class="my-4">Listado de Usuarios</h2>
+   <div class="table-container">
+       <table class="table table-bordered table-striped">
+           <thead>
+               <tr>
+                   <th><input type="text" placeholder="ID Usuario" onkeyup="filterTable(0)"></th>
+                   <th><input type="text" placeholder="Usuario" onkeyup="filterTable(1)"></th>
+                   <th><input type="text" placeholder="DNI Usuario" onkeyup="filterTable(2)"></th>
+                   <th><input type="text" placeholder="CUIL" onkeyup="filterTable(3)"></th>
+                   <th><input type="text" placeholder="Nombre" onkeyup="filterTable(4)"></th>
+                   <th><input type="text" placeholder="Apellido" onkeyup="filterTable(5)"></th>
+                   <th><input type="text" placeholder="Sexo" onkeyup="filterTable(6)"></th>
+                   <th><input type="text" placeholder="Nacionalidad" onkeyup="filterTable(7)"></th>
+                   <th><input type="text" placeholder="Fecha de Nacimiento" onkeyup="filterTable(8)"></th>
+                   <th><input type="text" placeholder="Direccion" onkeyup="filterTable(9)"></th>
+                   <th><input type="text" placeholder="Localidad" onkeyup="filterTable(10)"></th>
+                   <th><input type="text" placeholder="Provincia" onkeyup="filterTable(11)"></th>
+                   <th><input type="text" placeholder="E-mail" onkeyup="filterTable(12)"></th>
+                   <th><input type="text" placeholder="Telefono" onkeyup="filterTable(13)"></th>
+                   <th><input type="text" placeholder="Estado" onkeyup="filterTable(14)"></th>
+               </tr>
+               <tr>
+                   <th>ID Usuario</th>
+                   <th>Usuario</th>
+                   <th>DNI</th>
+                   <th>CUIL</th>
+                   <th>Nombre</th>
+                   <th>Apellido</th>
+                   <th>Sexo</th>
+                   <th>Nacionalidad</th>
+                   <th>Fecha Nac.</th>
+                   <th>Dirección</th>
+                   <th>Localidad</th>
+                   <th>Provincia</th>
+                   <th>E-Mail</th>
+                   <th>Teléfono</th>
+                   <th>Estado</th>
+               </tr>
+           </thead>
+           <% 
+          		ArrayList<Persona> personas = null;
+          		if(request.getAttribute("lista") != null){
+         	   
+         	   	personas = (ArrayList<Persona>)request.getAttribute("lista");   
+              }
+              %>
+           <tbody id="usersTable">
+              
+              <% 
+              if(personas != null)
+              for(Persona persona : personas)
+              {
+           	   %>
+              <tr>
+              <form action="ServletUsuarios" method="get">
+          <td><%=persona.getId()%></td>
+          <td><%=persona.getUsuario().getId()%> <input type="hidden" name="id" value="<%=persona.getUsuario().getId() %>"></td>
+          <td><%=persona.getDni() %></td>
+          <td><%=persona.getCuil() %></td>
+          <td><%=persona.getNombre() %></td>
+          <td><%=persona.getApellido() %></td>
+          <td><%=persona.getTipoSexo().getDescripcion() %></td>
+          <td><%=persona.getNacionalidad() %></td>
+          <td><%=persona.getFechaNacimiento() %></td>
+          <td><%=persona.getDireccion() %></td>
+          <td><%=persona.getLocalidad() %></td>
+          <td><%=persona.getProvincia() %></td>
+          <td><%=persona.getEmail() %></td>
+          <td><%=persona.getTelefono()%></td>
+          <td><%=persona.isEstado() ? "Activa" : "Baja"%></td>
+          <form action="ServletModificarUsuario" action="get">
+          		<td><input type="submit" name="btnModificarUsuario" class="btn btn-success" value="Modificar"></td>		           
+          <td><input type="submit" name="btnEliminarUsuario" class="btn btn-danger" value="Eliminar"></td>
+          </form>
+	</form>
+      </tr>    
+   <%
+              }
+   %>       
+           </tbody>
+       </table>
+       <div class="pagination">
+           <button onclick="prevPage()" id="btn_prev" class="btn btn-primary" style="margin: 5px">Anterior</button>
+           <button onclick="nextPage()" id="btn_next" class="btn btn-primary" style="margin: 5px">Siguiente</button>
+           Página: <span id="page"></span>
+       </div>
+   </div>
+ <%@include  file="../../components/post-body.jsp"%>
 <script>
 // Paginación
 let current_page = 1;
@@ -202,8 +180,5 @@ function filterTable(columnIndex) {
 }
 </script>
 
-<footer class="footer">
-    <p>&copy; 2024 BancArg. Todos los derechos reservados.</p>
-</footer>
 </body>
 </html>

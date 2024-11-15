@@ -1,13 +1,7 @@
 package Presentacion;
 
-import DaoImpl.PersonaDaoImpl;
-import DaoImpl.UsuarioDaoImpl;
-import Dominio.Usuario;
 import NegocioImpl.PersonaNegocioImpl;
-import NegocioImpl.UsuarioNegocioImpl;
 import Dominio.Persona;
-import Dao.IPersonaDao;
-import Dominio.TipoUsuario;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,8 +9,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -58,6 +50,7 @@ public class ServletUsuarios extends HttpServlet {
 			request.setAttribute("persona", persona);
 			RequestDispatcher rd = request.getRequestDispatcher("/ServletModificarUsuario");
 			rd.forward(request, response);
+			return; 
 		}
 
 	    List<Persona> personas = personaNegocio.readAll(0).getData();
