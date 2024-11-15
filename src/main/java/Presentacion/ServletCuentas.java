@@ -44,9 +44,12 @@ public class ServletCuentas extends HttpServlet {
 		ArrayList<Cuenta> cuentasList;
 		cuentasList = cuentaNegocioTemp.readAll();
 		
-		request.setAttribute("cuentasList", cuentasList);
-		RequestDispatcher rd = request.getRequestDispatcher("/Administrador/Cuentas/ListarCuentas.jsp");   
-		rd.forward(request, response);
+		//request.setAttribute("cuentasList", cuentasList);
+		//RequestDispatcher rd = request.getRequestDispatcher("/Administrador/Cuentas/ListarCuentas.jsp");   
+		//rd.forward(request, response);
+		
+		request.getSession().setAttribute("cuentasList", cuentasList);
+		response.sendRedirect(request.getContextPath() + "/Administrador/Cuentas/ListarCuentas.jsp");
 	}
 
 	/**
@@ -128,7 +131,7 @@ public class ServletCuentas extends HttpServlet {
 				System.out.println(error.getMessage());
 				request.getSession().setAttribute("mensajeError", "Ocurrió un error: " + error.getMessage());
 				request.getSession().setAttribute("popUpStatus", "error");
-				request.getSession().setAttribute("mostrarPopUp", "true");
+				request.getSession().setAttribute("mostrarPopUp", true);
 			}
 			
 			response.sendRedirect(request.getContextPath() + "/Administrador/Cuentas/AltaCuenta.jsp"); 
@@ -138,7 +141,7 @@ public class ServletCuentas extends HttpServlet {
 		if(request.getParameter("botonBuscarCuenta") != null){
 			String buscarCBU = request.getParameter("busquedaCBU");
 			String busquedaNumeroCuenta = request.getParameter("busquedaNumeroCuenta");
-			if(busquedaNumeroCuenta != null) {
+			if(!busquedaNumeroCuenta.isEmpty()) {
 				cuentaTemp = cuentaNegocioTemp.getCuenta(busquedaNumeroCuenta,"");
 			}
 			else {
@@ -146,7 +149,7 @@ public class ServletCuentas extends HttpServlet {
 				
 			}
 			request.setAttribute("cuenta", cuentaTemp);
-			RequestDispatcher rd = request.getRequestDispatcher("/Administrador/Cuentas/ModificarEliminarCuentas.jsp");   
+			RequestDispatcher rd = request.getRequestDispatcher("/Administrador/Cuentas/ModificarEliminarCuentas.jsp");
 			rd.forward(request, response);
 		}
 		if(request.getParameter("modificarCuenta") != null){
@@ -170,16 +173,13 @@ public class ServletCuentas extends HttpServlet {
 			catch (Exception e) {
 				request.getSession().setAttribute("mensajeError", "Ocurrió un error: " + e.getMessage());
 				request.getSession().setAttribute("popUpStatus", "error");
-				request.getSession().setAttribute("mostrarPopUp", "true");
+				request.getSession().setAttribute("mostrarPopUp", true);
 				System.out.println(e.getMessage());
 			}
 			
-			// Procesar los datos y establecer los atributos
 			request.getSession().setAttribute("mensajeExito", "¡Cuenta actualizada correctamente!");
 			request.getSession().setAttribute("mostrarPopUp", true);
 			request.getSession().setAttribute("popUpStatus", "success");
-
-			// Redirigir usando sendRedirect (Patrón PRG)
 			response.sendRedirect(request.getContextPath() + "/Administrador/Cuentas/ModificarEliminarCuentas.jsp");
 		}
 		
@@ -195,7 +195,7 @@ public class ServletCuentas extends HttpServlet {
 			catch (Exception e) {
 				request.getSession().setAttribute("mensajeError", "Ocurrió un error: " + e.getMessage());
 				request.getSession().setAttribute("popUpStatus", "error");
-				request.getSession().setAttribute("mostrarPopUp", "true");
+				request.getSession().setAttribute("mostrarPopUp", true);
 				System.out.println(e.getMessage());
 			}
 
@@ -218,7 +218,7 @@ public class ServletCuentas extends HttpServlet {
 			catch (Exception e) {
 				request.getSession().setAttribute("mensajeError", "Ocurrió un error: " + e.getMessage());
 				request.getSession().setAttribute("popUpStatus", "error");
-				request.getSession().setAttribute("mostrarPopUp", "true");
+				request.getSession().setAttribute("mostrarPopUp", true);
 				//System.out.println(e.getMessage());
 			}
 			request.getSession().setAttribute("mensajeExito", "¡Cuenta reactivada correctamente!");

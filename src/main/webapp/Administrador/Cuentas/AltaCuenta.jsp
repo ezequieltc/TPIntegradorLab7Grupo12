@@ -6,7 +6,7 @@
 <%
 
 	String mensajeExito = (String) session.getAttribute("mensajeExito");
-	String mensajeError = (String) session.getAttribute("mensajeError");
+	String mensajeError = (String) session.getAttribute("mensajeError"); 
 	Boolean mostrarPopUp = (Boolean) session.getAttribute("mostrarPopUp");
 	String popUpStatus = (String) session.getAttribute("popUpStatus");
 	
@@ -18,12 +18,10 @@
 %>
 
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BancArg - Alta de Cuenta</title>
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/layout.css" />
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/modal.css" />
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+<%@include file="../../components/header.jsp"%>
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 <style>
 .step {
 	padding: 40px;
@@ -54,26 +52,7 @@
 
 </head>
 <body>
-	<nav class="navbar navbar-expand-lg">
-		<a class="navbar-brand" href="#">BancArg</a>
-		<div class="collapse navbar-collapse justify-content-end">
-			<ul class="navbar-nav">
-				<li class="nav-item"><a class="nav-link" href="#">Usuario: Administrador</a></li>
-			</ul>
-		</div>
-	</nav>
-
-	<div class="d-flex">
-		<div class="sidebar">
-			<a href="#">Inicio</a> 
-			<a href="${pageContext.request.contextPath}/Administrador/Cuentas.jsp">Cuentas</a> 
-			<a href="#">Usuarios</a>
-			<a href="#">Transferencias</a>
-			<a href="#">Préstamos</a> 
-			<a href="#">Ajustes</a>
-		</div>
-
-		<div class="content-container">
+	<%@include file="../../components/pre-body.jsp"%>
 			<h2 class="my-4">Alta de Cuenta</h2>
 			<div id="registrationForm" class="w-100">
 				<div class="step">
@@ -113,8 +92,6 @@
 					</form>
 				</div>
 			</div>
-		</div> 
-	</div>
 
 	<!-- Modales de éxito y error -->
 	<div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">
@@ -151,10 +128,7 @@
 		</div>
 	</div>
 
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+	<%@include file="../../components/post-body.jsp"%>
 
 <script>
 // Script para mostrar modales de éxito o error
