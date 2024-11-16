@@ -21,8 +21,8 @@ public class AuthServices {
 	
 	public Persona login(String user, String pass) throws UsuarioBloqueado
 	{
+		System.out.println("Validando intentos de login nro: " + intento);
 		IUsuarioDao userDAO = new UsuarioDaoImpl();
-		IPersonaDao personaDAO = null;
 		Persona persona = null;
 		Usuario usuario = new Usuario();
 		usuario = userDAO.getUsuario(user);
@@ -42,6 +42,7 @@ public class AuthServices {
 	
 	private boolean setIntentosFallidos(Usuario usuario) {
 		Integer intento = (intentos.get(usuario) == null) ? 0 : intentos.get(usuario);
+		System.out.println("Validando intentos de login nro: " + intento);
 		if(intento == 3) {
 			return false;
 		}else {

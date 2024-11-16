@@ -13,6 +13,7 @@ import Dominio.Persona;
 import Dominio.TipoSexo;
 import Dominio.Usuario;
 import Dominio.DTO.PaginatedResponse;
+import excepciones.PersonaExistenteExcepcion;
 import servicios.ddbb.*;
 public class PersonaDaoImpl implements IPersonaDao {
 
@@ -42,6 +43,13 @@ public class PersonaDaoImpl implements IPersonaDao {
 		boolean isInsertExitoso = false;
 		try
 		{
+			//Validacion de la existencia del una pesona con el mismo DNI
+			boolean validatePerson = (getPersona(persona.getId()).getDni() == persona.getDni()) ? true : false;
+			//En caso de existir de lanza excepcion
+			if(validatePerson) {
+				throw new PersonaExistenteExcepcion("El usuario con DNI " + persona.getDni() + " ya existe");
+			}
+			
 			statement = conexion.prepareStatement(insert);
 	        statement.setInt(1, persona.getUsuario().getId());  
 	        statement.setInt(2, persona.getTipoSexo().getId());
@@ -63,6 +71,9 @@ public class PersonaDaoImpl implements IPersonaDao {
 				isInsertExitoso = true;
 			}
 		} 
+		catch(PersonaExistenteExcepcion e) {
+			e.printStackTrace();
+		}
 		catch (SQLException e) 
 		{
 			e.printStackTrace();
