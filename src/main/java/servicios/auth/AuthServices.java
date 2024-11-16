@@ -13,20 +13,20 @@ import excepciones.UsuarioBloqueado;
 
 public class AuthServices {
 	
-	private static Map<Usuario, Integer> intentos = new HashMap<Usuario, Integer>();
+	private static Map<Integer, Integer> intentos = new HashMap<Integer, Integer>();
 	
 	public AuthServices() {
 		
 	}
 	
-	public Persona login(String user, String pass) throws UsuarioBloqueado
+	public Persona login(String email, String pass) throws UsuarioBloqueado
 	{
-		System.out.println("Validando intentos de login nro: " + intento);
 		IUsuarioDao userDAO = new UsuarioDaoImpl();
 		Persona persona = null;
 		Usuario usuario = new Usuario();
-		usuario = userDAO.getUsuario(user);
+		usuario = userDAO.getUsuario(email);
 		if(usuario != null && usuario.getEstado()) {
+			System.out.println("validando usuario " + usuario.getContrasena());
 			if(usuario.getContrasena().equals(pass)){
 				persona = (new PersonaDaoImpl().getPersonaPorUsuario(usuario.getId()));
 				return persona;
@@ -40,14 +40,19 @@ public class AuthServices {
 		return persona;	
 	}
 	
+	//Validacion e imputacion de intentos de login fallidos
 	private boolean setIntentosFallidos(Usuario usuario) {
-		Integer intento = (intentos.get(usuario) == null) ? 0 : intentos.get(usuario);
-		System.out.println("Validando intentos de login nro: " + intento);
+		Integer intento = (intentos.get(usuario.getId()) == null) ? 0 : intentos.get(usuario.getId());
+		if(intento == 0) {
+			intentos.put(usuario.getId(), intento);
+		}
 		if(intento == 3) {
 			return false;
 		}else {
-			intentos.put(usuario, intento++);
+			intentos.replace(usuario.getId(), intento + 1);
 		}
 		return true;
 	}
+
+
 }
