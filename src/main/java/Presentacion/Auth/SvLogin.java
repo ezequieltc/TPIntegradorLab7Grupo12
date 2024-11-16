@@ -1,4 +1,4 @@
-package Presentacion.Auth;
+ package Presentacion.Auth;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -7,6 +7,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import Dominio.Persona;
+import excepciones.UsuarioBloqueado;
+import servicios.auth.AuthServices;
 
 /**
  * Servlet implementation class SvLogin
@@ -35,16 +38,19 @@ public class SvLogin extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String user = request.getParameter("user");
 		String pass = request.getParameter("pass");
+		AuthServices authService = new AuthServices();
+		 
+		Persona persona = null;
+		try {
+			persona = authService.login(user, pass);
+		} catch (UsuarioBloqueado e) {
+			e.printStackTrace();
+		}
 		
-		if(user.equals("admin@gmail.com") && pass.equals("admin")){
+		if(persona != null){
 			HttpSession session = request.getSession(true);
 			session.setAttribute("usuario", user);
-			session.setAttribute("isAdmin", true);
-			response.sendRedirect("SvSidebar");
-		} else if (user.equals("user@gmail.com") && pass.equals("user")) {
-			HttpSession session = request.getSession(true);
-			session.setAttribute("usuario", user);
-			session.setAttribute("isAdmin", false);
+			session.setAttribute("isAdmin", persona.getUsuario().getTipoUsuario().getId() == 1);
 			response.sendRedirect("SvSidebar");
 		} else {
 			response.sendRedirect("Login.jsp");

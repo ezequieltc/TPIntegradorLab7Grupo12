@@ -4,46 +4,24 @@
 <%@ page isELIgnored="false" %>
 <!DOCTYPE html>
 <html>
+  <%
+    // Establecer el título de la página
+    request.setAttribute("pageTitle", "Modificar Usuario");
+  %>
 <head>
-<meta charset="UTF-8">
-<title>BancArg - Modificar Usuario</title>
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/layout.css" />
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+<%@include  file="../../components/header.jsp"%>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg">
-    <a class="navbar-brand" href="#">BancArg</a>
-    <div class="collapse navbar-collapse justify-content-end">
-        <ul class="navbar-nav">
-            <li class="nav-item"><a class="nav-link" href="#">Usuario: Administrador</a></li>
-        </ul>
-    </div>
-</nav>
-
-<div class="d-flex">
-    <div class="sidebar">
-        <a href="#">Inicio</a> 
-        <a href="#">Cuentas</a> 
-        <a href="${pageContext.request.contextPath}/ServletUsuarios">Usuarios</a>
-        <a href="#">Transferencias</a>
-        <a href="#">Préstamos</a> 
-        <a href="#">Ajustes</a>
-    </div>
 
 <%
     Persona persona = (Persona) request.getAttribute("persona");
-    if (persona != null) {
-        System.out.println("Persona cargada correctamente: " + persona.getDni());
-    } else {
-        System.out.println("Persona es null");
-    }
 %>
-<div class="content-container">
+<%@include  file="../../components/pre-body.jsp"%>
     <h2 class="my-4">Modificar Usuario</h2>
     <div id="modificationForm" class="w-100">
       <div class="step step-1">
         <h4>Información Personal</h4>
-        <form action="ServletModificarUsuario" method="get">
+        <form action="ServletModificarUsuario" method="post">
         <input type="hidden" name="id" value="${persona.getId()}">
           <div class="row">
             <div class="col-md-6">
@@ -66,12 +44,13 @@
             </div>
             <div class="col-md-6">
               <div class="form-group">
+              
                 <label for="sexo">Sexo</label>
-                <select name="sexo" class="form-control">
-                  <option value="masculino">Masculino</option>
-                  <option value="femenino">Femenino</option>
-                  <option value="otro">Otro</option>
-                </select>
+				<select name="sexo" class="form-control">
+    				<option value="1" <%= (persona.getTipoSexo().getId() == 1) ? "selected" : "" %>>Masculino</option>
+    				<option value="2" <%= (persona.getTipoSexo().getId() == 2) ? "selected" : "" %>>Femenino</option>
+    				<option value="3" <%= (persona.getTipoSexo().getId() == 3) ? "selected" : "" %>>Otro</option>
+				</select>
               </div>
               <div class="form-group">
                 <label for="nacionalidad">Nacionalidad</label>
@@ -85,7 +64,6 @@
           </div>
 
           
-   <div class="content-container">
     <div id="registrationForm" class="w-100">
       <div class="step step-1">
         <h4>Información de Contacto</h4>
@@ -124,7 +102,7 @@
         
       </div>
       </div>
-      </div>
       </form>
+      <%@include  file="../../components/post-body.jsp"%>
 </body>
 </html>

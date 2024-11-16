@@ -5,15 +5,20 @@ import servicios.ddbb.*;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 
 import Dao.IPersonaDao;
 import Dominio.Persona;
 import Dominio.TipoSexo;
+import Dominio.TipoUsuario;
 import Dominio.Usuario;
 import Dominio.DTO.PaginatedResponse;
 import excepciones.PersonaExistenteExcepcion;
+import NegocioImpl.UsuarioNegocioImpl;
+
 import servicios.ddbb.*;
 public class PersonaDaoImpl implements IPersonaDao {
 
@@ -26,6 +31,8 @@ public class PersonaDaoImpl implements IPersonaDao {
 	//private static final String readall = "select * from personas where estado = 1 limit ? offset ?";
 	private static final String read = "select id_persona, id_usuario, id_sexo, dni, cuil, nombre, apellido, nacionalidad, fecha_nacimiento,"
 			+ "direccion, localidad, provincia, email, telefono, estado from personas where id_persona = ?";
+	private static final String readByUser = "select id_persona, id_usuario, id_sexo, dni, cuil, nombre, apellido, nacionalidad, fecha_nacimiento,"
+			+ "direccion, localidad, provincia, email, telefono, estado from personas where id_usuario = ?";
 	private static final String siguiente = "select max(id_persona) from personas";
 	private static final String count = "select count(*) as total FROM personas";
 	private TipoSexoDaoImpl tipoSexoDao;
@@ -50,6 +57,28 @@ public class PersonaDaoImpl implements IPersonaDao {
 				throw new PersonaExistenteExcepcion("El usuario con DNI " + persona.getDni() + " ya existe");
 			}
 			
+			UsuarioNegocioImpl usuarioNeg = new UsuarioNegocioImpl();
+			Usuario usuarioTemp = new Usuario();
+			try{
+				SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
+				Date fechaCreacion = formatoFecha.parse("2024-10-12");
+				usuarioTemp.setFechaCreacion(fechaCreacion);
+			}
+			catch (Exception e) {
+				
+			}
+			usuarioTemp.setEstado(true);
+			TipoUsuario tipoUserTemp = new TipoUsuario("cliente");
+			tipoUserTemp.setId(2);
+					
+			usuarioTemp.setTipoUsuario(tipoUserTemp);
+			usuarioTemp.setContrasena(persona.getUsuario().getContrasena());
+			usuarioTemp.setUsuario(persona.getUsuario().getUsuario());
+			usuarioTemp.setId(usuarioNeg.calcularSiguienteId());
+			
+			usuarioNeg.insert(usuarioTemp);
+			persona.setUsuario(usuarioTemp);
+			persona.setEstado(true);
 			statement = conexion.prepareStatement(insert);
 	        statement.setInt(1, persona.getUsuario().getId());  
 	        statement.setInt(2, persona.getTipoSexo().getId());
@@ -223,6 +252,46 @@ public class PersonaDaoImpl implements IPersonaDao {
 	        Connection connection = conn.getSQLConexion();
 	        PreparedStatement ps = connection.prepareStatement(read);
 	        ps.setInt(1, id);
+	        ResultSet rs = ps.executeQuery();
+
+	        if (rs.next()) {
+	            persona = new Persona();
+	            persona.setId(rs.getInt("id_persona"));
+	            
+	            int usuarioId = rs.getInt("id_usuario");
+	            Usuario usuario = usuarioDao.getUsuario(usuarioId);
+	            persona.setUsuario(usuario);
+	            
+	            int tipoSexoId = rs.getInt("id_sexo");
+	            TipoSexo tipoSexo = tipoSexoDao.getTipoSexo(tipoSexoId);
+	            persona.setTipoSexo(tipoSexo);
+	            
+	            persona.setDni(rs.getString("dni"));
+	            persona.setCuil(rs.getString("cuil"));
+	            persona.setNombre(rs.getString("nombre"));
+	            persona.setApellido(rs.getString("apellido"));
+	            persona.setNacionalidad(rs.getString("nacionalidad"));
+	            persona.setFechaNacimiento(rs.getDate("fecha_nacimiento"));
+	            persona.setDireccion(rs.getString("direccion"));
+	            persona.setLocalidad(rs.getString("localidad"));
+	            persona.setProvincia(rs.getString("provincia"));
+	            persona.setEmail(rs.getString("email"));
+	            persona.setTelefono(rs.getString("telefono"));
+	            persona.setEstado(rs.getBoolean("estado"));
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return persona;
+	}
+	
+	public Persona getPersonaPorUsuario(int idUsuario) {
+		Persona persona = null;
+	    try {
+	        Conexion conn = Conexion.getConexion();
+	        Connection connection = conn.getSQLConexion();
+	        PreparedStatement ps = connection.prepareStatement(readByUser);
+	        ps.setInt(1, idUsuario);
 	        ResultSet rs = ps.executeQuery();
 
 	        if (rs.next()) {

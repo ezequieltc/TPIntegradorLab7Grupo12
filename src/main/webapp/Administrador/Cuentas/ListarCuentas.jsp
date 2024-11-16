@@ -4,11 +4,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BancArg - Listado de Cuentas</title>
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/layout.css" />
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+	<%@include file="../../components/header.jsp"%>
 <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.css" />
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
@@ -34,8 +30,8 @@
         
     }
     table th, table td {
-    text-align: center; /* Centra el texto */
-    vertical-align: middle; /* Alinea verticalmente los contenidos */
+    text-align: center; 
+    vertical-align: middle;
 }
     .step {
           padding: 40px;
@@ -70,25 +66,7 @@
 </style>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg">
-    <a class="navbar-brand" href="#">BancArg</a>
-    <div class="collapse navbar-collapse justify-content-end">
-        <ul class="navbar-nav">
-            <li class="nav-item"><a class="nav-link" href="#">Usuario: Administrador</a></li>
-        </ul>
-    </div>
-</nav>
-
-<div class="d-flex">
-    <div class="sidebar">
-        <a href="#">Inicio</a> 
-        <a href="${pageContext.request.contextPath}/Administrador/Cuentas.jsp">Cuentas</a> 
-        <a href="#">Transferencias</a>
-        <a href="#">Préstamos</a> 
-        <a href="#">Ajustes</a>
-    </div>
-
-    <div class="content-container">
+	<%@include file="../../components/pre-body.jsp"%>
         <h2 class="my-4">Listado de Cuentas</h2>
         <div class="table-container">
             	<table id="example" class="display" style="width:85%">
@@ -96,6 +74,9 @@
 		            <tr>
 		                <th>ID Cuenta</th>
 		                <th>ID Cliente</th>
+		                <th>DNI Cliente</th>
+		                <th>Nombre</th>
+		                <th>Apellido</th>
 		                <th>Tipo de Cuenta</th>
 		                <th>Numero de Cuenta</th>
 		                <th>CBU</th>
@@ -106,11 +87,16 @@
 		        </thead>
 		        <tbody>
 		        	<% ArrayList<Cuenta>cuentasList = new ArrayList<Cuenta>();
-		        	 cuentasList = (ArrayList<Cuenta>)request.getAttribute("cuentasList");
+		        	
+		        	 cuentasList = (ArrayList<Cuenta>) session.getAttribute("cuentasList");
+		        	 if (cuentasList != null){
 		        	 for(Cuenta cuentaTemp : cuentasList){ %>
 		        	<tr>
 		                <td><%= cuentaTemp.getId() %></td>
 		                <td><%= cuentaTemp.getPersona().getUsuario().getId()%></td>
+		                <td><%= cuentaTemp.getPersona().getDni()%></td>
+		                <td><%= cuentaTemp.getPersona().getNombre()%></td>
+		                <td><%= cuentaTemp.getPersona().getApellido()%></td>
 		                <td><%= cuentaTemp.getTipoCuenta().getDescripcion() %></td>
 		                <td><%= cuentaTemp.getNumeroCuenta() %></td>
 		                <td><%= cuentaTemp.getCbu() %></td>
@@ -122,12 +108,12 @@
 		                	<td>Desactivada</td>
 		                <%} %>
 		            </tr>
-		            <% } %>
+		            <% }
+		        	 } %>
 		        </tbody>
 		    </table>
         </div>
-    </div> 
-</div>
+	<%@include file="../../components/post-body.jsp"%>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
@@ -142,7 +128,6 @@ new DataTable('#example', {
     }
 });
 </script>
-
-<footer class="footer">
-    <p>&copy; 2024 BancArg. Todos los derechos reservados.</p>
-</footer>
+ 	
+</body>
+</html>

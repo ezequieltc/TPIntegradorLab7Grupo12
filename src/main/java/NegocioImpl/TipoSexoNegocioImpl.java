@@ -9,11 +9,15 @@ import Negocio.ITipoSexoNegocio;
 
 public class TipoSexoNegocioImpl implements ITipoSexoNegocio{
 
-	ITipoSexoDao tipoSexo = new TipoSexoDaoImpl();
-	@Override
-	public ArrayList<TipoSexo> readAll() {
-		
-		return tipoSexo.getTipoSexo();
-	}
+ITipoSexoDao tipoSexo = new TipoSexoDaoImpl();
+@Override
+public ArrayList<TipoSexo> readAll() {
+
+return tipoSexo.getTipoSexo();
+}
+
+public TipoSexo getTipoSexo(int id) {
+return tipoSexo.getTipoSexo(id);
+}
 
 }

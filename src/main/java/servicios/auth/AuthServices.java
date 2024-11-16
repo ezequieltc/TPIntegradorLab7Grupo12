@@ -28,7 +28,7 @@ public class AuthServices {
 		usuario = userDAO.getUsuario(user);
 		if(usuario != null && usuario.getEstado()) {
 			if(usuario.getContrasena().equals(pass)){
-				persona = (new PersonaDaoImpl().getPersona(usuario.getId()));
+				persona = (new PersonaDaoImpl().getPersonaPorUsuario(usuario.getId()));
 				return persona;
 			}
 		}
