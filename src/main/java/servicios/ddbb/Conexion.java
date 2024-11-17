@@ -1,20 +1,35 @@
 package servicios.ddbb;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
 
 
 public class Conexion {
+	
 	public static Conexion instancia;
 	private Connection connection;
+	private Properties properties;
+	private String user;
+	private String pass;
+	private String path;
+	private String dbDriver;
 	
 	private Conexion()
 	{
 		try
 		{
-			Class.forName("com.mysql.cj.jdbc.Driver"); 
-			this.connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/dbbanco","root","admin");
+			properties = new Properties();
+			getPropiedades();
+			user =  properties.getProperty("DBUSERNAME");
+			pass = properties.getProperty("DBPASSWORD");
+			path = properties.getProperty("DBPATH");
+			dbDriver = properties.getProperty("DBDRIVER");
+			Class.forName(dbDriver);
+			
+			this.connection = DriverManager.getConnection(path,user,pass);
 			this.connection.setAutoCommit(false);
 		}
 		catch(Exception e)
@@ -25,8 +40,6 @@ public class Conexion {
 	
 	public static Conexion getConexion()   
 	{		
-
-				
 		if(instancia == null)
 		{
 			instancia = new Conexion();
@@ -52,5 +65,12 @@ public class Conexion {
 		instancia = null;
 	}
 	
+	private void getPropiedades() {
+		try {
+			properties.load(getClass().getResourceAsStream("../../propiedades/propiedades.properties"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 }
