@@ -1,4 +1,4 @@
-package servicios.auth;
+package tipos;
 
 public enum UserTypes {
 
