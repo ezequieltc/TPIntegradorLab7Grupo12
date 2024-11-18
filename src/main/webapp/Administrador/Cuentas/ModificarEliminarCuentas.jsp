@@ -6,17 +6,6 @@
 <%
     // Establecer el título de la página
     request.setAttribute("pageTitle", "Alta Cuenta");
-
-	String mensajeExito = (String) session.getAttribute("mensajeExito");
-	String mensajeError = (String) session.getAttribute("mensajeError");
-	Boolean mostrarPopUp = (Boolean) session.getAttribute("mostrarPopUp");
-	String popUpStatus = (String) session.getAttribute("popUpStatus");
-	
-	// Limpiar los atributos de la sesión para que no se muestren después de un refresh
-	session.removeAttribute("mensajeExito");
-	session.removeAttribute("mensajeError");
-	session.removeAttribute("mostrarPopUp");
-	session.removeAttribute("popUpStatus");
 %>
 <head>
 	<%@include file="../../components/header.jsp"%>
@@ -141,53 +130,10 @@
                 <% } %>
             </div>
         </div>
-   	<div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content success">
-				<div class="modal-header success">
-					<h5 class="modal-title">Éxito</h5>
-					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-				</div>
-				<div class="modal-body">
-					<%= mensajeExito != null ? mensajeExito : "¡Acción ejecutada exitosamente!" %>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<div class="modal fade" id="errorModal" tabindex="-1" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content error">
-				<div class="modal-header error">
-					<h5 class="modal-title">Error</h5>
-					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-				</div>
-				<div class="modal-body">
-					<%= mensajeError != null ? mensajeError : "Hubo un error al crear la cuenta. Por favor, inténtelo nuevamente." %>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-				</div>
-			</div>
-		</div>
-	</div>
 	
 	<%@include file="../../components/post-body.jsp"%>
     
     <script>
-    $(document).ready(function(){
-        <% if (mostrarPopUp != null && "success".equals(popUpStatus)) { %>
-            var successModal = new bootstrap.Modal(document.getElementById('successModal'));
-            successModal.show();
-        <% } else if (mostrarPopUp != null && "error".equals(popUpStatus)) { %>
-            var errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
-            errorModal.show();
-        <% } %>
-    });
-
     $(document).ready(function() {
         $('#busquedaCBU, #busquedaNumeroCuenta').on('input', function() {
             let cbuVal = $('#busquedaCBU').val();
