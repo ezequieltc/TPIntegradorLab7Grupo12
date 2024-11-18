@@ -23,8 +23,10 @@ public class AuthServices {
 	{
 		IUsuarioDao userDAO = new UsuarioDaoImpl();
 		Persona persona = null;
-		Usuario usuario = new Usuario();
+		Usuario usuario = null;
 		usuario = userDAO.getUsuario(email);
+		System.err.println("Validando credenciales en el login: Pass: " + pass + " Usuario: " + email);
+		System.out.println("usaurio desde db: " + usuario.getEstado());
 		if(usuario != null && usuario.getEstado()) {
 			System.out.println("validando usuario " + usuario.getContrasena());
 			if(usuario.getContrasena().equals(pass)){

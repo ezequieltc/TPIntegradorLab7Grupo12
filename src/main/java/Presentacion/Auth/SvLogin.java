@@ -42,19 +42,19 @@ public class SvLogin extends HttpServlet {
 		 
 		Persona persona = null;
 		try {
-			persona = authService.login(user, pass);
+			//persona = authService.login(user, pass);
+			if((persona = authService.login(user, pass)) != null){
+				HttpSession session = request.getSession(true);
+				session.setAttribute("persona", persona);
+				session.setAttribute("isAdmin", persona.getUsuario().getTipoUsuario().getId() == 1);
+				response.sendRedirect("SvSidebar");
+			} else {
+				response.sendRedirect("Login.jsp");
+			}
 		} catch (UsuarioBloqueado e) {
 			e.printStackTrace();
 		}
-		
-		if(persona != null){
-			HttpSession session = request.getSession(true);
-			session.setAttribute("persona", persona);
-			session.setAttribute("isAdmin", persona.getUsuario().getTipoUsuario().getId() == 1);
-			response.sendRedirect("SvSidebar");
-		} else {
-			response.sendRedirect("Login.jsp");
-		}
+
 	}
 
 }
