@@ -51,7 +51,8 @@ public class PersonaDaoImpl implements IPersonaDao {
 		try
 		{
 			//Validacion de la existencia del una pesona con el mismo DNI
-			boolean validatePerson = (getPersona(persona.getId()).getDni() == persona.getDni()) ? true : false;
+			Persona auxPersona = getPersona(persona.getId());
+			boolean validatePerson = (auxPersona != null && auxPersona.getDni() == persona.getDni()) ? true : false;
 			//En caso de existir de lanza excepcion
 			if(validatePerson) {
 				throw new PersonaExistenteExcepcion("El usuario con DNI " + persona.getDni() + " ya existe");
