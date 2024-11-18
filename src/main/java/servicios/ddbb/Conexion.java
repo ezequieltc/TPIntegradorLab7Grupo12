@@ -69,6 +69,7 @@ public class Conexion {
 		try {
 			properties.load(getClass().getResourceAsStream("../../propiedades/propiedades.properties"));
 		} catch (IOException e) {
+			System.err.println("Error al leer archivo de propiedades");
 			e.printStackTrace();
 		}
 	}
