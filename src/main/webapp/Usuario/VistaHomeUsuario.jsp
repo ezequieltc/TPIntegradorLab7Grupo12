@@ -10,42 +10,6 @@
       rel="stylesheet"
     />
     <style>
-      body {
-        background-color: #e0f0ff;
-        margin: 0;
-      }
-      .sidebar {
-        background-color: #007bff;
-        height: 100vh;
-        padding-top: 20px;
-        color: white;
-        position: fixed;
-        width: 200px;
-      }
-      .sidebar a {
-        color: white;
-        text-decoration: none;
-        font-size: 1.2em;
-        padding: 10px;
-        display: block;
-      }
-      .sidebar a:hover {
-        background-color: #0056b3;
-      }
-      .content {
-        margin-left: 200px;
-        padding: 20px;
-      }
-      .header-bar {
-        background-color: #007bff;
-        padding: 10px 20px;
-        color: white;
-        font-size: 1.2em;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-left: 200px;
-      }
       table {
         margin-top: 30px;
         width: 100%;
@@ -70,16 +34,6 @@
       }
       .table-row {
         cursor: pointer;
-      }
-      footer {
-        text-align: center;
-        color: #666;
-        padding: 10px;
-        background-color: #f8f9fa;
-        width: 100%;
-        position: absolute;
-        bottom: 0;
-        left: 0;
       }
     </style>
   </head>
