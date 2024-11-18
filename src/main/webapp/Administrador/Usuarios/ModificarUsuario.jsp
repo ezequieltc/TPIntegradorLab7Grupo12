@@ -15,13 +15,16 @@
 
 <%
     Persona persona = (Persona) request.getAttribute("persona");
+	if (persona == null){
+		System.out.println("Persona" + persona);
+	}
 %>
 <%@include  file="../../components/pre-body.jsp"%>
     <h2 class="my-4">Modificar Usuario</h2>
     <div id="modificationForm" class="w-100">
       <div class="step step-1">
         <h4>Información Personal</h4>
-        <form action="ServletModificarUsuario" method="post">
+        <form action="${pageContext.request.contextPath}/Administrador/Usuarios/ServletModificarUsuario" method="post">
         <input type="hidden" name="id" value="${persona.getId()}">
           <div class="row">
             <div class="col-md-6">
@@ -97,7 +100,7 @@
           </div>
           <div class="step-actions" style="margin-top: 10px">
             <button type="submit" class="btn btn-success" name="btnConfirmarModificacionUsuario">Guardar Cambios</button>
-            <a href="${pageContext.request.contextPath}/ServletUsuarios" class="btn btn-danger">Cancelar</a>
+            <a href="${pageContext.request.contextPath}/Administrador/Usuarios/ServletUsuarios" class="btn btn-danger">Cancelar</a>
           </div>
         
       </div>

@@ -54,7 +54,7 @@
 
         <div class="step">
             <h4>Buscar Cuenta</h4>
-            <form class="needs-validation" action="${pageContext.request.contextPath}/ServletCuentas" method="POST">
+            <form class="needs-validation" action="${pageContext.request.contextPath}/Administrador/Cuentas/ServletCuentas" method="POST">
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
@@ -84,7 +84,7 @@
                     if (cuentaDatos != null) {
                 %>
                 
-                <form class="needs-validation" action="${pageContext.request.contextPath}/ServletCuentas" method="POST">
+                <form class="needs-validation" action="${pageContext.request.contextPath}/Administrador/Cuentas/ServletCuentas" method="POST">
                     <div style="padding-bottom:50px;">
                     <div class="row">
                         <div class="col-md-6">

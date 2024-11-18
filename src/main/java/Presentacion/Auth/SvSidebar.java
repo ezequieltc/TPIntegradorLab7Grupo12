@@ -35,7 +35,7 @@ public class SvSidebar extends HttpServlet {
         if (isAdmin) {
             response.sendRedirect("Administrador/VistaHomeAdministrador.jsp");
         } else {
-            response.sendRedirect("VistaHomeUsuario.jsp");
+            response.sendRedirect("Usuario/VistaHomeUsuario.jsp");
         }
     }
 
@@ -43,7 +43,7 @@ public class SvSidebar extends HttpServlet {
         List<MenuItem> cuentasSubMenu = Arrays.asList(
             new MenuItem("Alta Cuenta", request.getContextPath() + "/Administrador/Cuentas/AltaCuenta.jsp"),
             new MenuItem("Modificar Cuenta", request.getContextPath() + "/Administrador/Cuentas/ModificarEliminarCuentas.jsp"),
-            new MenuItem("Listar Cuentas", request.getContextPath() + "/ServletCuentas")
+            new MenuItem("Listar Cuentas", request.getContextPath() + "/Administrador/Cuentas/ServletCuentas")
         );
 
         List<MenuItem> prestamosSubMenu = Arrays.asList(
@@ -52,7 +52,7 @@ public class SvSidebar extends HttpServlet {
 
         List<MenuItem> usuariosSubMenu = Arrays.asList(
             new MenuItem("Alta Usuario", request.getContextPath() + "/Administrador/Usuarios/AltaUsuarios.jsp"),
-            new MenuItem("Listar Usuarios", request.getContextPath() + "/ServletUsuarios")
+            new MenuItem("Listar Usuarios", request.getContextPath() + "/Administrador/Usuarios/ServletUsuarios")
         );
 
         return Arrays.asList(
@@ -67,21 +67,22 @@ public class SvSidebar extends HttpServlet {
 
     private List<MenuItem> getUserMenu(HttpServletRequest request) {
         List<MenuItem> preferenciasSubMenu = Arrays.asList(
-            new MenuItem("Preferencias Usuario", request.getContextPath() + "/Usuario/PreferenciasUsuario.jsp")
+            new MenuItem("Preferencias Usuario", request.getContextPath() + "/Usuario/Preferencias")
         );
 
         List<MenuItem> prestamosSubMenu = Arrays.asList(
-            new MenuItem("Préstamos", request.getContextPath() + "/Usuario/Prestamos.jsp"),
+            new MenuItem("Préstamos", request.getContextPath() + "/Usuario/Prestamos"),
+            new MenuItem("Pagar Cuotas", request.getContextPath() + "/Usuario/Prestamos/VistaPagarCuotas.jsp"),
             new MenuItem("Solicitar Préstamo", request.getContextPath() + "/Usuario/SolicitarPrestamo.jsp")
         );
 
         List<MenuItem> transferenciasSubMenu = Arrays.asList(
-            new MenuItem("Transferencias", request.getContextPath() + "/Usuario/Transferencias.jsp"),
+            new MenuItem("Transferencias", request.getContextPath() + "/Usuario/Transferencias"),
             new MenuItem("Nueva Transferencia", request.getContextPath() + "/Usuario/NuevaTransferencia.jsp")
         );
 
         return Arrays.asList(
-            new MenuItem("Inicio", request.getContextPath() + "/home.jsp"),
+            new MenuItem("Inicio", request.getContextPath() + "/Usuario/VistaHomeUsuario.jsp"),
             new MenuItem("Preferencias", preferenciasSubMenu),
             new MenuItem("Préstamos", prestamosSubMenu),
             new MenuItem("Transferencias", transferenciasSubMenu),

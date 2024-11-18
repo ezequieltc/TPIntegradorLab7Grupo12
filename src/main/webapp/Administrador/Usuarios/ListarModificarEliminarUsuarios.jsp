@@ -84,9 +84,9 @@
               {
            	   %>
               <tr>
-              <form action="ServletUsuarios" method="get">
-          <td><%=persona.getId()%></td>
-          <td><%=persona.getUsuario().getId()%> <input type="hidden" name="id" value="<%=persona.getUsuario().getId() %>"></td>
+              <form action="${pageContext.request.contextPath}/Administrador/Usuarios/ServletUsuarios" method="get">
+          <td><%=persona.getId()%></td> <input type="hidden" name="id" value="<%=persona.getId() %>"></td>
+          <td><%=persona.getUsuario().getId()%> 
           <td><%=persona.getDni() %></td>
           <td><%=persona.getCuil() %></td>
           <td><%=persona.getNombre() %></td>
@@ -100,10 +100,9 @@
           <td><%=persona.getEmail() %></td>
           <td><%=persona.getTelefono()%></td>
           <td><%=persona.isEstado() ? "Activa" : "Baja"%></td>
-          <form action="ServletModificarUsuario" action="get">
+
           		<td><input type="submit" name="btnModificarUsuario" class="btn btn-success" value="Modificar"></td>		           
           <td><input type="submit" name="btnEliminarUsuario" class="btn btn-danger" value="Eliminar"></td>
-          </form>
 	</form>
       </tr>    
    <%

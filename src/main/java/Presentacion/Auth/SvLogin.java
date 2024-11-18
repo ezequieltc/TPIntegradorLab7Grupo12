@@ -49,7 +49,7 @@ public class SvLogin extends HttpServlet {
 		
 		if(persona != null){
 			HttpSession session = request.getSession(true);
-			session.setAttribute("usuario", user);
+			session.setAttribute("persona", persona);
 			session.setAttribute("isAdmin", persona.getUsuario().getTipoUsuario().getId() == 1);
 			response.sendRedirect("SvSidebar");
 		} else {

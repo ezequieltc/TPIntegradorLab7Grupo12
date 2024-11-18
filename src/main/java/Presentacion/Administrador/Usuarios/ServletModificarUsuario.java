@@ -1,4 +1,4 @@
-package Presentacion;
+package Presentacion.Administrador.Usuarios;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ import NegocioImpl.TipoSexoNegocioImpl;
 /**
  * Servlet implementation class ServletModificarUsuario
  */
-@WebServlet("/ServletModificarUsuario")
+@WebServlet("/Administrador/Usuarios/ServletModificarUsuario")
 public class ServletModificarUsuario extends HttpServlet {
 private static final long serialVersionUID = 1L;
        
@@ -74,7 +74,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response) 
 		pNeg.update(persona);
 
 		request.setAttribute("persona", persona);
-		RequestDispatcher rd = request.getRequestDispatcher("/ServletUsuarios");
+		RequestDispatcher rd = request.getRequestDispatcher("/Administrador/Usuarios/ServletUsuarios");
 		rd.forward(request, response);
 		}
 }

@@ -1,4 +1,4 @@
-package Presentacion;
+package Presentacion.Administrador.Usuarios;
  
 import java.io.IOException;
 import java.text.ParseException;
@@ -16,7 +16,7 @@ import Dominio.TipoSexo;
 import Dominio.Usuario;
 import NegocioImpl.PersonaNegocioImpl;
  
-@WebServlet("/ServletAgregarUsuario")
+@WebServlet("/Administrador/Usuarios/ServletAgregarUsuario")
 public class ServletAgregarUsuario extends HttpServlet {
 	private static final long serialVersionUID = 1L;
  
@@ -72,7 +72,7 @@ public class ServletAgregarUsuario extends HttpServlet {
             boolean isAdded = personaNegocio.insert(persona);
             
             if (isAdded) {
-                response.sendRedirect(request.getContextPath() + "/ServletUsuarios?status=success");
+                response.sendRedirect(request.getContextPath() + "/Administrador/Usuarios/ServletUsuarios?status=success");
                 System.out.println("Se agrego la persona con dni " + persona.getDni() );
                 
             } else {

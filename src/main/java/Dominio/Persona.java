@@ -93,6 +93,10 @@ public class Persona {
     public String getApellido() {
         return apellido;
     }
+    
+    public String getNombreApellido() {
+    	return nombre + ", " + apellido;
+    }
 
     public void setApellido(String apellido) {
         this.apellido = apellido;

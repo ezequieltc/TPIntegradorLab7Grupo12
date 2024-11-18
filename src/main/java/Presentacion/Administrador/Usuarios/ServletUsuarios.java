@@ -1,4 +1,4 @@
-package Presentacion;
+package Presentacion.Administrador.Usuarios;
 
 import NegocioImpl.PersonaNegocioImpl;
 import Dominio.Persona;
@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * Servlet implementation class ServletUsuarios
  */
-@WebServlet("/ServletUsuarios")
+@WebServlet("/Administrador/Usuarios/ServletUsuarios")
 public class ServletUsuarios extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
@@ -38,17 +38,17 @@ public class ServletUsuarios extends HttpServlet {
 
 	        personaNegocio.delete(id);
 
-	        response.sendRedirect(request.getContextPath() + "/ServletUsuarios");
+	        response.sendRedirect(request.getContextPath() + "/Administrador/Usuarios/ServletUsuarios");
 	        return; 
 	    }
 	    
 	    if(request.getParameter("btnModificarUsuario") != null) {
-			int id = Integer.parseInt(request.getParameter("id"))-1;
+			int id = Integer.parseInt(request.getParameter("id"));
 			
 			Persona persona = personaNegocio.getPersona(id);
 			
 			request.setAttribute("persona", persona);
-			RequestDispatcher rd = request.getRequestDispatcher("/ServletModificarUsuario");
+			RequestDispatcher rd = request.getRequestDispatcher("/Administrador/Usuarios/ServletModificarUsuario");
 			rd.forward(request, response);
 			return; 
 		}

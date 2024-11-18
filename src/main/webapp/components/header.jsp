@@ -1,11 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page import="Dominio.Persona, servicios.auth.UserTypes" %>
 <%
-String usuario = (String) request.getSession().getAttribute("usuario");
-    
-    if(usuario==null) {
+	Persona personaAuth = (Persona) request.getSession().getAttribute("persona");
+    boolean isAdmin = (boolean) request.getSession().getAttribute("isAdmin");
+    UserTypes rolPermitido = (UserTypes) request.getAttribute("rolPermitido");
+    if(personaAuth==null || (rolPermitido ==  UserTypes.ADMIN && !isAdmin)) {
         response.sendRedirect(request.getContextPath() + "/Login.jsp");
         return;
-    }
+    }	
 %>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">

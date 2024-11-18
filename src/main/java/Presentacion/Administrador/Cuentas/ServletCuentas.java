@@ -1,4 +1,4 @@
-package Presentacion;
+package Presentacion.Administrador.Cuentas;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class ServletCuentas
  */
-@WebServlet("/ServletCuentas")
+@WebServlet("/Administrador/Cuentas/ServletCuentas")
 public class ServletCuentas extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -49,7 +49,7 @@ public class ServletCuentas extends HttpServlet {
 		//rd.forward(request, response);
 		
 		request.getSession().setAttribute("cuentasList", cuentasList);
-		response.sendRedirect(request.getContextPath() + "/Administrador/Cuentas/ListarCuentas.jsp");
+		response.sendRedirect(request.getContextPath() + "/Administrador/Cuentas");
 	}
 
 	/**

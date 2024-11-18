@@ -40,7 +40,7 @@
 <%@include  file="../../components/pre-body.jsp"%>
     <h2 class="my-4">Alta de Usuario</h2>
     <div id="registrationForm" class="w-100">
-      <form action="${pageContext.request.contextPath}/ServletAgregarUsuario" method="post">
+      <form action="${pageContext.request.contextPath}/Administrador/Usuarios/ServletAgregarUsuario" method="post">
         <!-- Paso 1: Información Personal -->
         <div class="step step-1">
           <h4>Paso 1: Información Personal</h4>
