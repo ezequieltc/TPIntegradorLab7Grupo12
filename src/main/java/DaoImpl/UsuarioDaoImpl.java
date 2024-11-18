@@ -20,7 +20,8 @@ public class UsuarioDaoImpl implements IUsuarioDao {
 //    private static final String readall = "select * from usuarios where estado = 1 limit ? offset ?";
     private final String readall = "select * from usuarios";
     private final String read = "select id_usuario, id_tipo_usuario, usuario, contrasena, fecha_creacion, estado from usuarios where id_usuario = ?";
-    private final String readLogin = "select * from usuarios u join Personas p on u.id_usuario = p.id_usuario where email = ?";
+    //private final String readLogin = "select * from usuarios u join Personas p on u.id_usuario = p.id_usuario where email = ?";
+    private final String readLogin = "select * from usuarios u join Personas p on u.id_usuario = p.id_usuario where usuario = ?";
     private final String siguiente = "select max(id_usuario) from usuarios";
 
     

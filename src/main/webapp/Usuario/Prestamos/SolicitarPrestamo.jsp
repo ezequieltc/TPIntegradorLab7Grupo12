@@ -1,9 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BancArg - Solicitud de Préstamos</title>
+<%@include file="../../components/header.jsp"%>
   <link rel="stylesheet" type="text/css" href="../../css/layout.css" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
@@ -25,26 +23,7 @@
   </style>
 </head>
 <body>
-<nav class="navbar">
-  <a class="navbar-brand" href="#">BancArg</a>
-  <div class="justify-content-end">
-    <ul class="navbar-nav">
-      <li class="nav-item">
-        <a class="nav-link" href="#">Usuario: Jorge Ramos</a>
-      </li>
-    </ul>
-  </div>
-</nav>
-
-<div class="d-flex">
-  <div class="sidebar">
-    <a href="#">Inicio</a>
-    <a href="#">Cuentas</a>
-    <a href="#">Transferencias</a>
-    <a href="#">Préstamos</a>
-    <a href="#">Ajustes</a>
-  </div>
-
+	<%@include file="../../components/pre-body.jsp"%>
   <div class="content-container">
 	<div class="main-content">
       <div class="cajaPrestamo">
@@ -93,11 +72,8 @@
       </div>
     </div>
   </div>
-</div>
 
-<footer class="footer">
-  <p>&copy; 2024 BancArg. Todos los derechos reservados.</p>
-</footer>
+<%@include file="../../components/post-body.jsp"%>
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
