@@ -12,13 +12,6 @@
 <%@include  file="../../components/header.jsp"%>
 </head>
 <body>
-
-<%
-    Persona persona = (Persona) request.getAttribute("persona");
-	if (persona == null){
-		System.out.println("Persona" + persona);
-	}
-%>
 <%@include  file="../../components/pre-body.jsp"%>
     <h2 class="my-4">Modificar Usuario</h2>
     <div id="modificationForm" class="w-100">

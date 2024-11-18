@@ -80,26 +80,26 @@
               
               <% 
               if(personas != null)
-              for(Persona persona : personas)
+              for(Persona personaTemp : personas)
               {
            	   %>
               <tr>
               <form action="${pageContext.request.contextPath}/Administrador/Usuarios/ServletUsuarios" method="get">
-          <td><%=persona.getId()%></td> <input type="hidden" name="id" value="<%=persona.getId() %>"></td>
-          <td><%=persona.getUsuario().getId()%> 
-          <td><%=persona.getDni() %></td>
-          <td><%=persona.getCuil() %></td>
-          <td><%=persona.getNombre() %></td>
-          <td><%=persona.getApellido() %></td>
-          <td><%=persona.getTipoSexo().getDescripcion() %></td>
-          <td><%=persona.getNacionalidad() %></td>
-          <td><%=persona.getFechaNacimiento() %></td>
-          <td><%=persona.getDireccion() %></td>
-          <td><%=persona.getLocalidad() %></td>
-          <td><%=persona.getProvincia() %></td>
-          <td><%=persona.getEmail() %></td>
-          <td><%=persona.getTelefono()%></td>
-          <td><%=persona.isEstado() ? "Activa" : "Baja"%></td>
+          <td><%=personaTemp.getId()%></td> <input type="hidden" name="id" value="<%=persona.getId() %>"></td>
+          <td><%=personaTemp.getUsuario().getId()%> 
+          <td><%=personaTemp.getDni() %></td>
+          <td><%=personaTemp.getCuil() %></td>
+          <td><%=personaTemp.getNombre() %></td>
+          <td><%=personaTemp.getApellido() %></td>
+          <td><%=personaTemp.getTipoSexo().getDescripcion() %></td>
+          <td><%=personaTemp.getNacionalidad() %></td>
+          <td><%=personaTemp.getFechaNacimiento() %></td>
+          <td><%=personaTemp.getDireccion() %></td>
+          <td><%=personaTemp.getLocalidad() %></td>
+          <td><%=personaTemp.getProvincia() %></td>
+          <td><%=personaTemp.getEmail() %></td>
+          <td><%=personaTemp.getTelefono()%></td>
+          <td><%=personaTemp.isEstado() ? "Activa" : "Baja"%></td>
 
           		<td><input type="submit" name="btnModificarUsuario" class="btn btn-success" value="Modificar"></td>		           
           <td><input type="submit" name="btnEliminarUsuario" class="btn btn-danger" value="Eliminar"></td>
