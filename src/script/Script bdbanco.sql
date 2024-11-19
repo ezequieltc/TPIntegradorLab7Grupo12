@@ -139,6 +139,13 @@ estado boolean not null,
 constraint foreign key(id_prestamo) references prestamos(id_prestamo)
 );
  
+CREATE OR REPLACE VIEW VW_Prestamos AS
+SELECT Pres.id_Prestamo, P.id_persona, P.id_usuario, P.nombre, P.apellido, P.dni, P.cuil, C.id_cuenta, C.numero_cuenta, C.cbu, TC.descripcion,  
+C.saldo, Pres.importe, Pres.cuotas_total, Pres.cuota_mensual, Pres.cantidad_cuotas, Pres.fecha_alta, Pres.status_prestamo, Pres.estado from Prestamos Pres
+INNER JOIN personas P on P.id_usuario = Pres.id_cliente
+INNER JOIN cuentas C on C.id_cuenta = Pres.id_cuenta
+INNER JOIN usuarios U on U.id_usuario = P.id_usuario
+INNER JOIN tiposcuenta TC on TC.id_tipo_cuenta = C.id_tipo_cuenta;
  
 use dbbanco;
  
