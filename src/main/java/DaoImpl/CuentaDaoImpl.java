@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
+
 import servicios.ddbb.*;
 
 import Dao.ICuentaDao;
@@ -221,5 +223,20 @@ public class CuentaDaoImpl implements ICuentaDao {
     		e.printStackTrace();
     	}
     	return ultimoId + 1;
+    }
+    
+    @Override
+    public ArrayList<Cuenta> getCuentasPorCliente(int Id){
+    	ArrayList<Cuenta> cuentasTemp = new ArrayList<Cuenta>();
+    	cuentasTemp = readAll();
+    	Iterator<Cuenta> iterator = cuentasTemp.iterator();
+    	while (iterator.hasNext()) {
+    	    Cuenta cuenta = iterator.next();
+    	    if (cuenta.getPersona().getUsuario().getId() != Id) {
+    	        iterator.remove();
+    	    }
+    	}
+    	return cuentasTemp;
+    	    	
     }
 }

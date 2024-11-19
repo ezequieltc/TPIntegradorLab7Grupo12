@@ -49,6 +49,10 @@ public class CuentaNegocioImpl implements ICuentaNegocio {
         int id = cuentaDao.calcularSiguienteId();
         return id;
     }
+    @Override
+    public ArrayList<Cuenta> getCuentasPorCliente(int id){
+    	return cuentaDao.getCuentasPorCliente(id);
+    }
     
     
 }

@@ -13,4 +13,5 @@ public interface ICuentaDao {
 	public Cuenta getCuenta(String numberoCuenta, String cbu);
 	public ArrayList<Cuenta> readAll();
 	public int calcularSiguienteId();
+	public ArrayList<Cuenta> getCuentasPorCliente(int Id);
 }
