@@ -1,6 +1,6 @@
-create schema dbbanco;
+create schema dbbanco2;
  
-use dbbanco;
+use dbbanco2;
  
 create table tiposusuario
 (
@@ -147,7 +147,7 @@ INNER JOIN cuentas C on C.id_cuenta = Pres.id_cuenta
 INNER JOIN usuarios U on U.id_usuario = P.id_usuario
 INNER JOIN tiposcuenta TC on TC.id_tipo_cuenta = C.id_tipo_cuenta;
  
-use dbbanco;
+use dbbanco2;
  
 insert into tiposusuario (descripcion) values 
 ('Administrador'),
@@ -157,7 +157,7 @@ insert into usuarios (id_tipo_usuario, usuario, contrasena, fecha_creacion, esta
 (1, 'admin', 'admin123', '2024-01-01', true),
 (2, 'cliente1', 'cliente123', '2024-02-01', true),
 (2, 'cliente2', 'cliente456', '2024-02-10', true),
-(3, 'empleado1', 'empleado123', '2024-01-15', true);
+(2, 'empleado1', 'empleado123', '2024-01-15', true);
  
 insert into tipossexo (descripcion) values 
 ('Masculino'),
