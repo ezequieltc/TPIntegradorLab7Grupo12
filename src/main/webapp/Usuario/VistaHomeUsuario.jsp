@@ -4,11 +4,8 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+		<%@include  file="../components/header.jsp"%>
 <title>BancArg - Home Usuario</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
     <style>
       table {
         margin-top: 30px;
@@ -38,19 +35,7 @@
     </style>
   </head>
   <body>
-    <div class="sidebar">
-      <h2 class="text-center">BancArg</h2>
-      <a href="#">Inicio</a>
-      <a href="#">Cuentas</a>
-      <a href="#">Transferencias</a>
-      <a href="#">Préstamos</a>
-      <a href="#">Ajustes</a>
-    </div>
-
-    <div class="header-bar">
-      <div>BancArg - Home Usuario</div>
-      <div>Usuario: Pepito Pistolero</div>
-    </div>
+  <%@include  file="../../components/pre-body.jsp"%>
 
     <div class="content">
       <h3 class="text-center">Resumen de Cuentas</h3>
@@ -95,10 +80,6 @@
       </div>
     </div>
 
-    <footer>
-      <p>&copy; 2024 BancArg. Todos los derechos reservados.</p>
-    </footer>
-
     <script>
         document.querySelectorAll(".table-row").forEach(function(row) {
             row.addEventListener("click", function(event) {
@@ -117,5 +98,7 @@
             });
         });
     </script>
+    
+     <%@include  file="../components/post-body.jsp"%>
   </body>
 </html>

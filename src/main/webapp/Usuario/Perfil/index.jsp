@@ -5,11 +5,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BancArg - Preferencias de Usuario</title>
+<title>BancArg - Perfil de Usuario</title>
 <link rel="stylesheet" type="text/css" href="../../css/layout.css" />
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
 	rel="stylesheet" />
+
+<%@include  file="../../components/header.jsp"%>
+
 <style>
 .step {
 	padding: 40px;
@@ -37,26 +40,14 @@
 }
 </style>
 </head>
+
+<%
+	Persona logueado = (Persona) request.getSession().getAttribute("persona");
+%>
 <body>
-	<nav class="navbar navbar-expand-lg">
-		<a class="navbar-brand" href="#">BancArg</a>
-		<div class="collapse navbar-collapse justify-content-end">
-			<ul class="navbar-nav">
-				<li class="nav-item"><a class="nav-link" href="#">Usuario: Administrador</a></li>
-			</ul>
-		</div>
-	</nav>
-	
-	<div class="d-flex">
-	  <div class="sidebar">
-	    <a href="#">Inicio</a>
-	    <a href="#">Cuentas</a>
-	    <a href="#">Transferencias</a>
-	    <a href="#">Préstamos</a>
-	    <a href="#">Ajustes</a>
-	  </div>
-  
-	<div class="content-container">
+
+<%@include  file="../../components/pre-body.jsp"%>
+
     <h2 class="my-4">Información del usuario</h2>
     <div id="registrationForm" class="w-100">
       <div class="step">
@@ -66,53 +57,53 @@
             <div class="col-md-6">
               <div class="form-group">
                 <label for="dniPreferencias">DNI</label>
-                <input type="text" id="dniPreferencias" class="form-control">
+                <input type="text" id="dniPreferencias" class="form-control" value="${persona.getDni() }" readonly>
               </div>
               <div class="form-group">
                 <label for="cuilPreferencias">CUIL</label>
-                <input type="text" id="cuilPreferencias" class="form-control">
+                <input type="text" id="cuilPreferencias" class="form-control" value="${persona.getCuil() }" readonly>
               </div>
               <div class="form-group">
                 <label for="nombrePreferencias">Nombre</label>
-                <input type="text" id="nombrePreferencias" class="form-control" >
+                <input type="text" id="nombrePreferencias" class="form-control" value="${persona.getNombre() }" readonly>
               </div>
               <div class="form-group">
                 <label for="apellidoPreferencias">Apellido</label>
-                <input type="text" id="apellidoPreferencias" class="form-control">
+                <input type="text" id="apellidoPreferencias" class="form-control" value="${persona.getApellido() }" readonly>
               </div>
               <div class="form-group">
                 <label for="fechaNacimientoPreferencias">Fecha de Nacimiento</label>
-                <input type="date" id="fechaNacimientoPreferencias" class="form-control">
+                <input type="date" id="fechaNacimientoPreferencias" class="form-control" value="${persona.getFechaNacimiento() }" readonly>
               </div>
               <div class="form-group">
                   <label for="correoPreferencias">Correo Electrónico</label>
-                  <input type="email" id="correoPreferencias" class="form-control">
+                  <input type="email" id="correoPreferencias" class="form-control" value="${persona.getEmail() }" readonly>
                 </div>
             </div>
             <div class="col-md-6">
             	<div class="form-group">
                   <label for="telefonoPreferencias">Teléfono</label>
-                  <input type="tel" id="telefonoPreferencias" class="form-control">
+                  <input type="tel" id="telefonoPreferencias" class="form-control" value="${persona.getTelefono() }" readonly>
                 </div>
               <div class="form-group">
                 <label for="sexoPreferencias">Sexo</label>
-                <input type="text" id="sexoPreferencias" class="form-control">
+                <input type="text" id="sexoPreferencias" class="form-control" value="${persona.getTipoSexo().getDescripcion().toString() }" readonly>
               </div>
               <div class="form-group">
                 <label for="nacionalidadPreferencias">Nacionalidad</label>
-                <input type="text" id="nacionalidadPreferencias" class="form-control">
+                <input type="text" id="nacionalidadPreferencias" class="form-control" value="${persona.getNacionalidad() }" readonly>
               </div>
               <div class="form-group">
                   <label for="direccionPreferencias">Dirección</label>
-                  <input type="text" id="direccionPreferencias" class="form-control">
+                  <input type="text" id="direccionPreferencias" class="form-control" value="${persona.getDireccion() }" readonly>
                 </div>
                 <div class="form-group">
                   <label for="localidadPreferencias">Localidad</label>
-                  <input type="text" id="localidadPreferencias" class="form-control">
+                  <input type="text" id="localidadPreferencias" class="form-control" value="${persona.getLocalidad() }" readonly>
                 </div>
                 <div class="form-group">
                   <label for="provinciaPreferencias">Provincia</label>
-                  <input type="text" id="provinciaPreferencias" class="form-control" >
+                  <input type="text" id="provinciaPreferencias" class="form-control" value="${persona.getProvincia() }" readonly>
                 </div>
               </div>
             </div>
@@ -120,7 +111,6 @@
         </form>
       </div>
 
-    <div class="content-container">
     <div id="registrationForm" class="w-100">
       <div class="step step-1">
         <h4>Información de Cuentas</h4>
@@ -207,7 +197,8 @@
 			</div>
           </div>
         </form>
-      </div>
-                 
+     
+     <%@include  file="../../components/post-body.jsp"%>
+              
 </body>
 </html>
