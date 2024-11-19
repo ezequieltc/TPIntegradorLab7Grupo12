@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ page import="Dominio.Persona,tipos.UserTypes" %>
+<%@ page import="Dominio.Persona" %>
+<%@ page import="tipos.UserTypes" %>
 <%
 	Persona personaAuth = (Persona) request.getSession().getAttribute("persona");
     boolean isAdmin = (boolean) request.getSession().getAttribute("isAdmin");

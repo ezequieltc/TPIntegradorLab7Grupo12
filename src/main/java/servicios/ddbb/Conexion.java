@@ -47,10 +47,17 @@ public class Conexion {
 		return instancia;
 	}
 
-	public Connection getSQLConexion() 
-	{
-		return this.connection;
-	}
+    public Connection getSQLConexion() {
+        try {
+            if (this.connection == null || this.connection.isClosed()) {
+                this.connection = DriverManager.getConnection(path, user, pass);
+                this.connection.setAutoCommit(false);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return this.connection;
+    }
 	
 	public void cerrarConexion()
 	{
