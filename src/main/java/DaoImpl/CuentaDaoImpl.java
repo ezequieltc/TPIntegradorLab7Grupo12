@@ -60,7 +60,7 @@ public class CuentaDaoImpl implements ICuentaDao {
             statement.setInt(2, cuenta.getTipoCuenta().getId());
             statement.setString(3, cuenta.getNumeroCuenta());
             statement.setString(4, cuenta.getCbu());
-            statement.setInt(5, cuenta.getSaldo());
+            statement.setDouble(5, cuenta.getSaldo());
             statement.setDate(6, new java.sql.Date(cuenta.getFechaCreacion().getTime()));
             statement.setBoolean(7, cuenta.isEstado());
             if (statement.executeUpdate() > 0) {
@@ -109,7 +109,7 @@ public class CuentaDaoImpl implements ICuentaDao {
             statement.setInt(2, cuenta.getTipoCuenta().getId());
             statement.setString(3, cuenta.getNumeroCuenta());
             statement.setString(4, cuenta.getCbu());
-            statement.setInt(5, cuenta.getSaldo());
+            statement.setDouble(5, cuenta.getSaldo());
             statement.setDate(6, new java.sql.Date(cuenta.getFechaCreacion().getTime()));
             statement.setBoolean(7, cuenta.isEstado());
             statement.setInt(8, cuenta.getId());
@@ -152,7 +152,7 @@ public class CuentaDaoImpl implements ICuentaDao {
         int idTipoCuenta = resultSet.getInt("id_tipo_cuenta");
         String numeroCuenta = resultSet.getString("numero_cuenta");
         String cbu = resultSet.getString("cbu");
-        int saldo = resultSet.getInt("saldo");
+        Double saldo = resultSet.getDouble("saldo");
         Date fechaCreacion = resultSet.getDate("fecha_creacion");
         boolean estado = resultSet.getBoolean("estado");
 
@@ -180,12 +180,17 @@ public class CuentaDaoImpl implements ICuentaDao {
     
     @Override
     public Cuenta getCuenta(String numeroCuenta, String cbu) {
+        System.out.println("getCuenta(String numeroCuenta, String cbu)");
     	Cuenta cuenta = null;
     	Connection conexion = Conexion.getConexion().getSQLConexion();
+
     	try {
     	if(!numeroCuenta.isEmpty()) {
     		PreparedStatement ps = conexion.prepareStatement(readNumeroCuenta);
     		ps.setString(1, numeroCuenta);
+            System.out.println("numeroCuenta = " + numeroCuenta);
+            System.out.println("cbu = " + cbu);
+            System.out.println("readNumeroCuenta = " + readNumeroCuenta);
     		ResultSet rs = ps.executeQuery();
     		if (rs.next()) {
     			cuenta = getCuentaFromResultSet(rs);
@@ -194,6 +199,8 @@ public class CuentaDaoImpl implements ICuentaDao {
     	if(!cbu.isEmpty()) {
     		PreparedStatement ps = conexion.prepareStatement(readCBU);
     		ps.setString(1, cbu);
+            System.out.println("cbu = " + cbu);
+            System.out.println("readCBU = " + readCBU);
     		ResultSet rs = ps.executeQuery();
     		if (rs.next()) {
     			cuenta = getCuentaFromResultSet(rs);

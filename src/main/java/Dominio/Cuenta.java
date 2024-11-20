@@ -9,14 +9,14 @@ public class Cuenta {
 	public TipoCuenta tipoCuenta;
 	public String numeroCuenta;
 	public String cbu;
-	public int saldo;
+	public Double saldo;
 	public Date fechaCreacion;
 	public boolean estado;
 	
 	
 	public Cuenta() {};
 	
-	public Cuenta(int id, Persona persona, TipoCuenta tipoCuenta, String numeroCuenta, String cbu, int saldo, Date fechaCreacion, boolean estado) {
+	public Cuenta(int id, Persona persona, TipoCuenta tipoCuenta, String numeroCuenta, String cbu, Double saldo, Date fechaCreacion, boolean estado) {
         this.id = id;
         this.persona = persona;
         this.tipoCuenta = tipoCuenta;
@@ -67,11 +67,11 @@ public class Cuenta {
 		this.cbu = cbu;
 	}
 
-	public int getSaldo() {
+	public double getSaldo() {
 		return saldo;
 	}
 
-	public void setSaldo(int saldo) {
+	public void setSaldo(double saldo) {
 		this.saldo = saldo;
 	}
 

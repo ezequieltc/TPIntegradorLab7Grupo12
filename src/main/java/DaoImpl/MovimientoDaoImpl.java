@@ -45,8 +45,9 @@ public class MovimientoDaoImpl implements IMovimientoDao {
     // Método para insertar un nuevo movimiento
     @Override
     public void insertarMovimiento(Movimiento movimiento) throws Exception {
-    try (Connection conexion = Conexion.getConexion().getSQLConexion();
-         PreparedStatement statement = conexion.prepareStatement(INSERT_MOVIMIENTO_SQL)) {
+	Connection conexion = Conexion.getConexion().getSQLConexion();
+    PreparedStatement statement = conexion.prepareStatement(INSERT_MOVIMIENTO_SQL);
+    try {
 
             statement.setInt(1, movimiento.getIdCuenta());
             statement.setInt(2, movimiento.getTipoMovimiento().getId());

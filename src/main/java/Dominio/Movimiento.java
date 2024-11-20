@@ -1,6 +1,6 @@
 package Dominio;
 
-import java.sql.Date;
+import java.util.Date;
 
 public class Movimiento {
     private int id;
