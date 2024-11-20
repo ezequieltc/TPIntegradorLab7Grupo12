@@ -21,15 +21,26 @@ public class MovimientoDaoImpl implements IMovimientoDao {
         "VALUES (?, ?, ?, ?, ?, ?)";
 
     private static final String SELECT_MOVIMIENTOS_POR_CUENTA_SQL = 
-        "SELECT m.id, m.id_cuenta, tm.id, tm.descripcion, m.fecha, m.detalle, m.importe, m.estado " +
+        "SELECT m.id_movimiento, m.id_cuenta, tm.id_tipo_movimiento, tm.descripcion, m.fecha, m.detalle, m.importe, m.estado " +
         "FROM movimientos m " +
-        "INNER JOIN tiposmovimiento tm ON m.id_tipo_movimiento = tm.id " +
+        "INNER JOIN tiposmovimiento tm ON m.id_tipo_movimiento = tm.id_tipo_movimiento " +
         "WHERE m.id_cuenta = ?";
     
     private static final String COUNT_MOVIMIENTOS_POR_CUENTA_SQL =
-    	"SELECT COUNT(*) AS total" +
-        "FROM movimientos m" +
+    	"SELECT COUNT(*) AS total " +
+        "FROM movimientos m " +
         "WHERE m.id_cuenta = ?";
+    private final String SELECT_ULTIMOS_MOVIMIENTOS_SQL =
+    	    "SELECT m.id_movimiento, m.id_cuenta, tm.id_tipo_movimiento, tm.descripcion, m.fecha, m.detalle, m.importe, m.estado " +
+    	    "FROM movimientos m " +
+    	    "INNER JOIN tiposmovimiento tm ON m.id_tipo_movimiento = tm.id_tipo_movimiento " +
+    	    "WHERE m.id_cuenta IN ( " +
+    	    "    SELECT c.id_cuenta " +
+    	    "    FROM cuentas c " +
+    	    "    WHERE c.id_cliente = ? " +
+    	    ") " +
+    	    "ORDER BY m.fecha DESC " +
+    	    "LIMIT ?";
 
     // Método para insertar un nuevo movimiento
     @Override
@@ -55,16 +66,17 @@ public class MovimientoDaoImpl implements IMovimientoDao {
     public PaginatedResponse<Movimiento> listarMovimientosPorCuenta(int idCuenta) throws Exception {
         List<Movimiento> movimientos = new ArrayList<>();
         int totalMovimientosPorCuenta = 0;
-        try (Connection conexion = Conexion.getConexion().getSQLConexion();
-                PreparedStatement statement = conexion.prepareStatement(SELECT_MOVIMIENTOS_POR_CUENTA_SQL)) {
+        Connection conexion = Conexion.getConexion().getSQLConexion();
+    	PreparedStatement statement = conexion.prepareStatement(SELECT_MOVIMIENTOS_POR_CUENTA_SQL);
+        try{
 
             statement.setInt(1, idCuenta);
 
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
-                    int id = resultSet.getInt("id");
+                    int id = resultSet.getInt("id_movimiento");
                     int cuentaId = resultSet.getInt("id_cuenta");
-                    int tipoId = resultSet.getInt("tm.id");
+                    int tipoId = resultSet.getInt("tm.id_tipo_movimiento");
                     String descripcion = resultSet.getString("tm.descripcion");
                     Date fecha = resultSet.getDate("fecha");
                     String detalle = resultSet.getString("detalle");
@@ -82,14 +94,16 @@ public class MovimientoDaoImpl implements IMovimientoDao {
         } catch (SQLException e) {
             throw new Exception("Error al listar movimientos por cuenta: " + e.getMessage(), e);
         }
+        
         return new PaginatedResponse<Movimiento>(movimientos, totalMovimientosPorCuenta, 0, 0);
     }
     
     
     
     private int getTotalRegistrosPorCuenta(int idCuenta) throws Exception {
-        try (Connection conexion = Conexion.getConexion().getSQLConexion();
-                PreparedStatement statement = conexion.prepareStatement(COUNT_MOVIMIENTOS_POR_CUENTA_SQL)) {
+    	Connection conexion = Conexion.getConexion().getSQLConexion();
+    	PreparedStatement statement = conexion.prepareStatement(COUNT_MOVIMIENTOS_POR_CUENTA_SQL);
+        try{
         	statement.setInt(1, idCuenta);
         	try(ResultSet resultSet = statement.executeQuery()){
         		if(resultSet.next()) {
@@ -100,6 +114,39 @@ public class MovimientoDaoImpl implements IMovimientoDao {
         	throw new Exception("Error al contar movimientos por cuenta: " + e.getMessage(), e);
         }
 		return 0;
+    }
+    
+    public List<Movimiento> obtenerUltimosMovimientos(int idCliente, int limite) throws Exception {
+        List<Movimiento> movimientos = new ArrayList<>();
+        Connection conexion = Conexion.getConexion().getSQLConexion();
+    	PreparedStatement ps = conexion.prepareStatement(SELECT_ULTIMOS_MOVIMIENTOS_SQL);
+        try{
+            
+            ps.setInt(1, idCliente);
+            ps.setInt(2, limite);
+            System.out.println(idCliente);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    int id = rs.getInt("id_movimiento");
+                    int cuentaId = rs.getInt("id_cuenta");
+                    int tipoId = rs.getInt("tm.id_tipo_movimiento");
+                    String descripcion = rs.getString("tm.descripcion");
+                    Date fecha = rs.getDate("fecha");
+                    String detalle = rs.getString("detalle");
+                    Double importe = rs.getDouble("importe");
+                    Boolean estado = rs.getBoolean("estado");
+
+                    TipoMovimiento tipoMovimiento = new TipoMovimiento(tipoId, descripcion);
+                    Movimiento movimiento = new Movimiento(cuentaId, tipoMovimiento, fecha, detalle, importe, estado);
+                    movimiento.setId(id);
+                    movimientos.add(movimiento);
+                }
+            }
+        } catch(SQLException e) {
+        	throw new Exception("Error al buscar ultimos movimientos: " + e.getMessage(), e);
+        }
+        
+        return movimientos;
     }
 }
 

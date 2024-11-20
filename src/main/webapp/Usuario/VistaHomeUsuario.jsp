@@ -1,10 +1,13 @@
+<%@ page import="java.util.Map" %>
+<%@ page import="Dominio.Cuenta" %>
+<%@ page import="Dominio.Movimiento" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-		<%@include  file="../components/header.jsp"%>
+		<%@include  file="../../components/header.jsp"%>
 <title>BancArg - Home Usuario</title>
     <style>
       table {
@@ -48,57 +51,111 @@
             <th>Saldo</th>
           </tr>
         </thead>
-        <tbody>
-          <tr
-            class="table-row"
-            data-toggle="dropdown"
-            data-account="Caja de Ahorro"
-            data-account-number="1234567890"
-            data-balance="$25,000.00"
-          >
-            <td>Caja de Ahorro</td>
-            <td>1234567890</td>
-            <td>$25,000.00</td>
-          </tr>
-          <tr
-            class="table-row"
-            data-toggle="dropdown"
-            data-account="Cuenta Corriente"
-            data-account-number="0987654321"
-            data-balance="$10,000.00"
-          >
-            <td>Cuenta Corriente</td>
-            <td>0987654321</td>
-            <td>$10,000.00</td>
-          </tr>
-        </tbody>
+<tbody>
+  <% 
+    List<Cuenta> cuentas = (List<Cuenta>) request.getAttribute("lista");
+    if (cuentas != null) {
+      for (Cuenta cuenta : cuentas) { 
+  %>
+        <tr
+          class="table-row"
+          onclick="enviarFormulario(<%= cuenta.getId() %>)"
+          data-toggle="dropdown"
+          data-account="<%= cuenta.getTipoCuenta().getDescripcion() %>"
+          data-account-number="<%= cuenta.getNumeroCuenta() %>"
+          data-balance="<%= cuenta.getSaldo() %>"
+          data-id-cuenta="<%= cuenta.getId() %>"
+        >
+          <td><%= cuenta.getTipoCuenta().getDescripcion() %></td>
+          <td><%= cuenta.getNumeroCuenta() %></td>
+          <td><%= cuenta.getSaldo() %></td>
+        </tr>
+  <% 
+      }
+    }
+  %>
+</tbody>
       </table>
-
+<h3 class="text-center">Últimos Movimientos</h3>
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>Nro de Cuenta</th>
+                        <th>Tipo de Movimiento</th>
+                        <th>Importe</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <%
+                    	Map<Integer, Cuenta> cuentaMap = (Map<Integer, Cuenta>) request.getAttribute("cuentaMap");
+                        List<Movimiento> ultimosMovimientos = (List<Movimiento>) request.getAttribute("ultimosMovimientos");
+                        if (ultimosMovimientos != null) {
+                            for (Movimiento movimiento : ultimosMovimientos) {
+                            	Cuenta cuenta = cuentaMap.get(movimiento.getIdCuenta());
+                    %>
+                        <tr>
+							<td><%= cuenta != null ? cuenta.getNumeroCuenta() : "Desconocido" %></td>
+                            <td><%= movimiento.getTipoMovimiento().getDescripcion() %></td>
+                            <td><%= movimiento.getImporte() %></td>
+                        </tr>
+                    <%
+                            }
+                        }
+                    %>
+                </tbody>
+            </table>
       <div class="dropdown-menu" id="accountOptionsMenu">
         <a class="dropdown-item" href="#">Movimientos</a>
         <a class="dropdown-item" href="#">Transferir</a>
       </div>
     </div>
-
+<form id="formMovimientos" method="GET" action="ServletMovimientos">
+    <input type="hidden" name="idCuenta" id="idCuenta">
+</form>
     <script>
-        document.querySelectorAll(".table-row").forEach(function(row) {
-            row.addEventListener("click", function(event) {
-                const menu = document.getElementById("accountOptionsMenu");
+    document.querySelectorAll(".table-row").forEach(function (row) {
+        row.addEventListener("click", function (event) {
+            const menu = document.getElementById("accountOptionsMenu");
 
-                menu.style.display = "block";
-                menu.style.top = event.clientY + "px";
-                menu.style.left = event.clientX + "px";
+        const idCuenta = row.dataset.idCuenta;
+        menu.dataset.idCuenta = idCuenta;
 
-                document.addEventListener("click", function hideMenu(e) {
-                    if (!menu.contains(e.target) && !row.contains(e.target)) {
-                        menu.style.display = "none";
-                        document.removeEventListener("click", hideMenu);
-                    }
-                });
+            menu.style.display = "block";
+            menu.style.top = event.clientY + "px";
+            menu.style.left = event.clientX + "px";
+
+            document.addEventListener("click", function hideMenu(e) {
+                if (!menu.contains(e.target) && !row.contains(e.target)) {
+                    menu.style.display = "none";
+                    document.removeEventListener("click", hideMenu);
+                }
             });
         });
+    });
+
+    document.querySelector("#accountOptionsMenu").addEventListener("click", function (event) {
+        if (event.target.classList.contains("dropdown-item")) {
+            const idCuenta = this.dataset.idCuenta;
+
+            if (event.target.textContent.trim() === "Movimientos") {
+                const form = document.createElement("form");
+                form.method = "POST";
+                form.action = "ServletMovimientos";
+
+                const input = document.createElement("input");
+                input.type = "hidden";
+                input.name = "idCuenta";
+                input.value = idCuenta;
+
+                form.appendChild(input);
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
+    });
+        
     </script>
     
-     <%@include  file="../components/post-body.jsp"%>
+     <%@include  file="../../components/post-body.jsp"%>
   </body>
 </html>

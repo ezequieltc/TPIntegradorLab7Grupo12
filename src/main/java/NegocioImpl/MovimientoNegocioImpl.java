@@ -1,5 +1,8 @@
 package NegocioImpl;
 
+import java.sql.SQLException;
+import java.util.List;
+
 import Dao.IMovimientoDao;
 import DaoImpl.MovimientoDaoImpl;
 import Dominio.Movimiento;
@@ -29,6 +32,17 @@ public class MovimientoNegocioImpl implements IMovimientoNegocio{
 			e.printStackTrace();
 		}
 		return movimientos;
+	}
+	@Override
+    public List<Movimiento> obtenerUltimosMovimientos(int idCuenta, int limite) throws SQLException {
+		List<Movimiento> ultimosMovimientos = null;
+		try {
+			 ultimosMovimientos = movimientoDao.obtenerUltimosMovimientos(idCuenta, limite);
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		return ultimosMovimientos;
 	}
 
 }

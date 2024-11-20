@@ -85,7 +85,7 @@
            	   %>
               <tr>
               <form action="${pageContext.request.contextPath}/Administrador/Usuarios/ServletUsuarios" method="get">
-          <td><%=personaTemp.getId()%></td> <input type="hidden" name="id" value="<%=persona.getId() %>"></td>
+          <td><%=personaTemp.getId()%></td> <input type="hidden" name="id" value="<%=personaTemp.getId() %>"></td>
           <td><%=personaTemp.getUsuario().getId()%> 
           <td><%=personaTemp.getDni() %></td>
           <td><%=personaTemp.getCuil() %></td>
