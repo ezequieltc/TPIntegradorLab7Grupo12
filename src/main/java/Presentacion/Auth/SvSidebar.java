@@ -42,7 +42,7 @@ public class SvSidebar extends HttpServlet {
     private List<MenuItem> getAdminMenu(HttpServletRequest request) {
         List<MenuItem> cuentasSubMenu = Arrays.asList(
             new MenuItem("Alta Cuenta", request.getContextPath() + "/Administrador/Cuentas/ServletAgregarCuenta"),
-            new MenuItem("Modificar Cuenta", request.getContextPath() + "/Administrador/Cuentas/ModificarEliminarCuentas.jsp"),
+            new MenuItem("Modificar Cuenta", request.getContextPath() + "/Administrador/Cuentas/ServletModificarEliminarCuenta"),
             new MenuItem("Listar Cuentas", request.getContextPath() + "/Administrador/Cuentas/ServletCuentas")
         );
 

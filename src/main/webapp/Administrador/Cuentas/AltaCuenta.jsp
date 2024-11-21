@@ -76,7 +76,7 @@
 									<label for="saldo">Saldo Inicial</label> 
 									<div class="input-group mb-3">
 										<span class="input-group-text">$</span>
-										<input type="number" id="saldo" name="saldo" class="form-control" placeholder="$0" value="10000" step="100" min="0">
+										<input type="number" id="saldo" name="saldo" class="form-control" placeholder="$0" value="10000" step="1" min="0">
 									</div>
 								</div>
 							</div>
