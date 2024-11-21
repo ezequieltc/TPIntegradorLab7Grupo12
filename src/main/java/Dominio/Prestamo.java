@@ -20,13 +20,14 @@ public class Prestamo {
 		
 	}
 	
-	public Prestamo(int id, Cuenta cuenta, Persona persona, Date fecha_alta, float importe, float cuota_mensual, float total_pagado, PrestamosStatus status, boolean estado) {
+	public Prestamo(int id, Cuenta cuenta, Persona persona, Date fecha_alta, float importe, float cuota_mensual, int cantidad_cuotas, float total_pagado, PrestamosStatus status, boolean estado) {
 		this.id = id;
 		this.cuenta = cuenta;
 		this.persona = persona;
 		this.fecha_alta = fecha_alta;
 		this.importe = importe;
 		this.cuota_mensual = cuota_mensual;
+		this.cantidad_cuotas = cantidad_cuotas;
 		this.total_pagado = total_pagado;
 		this.status = status;
 		this.estado = estado;
@@ -115,7 +116,7 @@ public class Prestamo {
 
 	@Override
 	public String toString() {
-		return "Prestamo [cuenta=" + cuenta + ", persona=" + persona + ", fecha_alta=" + fecha_alta + ", importe="
+		return "Prestamo id=" + id +  ", [cuenta=" + cuenta + ", persona=" + persona + ", fecha_alta=" + fecha_alta + ", importe="
 				+ importe + ", cuota_mensual=" + cuota_mensual + ", total_pagado=" + total_pagado + ", cantidad_cuotas="
 				+ cantidad_cuotas + ", status=" + status + ", estado=" + estado + "]";
 	}

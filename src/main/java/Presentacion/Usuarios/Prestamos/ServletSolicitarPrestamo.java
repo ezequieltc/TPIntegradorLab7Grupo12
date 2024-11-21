@@ -39,7 +39,7 @@ public class ServletSolicitarPrestamo extends HttpServlet {
 		CuentaNegocioImpl cuentasNegocio = new CuentaNegocioImpl();
 		ArrayList<Cuenta> cuentasCliente = new ArrayList<Cuenta>();
 		cuentasCliente = cuentasNegocio.getCuentasPorCliente(((Persona)(session.getAttribute("persona"))).getUsuario().getId());
-		System.out.println(cuentasCliente);
+
 		//request.getSession().setAttribute(getServletInfo(), response);
 		//response.sendRedirect(request.getContextPath() + "/Usuarios/Prestamos/SolicitarPrestamo.jsp");
 		request.setAttribute("cuentasCliente", cuentasCliente);

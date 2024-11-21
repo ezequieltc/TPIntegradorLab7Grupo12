@@ -3,18 +3,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <title>BancArg - Nueva Transferencia</title>
-  <link rel="stylesheet" type="text/css" href="../../css/layout.css" />
-  <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-    rel="stylesheet"
-  />
+  <%@include  file="../../components/header.jsp"%>
   <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.css" />
-  <script type="text/javascript" src="https://code.jquery.com/jquery-3.7.1.js"></script>
-  <script type="text/javascript" src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
   
-  <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
   <style>
 
       h2 {
@@ -58,7 +49,7 @@
 
 
     <h2 class="my-4">Historial de Prestamos</h2>
-    <a href="NuevaTransferencia.jsp" class="btn btn-primary">Nuevo Prestamo</a>
+    <a href="${pageContext.request.contextPath}/Usuarios/Prestamos/ServletSolicitarPrestamo" class="btn btn-primary">Nuevo Prestamo</a>
 
 	<table id="example" class="display" style="width:85%">
         <thead>
@@ -96,8 +87,8 @@
         </tbody>
     </table>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+<%@include  file="../../components/post-body.jsp"%>
+<script type="text/javascript" src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
 <script>
 	new DataTable('#example', {
 	    initComplete: function () {
