@@ -1,12 +1,13 @@
 package Negocio;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import Dominio.Persona;
 import Dominio.DTO.PaginatedResponse;
 
 public interface IPersonaNegocio {
-	public boolean insert(Persona persona);
+	public void registrarCliente(Persona persona) throws RuntimeException, SQLException;
 	public boolean delete(int id);
 	public boolean update(Persona persona);
 	public Persona getPersona(int id);

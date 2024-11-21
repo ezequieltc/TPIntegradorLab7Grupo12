@@ -51,7 +51,7 @@ public class SvSidebar extends HttpServlet {
         );
 
         List<MenuItem> usuariosSubMenu = Arrays.asList(
-            new MenuItem("Alta Usuario", request.getContextPath() + "/Administrador/Usuarios/AltaUsuarios.jsp"),
+            new MenuItem("Alta Usuario", request.getContextPath() + "/Administrador/Usuarios/ServletAgregarUsuario"),
             new MenuItem("Listar Usuarios", request.getContextPath() + "/Administrador/Usuarios/ServletUsuarios")
         );
 

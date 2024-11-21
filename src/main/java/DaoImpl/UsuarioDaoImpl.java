@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 import Dao.IUsuarioDao;
@@ -32,31 +33,35 @@ public class UsuarioDaoImpl implements IUsuarioDao {
     }
     
     @Override
-    public boolean insert(Usuario usuario) {
+    public void insert(Usuario usuario) {
         PreparedStatement statement;
         Connection conexion = Conexion.getConexion().getSQLConexion();
-        boolean isInsertExitoso = false;
         try {
-            statement = conexion.prepareStatement(insert);
+            // Especificar RETURN_GENERATED_KEYS para obtener la clave generada automáticamente
+            statement = conexion.prepareStatement(insert, Statement.RETURN_GENERATED_KEYS);
             statement.setInt(1, usuario.getTipoUsuario().getId());
             statement.setString(2, usuario.getUsuario());
             statement.setString(3, usuario.getContrasena());
             statement.setDate(4, new java.sql.Date(usuario.getFechaCreacion().getTime()));
             statement.setBoolean(5, usuario.getEstado());
-            
-            if (statement.executeUpdate() > 0) {
-                conexion.commit();
-                isInsertExitoso = true;
+
+            int rowsInserted = statement.executeUpdate();
+
+            // Verificar si se insertó correctamente
+            if (rowsInserted > 0) {
+                ResultSet generatedKeys = statement.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    usuario.setId(generatedKeys.getInt(1)); // Establecer el ID generado en el objeto
+                } else {
+                    throw new SQLException("No se pudo obtener la clave generada para el usuario.");
+                }
+            } else {
+                throw new SQLException("La inserción del usuario falló, no se insertaron filas.");
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            try {
-                conexion.rollback();
-            } catch (SQLException e1) {
-                e1.printStackTrace();
-            }
+            throw new RuntimeException("Error al insertar el usuario: " + e.getMessage(), e);
         }
-        return isInsertExitoso;
     }
 
     @Override

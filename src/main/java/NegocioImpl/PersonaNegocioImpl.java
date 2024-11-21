@@ -1,22 +1,58 @@
 package NegocioImpl;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import Dao.IPersonaDao;
+import Dao.IUsuarioDao;
 import DaoImpl.PersonaDaoImpl;
+import DaoImpl.UsuarioDaoImpl;
 import Dominio.Persona;
+import Dominio.TipoUsuario;
+import Dominio.Usuario;
 import Dominio.DTO.PaginatedResponse;
 import Negocio.IPersonaNegocio;
+import servicios.ddbb.Conexion;
 
 public class PersonaNegocioImpl implements IPersonaNegocio{
 
 	IPersonaDao personaDao = new PersonaDaoImpl();
+	IUsuarioDao usuarioDao = new UsuarioDaoImpl();
 
 	@Override
-	public boolean insert(Persona persona) {
-	    boolean estado = false;
-	    estado = personaDao.insert(persona);
-	    return estado;
+	public void registrarCliente(Persona persona) throws RuntimeException, SQLException {
+		Connection conexion = Conexion.getConexion().getSQLConexion();
+		try{
+			conexion.setAutoCommit(false);
+
+			Usuario usuario = persona.getUsuario();
+			usuario.setId(usuarioDao.calcularSiguienteId());
+			TipoUsuario tipoUsuario = new TipoUsuario("Cliente");
+			tipoUsuario.setId(2);
+			usuario.setTipoUsuario(tipoUsuario);
+			usuario.setEstado(true);
+
+			// Date actual
+			Date fechaActual = new Date();
+			usuario.setFechaCreacion(fechaActual);
+
+			
+			usuarioDao.insert(usuario);
+
+			persona.setUsuario(usuario);
+			persona.setEstado(true);
+
+			personaDao.insert(persona);
+
+			conexion.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			conexion.rollback();
+			throw new RuntimeException("Hubo un error al registrar el cliente: " + e.getMessage());
+		}
 	}
 
 	@Override

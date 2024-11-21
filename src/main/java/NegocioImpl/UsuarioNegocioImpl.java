@@ -14,7 +14,12 @@ public class UsuarioNegocioImpl implements IUsuarioNegocio{
 	@Override
 	public boolean insert(Usuario usuario) {
 		boolean estado = false;
-		estado = usuarioDao.insert(usuario);
+		try {
+			usuarioDao.insert(usuario);
+			estado = true;
+		} catch (Exception e) {
+			estado = false;
+		}
 		return estado;
 	}
 

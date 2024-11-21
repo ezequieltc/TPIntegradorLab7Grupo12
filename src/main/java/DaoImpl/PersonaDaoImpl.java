@@ -44,77 +44,25 @@ public class PersonaDaoImpl implements IPersonaDao {
 	}
 	
 	@Override
-	public boolean insert(Persona persona) {
+	public void insert(Persona persona) throws SQLException {
 		PreparedStatement statement;
 		Connection conexion = Conexion.getConexion().getSQLConexion();
-		boolean isInsertExitoso = false;
-		try
-		{
-			//Validacion de la existencia del una pesona con el mismo DNI
-			Persona auxPersona = getPersona(persona.getId());
-			boolean validatePerson = (auxPersona != null && auxPersona.getDni() == persona.getDni()) ? true : false;
-			//En caso de existir de lanza excepcion
-			if(validatePerson) {
-				throw new PersonaExistenteExcepcion("El usuario con DNI " + persona.getDni() + " ya existe");
-			}
-			
-			UsuarioNegocioImpl usuarioNeg = new UsuarioNegocioImpl();
-			Usuario usuarioTemp = new Usuario();
-			try{
-				SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
-				Date fechaCreacion = formatoFecha.parse("2024-10-12");
-				usuarioTemp.setFechaCreacion(fechaCreacion);
-			}
-			catch (Exception e) {
-				
-			}
-			usuarioTemp.setEstado(true);
-			TipoUsuario tipoUserTemp = new TipoUsuario("cliente");
-			tipoUserTemp.setId(2);
-					
-			usuarioTemp.setTipoUsuario(tipoUserTemp);
-			usuarioTemp.setContrasena(persona.getUsuario().getContrasena());
-			usuarioTemp.setUsuario(persona.getUsuario().getUsuario());
-			usuarioTemp.setId(usuarioNeg.calcularSiguienteId());
-			
-			usuarioNeg.insert(usuarioTemp);
-			persona.setUsuario(usuarioTemp);
-			persona.setEstado(true);
-			statement = conexion.prepareStatement(insert);
-	        statement.setInt(1, persona.getUsuario().getId());  
-	        statement.setInt(2, persona.getTipoSexo().getId());
-	        statement.setString(3, persona.getDni());
-	        statement.setString(4, persona.getCuil());
-	        statement.setString(5, persona.getNombre());
-	        statement.setString(6, persona.getApellido());
-	        statement.setString(7, persona.getNacionalidad());
-	        statement.setDate(8, new java.sql.Date(persona.getFechaNacimiento().getTime()));
-	        statement.setString(9, persona.getDireccion());
-	        statement.setString(10, persona.getLocalidad());
-	        statement.setString(11, persona.getProvincia());
-	        statement.setString(12, persona.getEmail());
-	        statement.setString(13, persona.getTelefono());
-	        statement.setBoolean(14, persona.isEstado());
-			if(statement.executeUpdate() > 0)
-			{
-				conexion.commit();
-				isInsertExitoso = true;
-			}
-		} 
-		catch(PersonaExistenteExcepcion e) {
-			e.printStackTrace();
-		}
-		catch (SQLException e) 
-		{
-			e.printStackTrace();
-			try {
-				conexion.rollback();
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-			}
-		}
-		
-		return isInsertExitoso;
+		statement = conexion.prepareStatement(insert);
+        statement.setInt(1, persona.getUsuario().getId());  
+        statement.setInt(2, persona.getTipoSexo().getId());
+        statement.setString(3, persona.getDni());
+        statement.setString(4, persona.getCuil());
+        statement.setString(5, persona.getNombre());
+        statement.setString(6, persona.getApellido());
+        statement.setString(7, persona.getNacionalidad());
+        statement.setDate(8, new java.sql.Date(persona.getFechaNacimiento().getTime()));
+        statement.setString(9, persona.getDireccion());
+        statement.setString(10, persona.getLocalidad());
+        statement.setString(11, persona.getProvincia());
+        statement.setString(12, persona.getEmail());
+        statement.setString(13, persona.getTelefono());
+        statement.setBoolean(14, persona.isEstado());
+		statement.executeUpdate();
 	}
 
 	@Override

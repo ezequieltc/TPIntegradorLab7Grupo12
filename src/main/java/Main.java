@@ -23,10 +23,11 @@ public class Main {
         }
 
         Usuario nuevoUsuario = new Usuario(0, tipoUsuario, "johndoe", "password123", new Date(), true);
-        if (usuarioDao.insert(nuevoUsuario)) {
-            System.out.println("Usuario agregado exitosamente");
-        } else {
-            System.out.println("Error al agregar usuario");
+        try {
+        	usuarioDao.insert(nuevoUsuario);
+        	System.out.println("Usuario agregado exitosamente");
+        }catch(Exception e) {
+        	System.out.println("Error al agregar usuario");
         }
 
         List<Usuario> usuarios = usuarioDao.readAll(1).getData();
@@ -79,10 +80,13 @@ public class Main {
                                            "Argentina", new Date(), "Av. Siempre Viva 123", "Ciudad", 
                                            "Provincia", "juan.perez@example.com", "123456789", true);
 
-        if (personaDao.insert(nuevaPersona)) {
-            System.out.println("Persona agregada exitosamente");
-        } else {
-            System.out.println("Error al agregar persona");
+        try {
+        	personaDao.insert(nuevaPersona);
+        	System.out.println("Persona agregada exitosamente");
+        	
+        }catch(Exception e) {
+        
+        	System.out.println("Error al agregar persona");
         }
 
         List<Persona> personas = personaDao.readAll(1).getData();
