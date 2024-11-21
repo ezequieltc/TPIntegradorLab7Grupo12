@@ -12,4 +12,7 @@ public interface IMovimientoNegocio {
     PaginatedResponse<Movimiento> listarMovimientosPorCuenta(int idCuenta);
     
     List<Movimiento> obtenerUltimosMovimientos(int idCuenta, int limite) throws SQLException;
+    
+    List<Movimiento> obtenerTodosLosMovimientos() throws Exception;
+
 }

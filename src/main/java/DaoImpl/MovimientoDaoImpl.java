@@ -149,5 +149,34 @@ public class MovimientoDaoImpl implements IMovimientoDao {
         
         return movimientos;
     }
+    
+    public List<Movimiento> obtenerTodosLosMovimientos() throws Exception {
+        List<Movimiento> movimientos = new ArrayList<>();
+        Connection conexion = Conexion.getConexion().getSQLConexion();
+        String query = "SELECT m.id_movimiento, m.id_cuenta, tm.id_tipo_movimiento, tm.descripcion, m.fecha, m.detalle, m.importe, m.estado " +
+                       "FROM movimientos m " +
+                       "INNER JOIN tiposmovimiento tm ON m.id_tipo_movimiento = tm.id_tipo_movimiento";
+
+        try (PreparedStatement ps = conexion.prepareStatement(query); ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                int id = rs.getInt("id_movimiento");
+                int cuentaId = rs.getInt("id_cuenta");
+                int tipoId = rs.getInt("tm.id_tipo_movimiento");
+                String descripcion = rs.getString("tm.descripcion");
+                Date fecha = rs.getDate("fecha");
+                String detalle = rs.getString("detalle");
+                Double importe = rs.getDouble("importe");
+                Boolean estado = rs.getBoolean("estado");
+
+                TipoMovimiento tipoMovimiento = new TipoMovimiento(tipoId, descripcion);
+                Movimiento movimiento = new Movimiento(cuentaId, tipoMovimiento, fecha, detalle, importe, estado);
+                movimiento.setId(id);
+                movimientos.add(movimiento);
+            }
+        } catch (SQLException e) {
+            throw new Exception("Error al obtener todos los movimientos: " + e.getMessage(), e);
+        }
+        return movimientos;
+    }
 }
 

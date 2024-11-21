@@ -13,4 +13,6 @@ public interface IMovimientoDao {
 
     PaginatedResponse<Movimiento> listarMovimientosPorCuenta(int idCuenta) throws Exception;
     List<Movimiento> obtenerUltimosMovimientos(int idCliente, int limite) throws Exception;
+    List<Movimiento> obtenerTodosLosMovimientos() throws Exception;
+
 }

@@ -45,4 +45,12 @@ public class MovimientoNegocioImpl implements IMovimientoNegocio{
 		return ultimosMovimientos;
 	}
 
+	@Override
+	public List<Movimiento> obtenerTodosLosMovimientos() throws Exception {
+		// TODO Auto-generated method stub
+		return movimientoDao.obtenerTodosLosMovimientos();
+	}
+	
+	
+
 }
