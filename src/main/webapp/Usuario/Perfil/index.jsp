@@ -131,11 +131,13 @@
     if (cuentas != null) {
       for (Cuenta cuenta : cuentas) { 
   %>	
+  		<tr>
           <td><%= cuenta.getTipoCuenta().getDescripcion() %></td>
           <td><%= cuenta.getNumeroCuenta() %></td>
           <td><%= cuenta.getCbu() %></td>
           <td><%= cuenta.getFechaCreacion() %>
           <td><%= cuenta.getSaldo() %></td>
+        </tr>
   <% 
       }
     }

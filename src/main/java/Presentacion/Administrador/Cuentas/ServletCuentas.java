@@ -67,76 +67,8 @@ public class ServletCuentas extends HttpServlet {
 		personasList = personaNegocioTemp.readAll(0).getData();
 		cuentasList = cuentaNegocioTemp.readAll();
 		tipoCuentaList = tipoCuentaTemp.readAll();
-		if(request.getParameter("crearCuenta")!= null) {
-			
-			String dniUsuario = request.getParameter("dniUsuario");
-			String tipoCuenta = request.getParameter("tipoCuenta");
-			String fechaAltaCuenta = request.getParameter("fechaAltaCuenta");
-			String saldo = request.getParameter("saldo");
-			Persona cliente = null;
-			int cantCuentas = 0;
-			Cuenta cuenta = new Cuenta();
-			try {
-				for(Persona persona : personasList) {
-					if (persona.getDni().equals(dniUsuario)) {
-						cliente = persona;
-						break;
-					}
-				}
-				if(cliente == null) {
-					throw new Exception("La persona no existe");
-				}
-				
-				for (Cuenta cuentaTemp : cuentasList ) {
-					if(cuentaTemp.estado) {						
-						if(cuentaTemp.getPersona().getUsuario().getId() == cliente.getUsuario().getId()) {
-							cantCuentas++;
-						}
-					}
-				}
-				
-				if(cantCuentas < 3) {
-					cuenta.setEstado(true);
-					SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
-					Date fechaCreacion = formatoFecha.parse(fechaAltaCuenta);
-					cuenta.setFechaCreacion(fechaCreacion);
-					cuenta.setId(cuentaNegocioTemp.calcularSiguienteId());
-					for(TipoCuenta tipoCuentas : tipoCuentaList) {
-						if(tipoCuentas.getDescripcion().equals(tipoCuenta)) {
-							cuenta.setTipoCuenta(tipoCuentas);
-						}
-					}
-					cuenta.setPersona(cliente);
-					cuenta.setSaldo(Integer.parseInt(saldo));
-					try {
-						cuentaNegocioTemp.insert(cuenta);
-					}
-					catch (Exception e) {
-						System.out.println(e.getMessage());
-					}
-					
-					
-					request.getSession().setAttribute("mensajeExito", "¡Cuenta actualizada correctamente!");
-					request.getSession().setAttribute("mostrarPopUp", true);
-					request.getSession().setAttribute("popUpStatus", "success");
-					
-				}
-				else {
-					throw new Exception("El cliente ya posee 3 cuentas");
-				}
-				
-				
-			}
-			catch (Exception error) {
-				System.out.println(error.getMessage());
-				request.getSession().setAttribute("mensajeError", "Ocurrió un error: " + error.getMessage());
-				request.getSession().setAttribute("popUpStatus", "error");
-				request.getSession().setAttribute("mostrarPopUp", true);
-			}
-			
-			response.sendRedirect(request.getContextPath() + "/Administrador/Cuentas/AltaCuenta.jsp"); 
-		}
-
+		request.setAttribute("tiposCuentas", tipoCuentaList);
+		
 		Cuenta cuentaTemp = new Cuenta();
 		if(request.getParameter("botonBuscarCuenta") != null){
 			String buscarCBU = request.getParameter("busquedaCBU");

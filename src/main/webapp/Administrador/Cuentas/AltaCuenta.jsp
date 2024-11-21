@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+	<%@page import="java.util.ArrayList"%>
+<%@page import="Dominio.TipoCuenta"%>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -43,7 +45,7 @@
 			<div id="registrationForm" class="w-100">
 				<div class="step">
 					<h4>Información de la Cuenta</h4>
-					<form class="needs-validation" action="${pageContext.request.contextPath}/Administrador/Cuentas/ServletCuentas" method="POST" novalidate>
+					<form class="needs-validation" action="${pageContext.request.contextPath}/Administrador/Cuentas/ServletAgregarCuenta" method="POST" novalidate>
 						<div class="row">
 							<div class="col-md-6">
 								<div class="form-group">
@@ -53,8 +55,15 @@
 								<div class="form-group">
 									<label for="tipoCuenta">Tipo de Cuenta</label> 
 									<select id="tipoCuenta" class="form-control" name="tipoCuenta">
-										<option value="caja de ahorro">Caja de Ahorro</option>
-										<option value="cuenta corriente">Cuenta Corriente</option>
+										<% List<TipoCuenta> tiposCuenta = (List<TipoCuenta>) request.getAttribute("tiposCuentas"); 
+											if (tiposCuenta != null) {
+								                for (TipoCuenta tipoCuenta : tiposCuenta) {
+								        %>
+								                    <option value="<%= tipoCuenta.getId() %>"><%= tipoCuenta.getDescripcion() %></option>
+								        <%
+								                }
+								            }
+								        %>
 									</select>
 								</div>
 							</div>
