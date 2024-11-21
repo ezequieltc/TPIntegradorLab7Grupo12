@@ -6,6 +6,7 @@
 <%
     List<MenuItem> sidebarMenu = (List<MenuItem>) session.getAttribute("sidebarMenu");
 	Persona persona = (Persona) request.getSession().getAttribute("persona");
+	boolean esAdmin = (boolean) request.getSession().getAttribute("isAdmin");
 %>
 
 <nav class="navbar">
@@ -13,13 +14,11 @@
   <div class="justify-content-end">
     <ul class="navbar-nav">
 	<div class="header-user">
-	<%if(persona.getUsuario().getTipoUsuario().getId() != 1){ %>
-		<a href="../Usuario/Perfil/index.jsp" class="linkPerfil">Usuario: <%= persona.getNombreApellido() %></a>
+	<%if(!esAdmin){ %>
+		<a href="${pageContext.request.contextPath}/Usuarios/Perfil/ServletPerfilUsuario" class="linkPerfil">Usuario: <%= persona.getNombreApellido() %></a>
 	<% } else { %>
 		<div>Usuario: <%= persona.getNombreApellido() %></div>
 	<% } %>
-		
-<!--		<a href="../Usuario/Perfil/index.jsp" class="linkPerfil">Usuario: <%= persona.getNombreApellido() %></a>-->
     	<a class="logout-button" href="${pageContext.request.contextPath}/SvLogout">    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="icon-logout">
         <path d="M10 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h3a1 1 0 1 0 0-2H7V5h3a1 1 0 1 0 0-2zm10.707 10.707a1 1 0 0 0 0-1.414l-4-4a1 1 0 0 0-1.414 1.414L17.586 11H9a1 1 0 1 0 0 2h8.586l-2.293 2.293a1 1 0 0 0 1.414 1.414l4-4z"/></svg>
     	Cerrar sesión</a>

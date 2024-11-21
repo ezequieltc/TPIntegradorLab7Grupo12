@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ page import="Dominio.Cuenta" %>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -111,94 +112,39 @@
         </form>
       </div>
 
+	<h2 class="my-4">Información de Cuentas</h2>
     <div id="registrationForm" class="w-100">
-      <div class="step step-1">
-        <h4>Información de Cuentas</h4>
-        <form>
-          <div class="row">
-            <div class="col-md-4">
-              <div class="form-group">
-					<label for="tipoCuentaPreferencias1">Tipo de Cuenta</label> 
-					<input type="text" id="tipoCuentaPreferencias1" class="form-control">
-				</div>
-              <div class="form-group">
-					<label for="fechaAltaCuentaPreferencias1">Fecha de Alta</label> <input
-						type="date" id="fechaAltaCuentaPreferencias1" class="form-control">
-				</div>
-				
-              <div class="form-group">
-					<label for="numeroCuentaPreferencias1">Número de cuenta</label> <input
-						type="number" id="numeroCuentaPreferencias1" class="form-control"
-						>
-				</div>
-				<div class="form-group">
-				<div class="form-group">
-					<label for="cbuCuentaPreferencias1">CBU</label> <input type="number" id="cbuCuentaPreferencias1"
-						class="form-control">
-				</div>
-			</div>
-			<div class="form-group">
-					<label for="saldoCuentaPreferencias1">Saldo</label> <input type="number"
-						id="saldoCuentaPreferencias1" class="form-control" placeholder="$0" step="0.01"
-						min="0">
-			</div>
-          </div>
-          <div class="col-md-4">
-          	<div class="form-group">
-					<label for="tipoCuentaPreferencias2">Tipo de Cuenta</label> 
-					<input type="text" id="tipoCuentaPreferencias2" class="form-control">
-				</div>
-              <div class="form-group">
-					<label for="fechaAltaCuentaPreferencias2">Fecha de Alta</label> <input
-						type="date" id="fechaAltaCuentaPreferencias2" class="form-control">
-				</div>
-				
-              <div class="form-group">
-					<label for="numeroCuentaPreferencias2">Número de cuenta</label> <input
-						type="number" id="numeroCuentaPreferencias2" class="form-control"
-						>
-				</div>
-				<div class="form-group">
-				<div class="form-group">
-					<label for="cbuCuentaPreferencias2">CBU</label> <input type="number" id="cbuCuentaPreferencias2"
-						class="form-control">
-				</div>
-			</div>
-			<div class="form-group">
-					<label for="saldoCuentaPreferencias2">Saldo</label> <input type="number"
-						id="saldoCuentaPreferencias2" class="form-control" placeholder="$0" step="0.01"
-						min="0">
-			</div>
-          </div>
-          <div class="col-md-4">
-          	<div class="form-group">
-					<label for="tipoCuentaPreferencias3">Tipo de Cuenta</label> 
-					<input type="text" id="tipoCuentaPreferencias3" class="form-control">
-				</div>
-              <div class="form-group">
-					<label for="fechaAltaCuentaPreferencias3">Fecha de Alta</label> <input
-						type="date" id="fechaAltaCuentaPreferencias3" class="form-control">
-				</div>
-				
-              <div class="form-group">
-					<label for="numeroCuentaPreferencias3">Número de cuenta</label> <input
-						type="number" id="numeroCuentaPreferencias3" class="form-control"
-						>
-				</div>
-				<div class="form-group">
-				<div class="form-group">
-					<label for="cbuCuentaPreferencias3">CBU</label> <input type="number" id="cbuCuentaPreferencias3"
-						class="form-control">
-				</div>
-				<div class="form-group">
-					<label for="saldoCuentaPreferencias3">Saldo</label> <input type="number"
-						id="saldoCuentaPreferencias3" class="form-control" placeholder="$0" step="0.01"
-						min="0">
-			</div>
-          </div>
-        </form>
-     
-     <%@include  file="../../components/post-body.jsp"%>
+      <div class="step">
+     	<table class="table table-bordered table-hover">
+        <thead>
+          <tr>
+            <th>Tipo de Cuenta</th>
+            <th>Nro de Cuenta</th>
+            <th>CBU</th>
+            <th>Fecha de Alta</th>
+            <th>Saldo</th>
+          </tr>
+        </thead>
+        <tbody>
+  <% 
+    List<Cuenta> cuentas = (List<Cuenta>) request.getAttribute("cuentas");
+    if (cuentas != null) {
+      for (Cuenta cuenta : cuentas) { 
+  %>	
+          <td><%= cuenta.getTipoCuenta().getDescripcion() %></td>
+          <td><%= cuenta.getNumeroCuenta() %></td>
+          <td><%= cuenta.getCbu() %></td>
+          <td><%= cuenta.getFechaCreacion() %>
+          <td><%= cuenta.getSaldo() %></td>
+  <% 
+      }
+    }
+  %>
+</tbody>
+        </table>
+     </div>
+	</div>
+<%@include  file="../../components/post-body.jsp"%>
               
 </body>
 </html>
