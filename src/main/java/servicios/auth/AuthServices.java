@@ -1,5 +1,6 @@
 package servicios.auth;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,11 +27,10 @@ public class AuthServices {
 		Persona persona = null;
 		Usuario usuario = null;
 		usuario = userDAO.getUsuario(email);
-		
 		if(usuario != null && usuario.getEstado()) {
-			System.out.println("validando usuario " + usuario.getContrasena());
 			if(usuario.getContrasena().equals(pass)){
 				persona = (new PersonaDaoImpl().getPersonaPorUsuario(usuario.getId()));
+				intentos.remove(usuario);
 				return persona;
 			}
 		}
@@ -38,10 +38,10 @@ public class AuthServices {
 			throw new PersonaExistenteExcepcion("Usuario inexistente");
 		}
 		
-		if(!setIntentosFallidos(usuario)) {
+		if(!setIntentosFallidos(usuario) || !usuario.getEstado()) {
 			usuario.setEstado(false);
 			userDAO.update(usuario);
-			throw new UsuarioBloqueado("Se bloquea usuario por reintentos fallidos");
+			throw new UsuarioBloqueado("Usuario bloqueado, por favor ponganse en contacto con la sucursal mas cercana a su domicilio");
 		}
 		return persona;	
 	}
@@ -52,6 +52,7 @@ public class AuthServices {
 		if(intento == 0) {
 			intentos.put(usuario.getId(), intento);
 		}
+		System.err.println("Intento nro " + intento + " del usuario " + usuario.getUsuario());
 		if(intento == 3) {
 			return false;
 		}else {
