@@ -46,9 +46,6 @@ public class SvLogin extends HttpServlet {
 		try {
 			persona = authService.login(user, pass);
 			if(persona != null){
-				session = request.getSession(true);
-			}
-			if((persona = authService.login(user, pass)) != null){
 				session.setAttribute("persona", persona);
 				session.setAttribute("isAdmin", persona.getUsuario().getTipoUsuario().getId() == 1);
 				response.sendRedirect("SvSidebar");

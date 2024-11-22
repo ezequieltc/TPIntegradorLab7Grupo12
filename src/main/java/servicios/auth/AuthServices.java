@@ -30,7 +30,8 @@ public class AuthServices {
 		if(usuario != null && usuario.getEstado()) {
 			if(usuario.getContrasena().equals(pass)){
 				persona = (new PersonaDaoImpl().getPersonaPorUsuario(usuario.getId()));
-				intentos.remove(usuario);
+				intentos.replace((Integer)usuario.getId(), 0);
+				System.out.println("Nuevo valor de reintentos: " + intentos.get((Integer)usuario.getId()));
 				return persona;
 			}
 		}
