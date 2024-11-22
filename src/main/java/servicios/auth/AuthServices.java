@@ -9,6 +9,7 @@ import DaoImpl.PersonaDaoImpl;
 import DaoImpl.UsuarioDaoImpl;
 import Dominio.Persona;
 import Dominio.Usuario;
+import excepciones.PersonaExistenteExcepcion;
 import excepciones.UsuarioBloqueado;
 
 public class AuthServices {
@@ -19,14 +20,13 @@ public class AuthServices {
 		
 	}
 	
-	public Persona login(String email, String pass) throws UsuarioBloqueado
+	public Persona login(String email, String pass) throws UsuarioBloqueado, PersonaExistenteExcepcion
 	{
 		IUsuarioDao userDAO = new UsuarioDaoImpl();
 		Persona persona = null;
 		Usuario usuario = null;
 		usuario = userDAO.getUsuario(email);
-		System.err.println("Validando credenciales en el login: Pass: " + pass + " Usuario: " + email);
-		System.out.println("usaurio desde db: " + usuario.getEstado());
+		
 		if(usuario != null && usuario.getEstado()) {
 			System.out.println("validando usuario " + usuario.getContrasena());
 			if(usuario.getContrasena().equals(pass)){
@@ -34,6 +34,10 @@ public class AuthServices {
 				return persona;
 			}
 		}
+		if(usuario == null) {
+			throw new PersonaExistenteExcepcion("Usuario inexistente");
+		}
+		
 		if(!setIntentosFallidos(usuario)) {
 			usuario.setEstado(false);
 			userDAO.update(usuario);

@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import Dominio.Persona;
+import excepciones.PersonaExistenteExcepcion;
 import excepciones.UsuarioBloqueado;
 import servicios.auth.AuthServices;
 
@@ -42,8 +43,8 @@ public class SvLogin extends HttpServlet {
 		 
 		Persona persona = null;
 		try {
-			//persona = authService.login(user, pass);
-			if((persona = authService.login(user, pass)) != null){
+			persona = authService.login(user, pass);
+			if(persona != null){
 				HttpSession session = request.getSession(true);
 				session.setAttribute("persona", persona);
 				session.setAttribute("isAdmin", persona.getUsuario().getTipoUsuario().getId() == 1);
@@ -51,7 +52,8 @@ public class SvLogin extends HttpServlet {
 			} else {
 				response.sendRedirect("Login.jsp");
 			}
-		} catch (UsuarioBloqueado e) {
+		} catch (UsuarioBloqueado | PersonaExistenteExcepcion e) {
+			response.sendRedirect("Login.jsp");
 			e.printStackTrace();
 		}
 

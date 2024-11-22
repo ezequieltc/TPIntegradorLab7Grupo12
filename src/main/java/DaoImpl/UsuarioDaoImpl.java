@@ -196,6 +196,7 @@ public class UsuarioDaoImpl implements IUsuarioDao {
             PreparedStatement ps = connection.prepareStatement(readLogin);
             ps.setString(1, email);
             ResultSet rs = ps.executeQuery();
+                                  
             if (rs.next()) {
                 usuario = new Usuario();
                 usuario.setId(rs.getInt("id_usuario"));
