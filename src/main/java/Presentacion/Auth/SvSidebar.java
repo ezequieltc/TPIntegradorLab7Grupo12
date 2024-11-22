@@ -33,7 +33,7 @@ public class SvSidebar extends HttpServlet {
 
         session.setAttribute("sidebarMenu", menuItems);
         if (isAdmin) {
-            response.sendRedirect("Administrador/VistaHomeAdministrador.jsp");
+            response.sendRedirect("Administrador/ServletHomeAdministrador");
         } else {
             response.sendRedirect("Usuarios/Home/ServletHomeUsuario");
         }
@@ -56,7 +56,7 @@ public class SvSidebar extends HttpServlet {
         );
 
         return Arrays.asList(
-            new MenuItem("Inicio", request.getContextPath() + "/Administrador/VistaHomeAdministrador.jsp"),
+            new MenuItem("Inicio", request.getContextPath() + "/Administrador/ServletHomeAdministrador"),
             new MenuItem("Informes y Reportes", request.getContextPath() + "/Administrador/InformesReportes.jsp"),
             new MenuItem("Cuentas", cuentasSubMenu),
             new MenuItem("Préstamos", prestamosSubMenu),
