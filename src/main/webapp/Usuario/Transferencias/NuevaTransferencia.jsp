@@ -121,7 +121,7 @@
           <% 
           if (cuentasCliente != null) {
           for (Cuenta cuenta : cuentasCliente){%>
-            <option  value="<%= cuenta.getNumeroCuenta() %>">Cuenta <%= cuenta.getNumeroCuenta() %> - <%= cuenta.getTipoCuenta().getDescripcion() %> - <span><%= cuenta.getSaldo() %></span></option>         	              	
+            <option  value="<%= cuenta.getNumeroCuenta() %>" data-saldo="<%= cuenta.getSaldo() %>">Cuenta <%= cuenta.getNumeroCuenta() %> - <%= cuenta.getTipoCuenta().getDescripcion() %> - <%= cuenta.getSaldo() %></option>         	              	
           <% 
           }}%>
         </select>
@@ -219,8 +219,10 @@ document.getElementById("confirmTransfer").addEventListener("click", function (e
 
       // Validar saldo de la cuenta seleccionada
       const selectedOption = accountSelect.options[accountSelect.selectedIndex];
-      const saldoSpan = selectedOption.querySelector(`span`);
-      const saldoCuenta = parseFloat(saldoSpan.textContent);
+      const saldoAttribute = selectedOption.getAttribute("data-saldo");
+      const saldoCuenta = parseFloat(saldoAttribute);
+      
+      console.log(selectedOption, saldoAttribute, saldoCuenta, accountSelect)
 
       if (saldoCuenta < amountValue) {
         errorAccount.textContent = "El saldo de la cuenta seleccionada no es suficiente.";
