@@ -1,5 +1,6 @@
 package servicios.auth;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,6 +10,7 @@ import DaoImpl.PersonaDaoImpl;
 import DaoImpl.UsuarioDaoImpl;
 import Dominio.Persona;
 import Dominio.Usuario;
+import excepciones.PersonaExistenteExcepcion;
 import excepciones.UsuarioBloqueado;
 
 public class AuthServices {
@@ -19,25 +21,28 @@ public class AuthServices {
 		
 	}
 	
-	public Persona login(String email, String pass) throws UsuarioBloqueado
+	public Persona login(String email, String pass) throws UsuarioBloqueado, PersonaExistenteExcepcion
 	{
 		IUsuarioDao userDAO = new UsuarioDaoImpl();
 		Persona persona = null;
 		Usuario usuario = null;
 		usuario = userDAO.getUsuario(email);
-		System.err.println("Validando credenciales en el login: Pass: " + pass + " Usuario: " + email);
-		System.out.println("usaurio desde db: " + usuario.getEstado());
 		if(usuario != null && usuario.getEstado()) {
-			System.out.println("validando usuario " + usuario.getContrasena());
 			if(usuario.getContrasena().equals(pass)){
 				persona = (new PersonaDaoImpl().getPersonaPorUsuario(usuario.getId()));
+				intentos.replace((Integer)usuario.getId(), 0);
+				System.out.println("Nuevo valor de reintentos: " + intentos.get((Integer)usuario.getId()));
 				return persona;
 			}
 		}
-		if(!setIntentosFallidos(usuario)) {
+		if(usuario == null) {
+			throw new PersonaExistenteExcepcion("Usuario inexistente");
+		}
+		
+		if(!setIntentosFallidos(usuario) || !usuario.getEstado()) {
 			usuario.setEstado(false);
 			userDAO.update(usuario);
-			throw new UsuarioBloqueado("Se bloquea usuario por reintentos fallidos");
+			throw new UsuarioBloqueado("Usuario bloqueado, por favor ponganse en contacto con la sucursal mas cercana a su domicilio");
 		}
 		return persona;	
 	}
@@ -48,6 +53,7 @@ public class AuthServices {
 		if(intento == 0) {
 			intentos.put(usuario.getId(), intento);
 		}
+		System.err.println("Intento nro " + intento + " del usuario " + usuario.getUsuario());
 		if(intento == 3) {
 			return false;
 		}else {

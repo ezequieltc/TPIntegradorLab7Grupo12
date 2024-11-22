@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import Dominio.Persona;
+import excepciones.PersonaExistenteExcepcion;
 import excepciones.UsuarioBloqueado;
 import servicios.auth.AuthServices;
 
@@ -39,20 +40,33 @@ public class SvLogin extends HttpServlet {
 		String user = request.getParameter("user");
 		String pass = request.getParameter("pass");
 		AuthServices authService = new AuthServices();
-		 
+		HttpSession session = request.getSession(true);
+		
 		Persona persona = null;
 		try {
-			//persona = authService.login(user, pass);
-			if((persona = authService.login(user, pass)) != null){
-				HttpSession session = request.getSession(true);
+			persona = authService.login(user, pass);
+			if(persona != null){
 				session.setAttribute("persona", persona);
 				session.setAttribute("isAdmin", persona.getUsuario().getTipoUsuario().getId() == 1);
 				response.sendRedirect("SvSidebar");
 			} else {
+				session.setAttribute("mensajeError", "Error al aceeder, por favor intente mas tarde");
+				session.setAttribute("mostrarPopUp", true);
+				session.setAttribute("popUpStatus", "error");
+				
 				response.sendRedirect("Login.jsp");
 			}
+		} catch (PersonaExistenteExcepcion e) {
+			session.setAttribute("mensajeError", e.getMessage());
+			session.setAttribute("mostrarPopUp", true);
+			session.setAttribute("popUpStatus", "error");
+			response.sendRedirect("Login.jsp");
 		} catch (UsuarioBloqueado e) {
-			e.printStackTrace();
+			session.setAttribute("mensajeError", e.getMessage());
+			session.setAttribute("mostrarPopUp", true);
+			session.setAttribute("popUpStatus", "error");
+			response.sendRedirect("Login.jsp");
+			//e.printStackTrace();
 		}
 
 	}

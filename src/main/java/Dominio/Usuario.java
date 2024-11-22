@@ -9,6 +9,7 @@ public class Usuario {
     private String contrasena;
     private Date fechaCreacion;
     private boolean estado;
+    private Date fechaBloqueo;
     
     public Usuario() {}
 
@@ -19,9 +20,18 @@ public class Usuario {
         this.contrasena = contrasena;
         this.fechaCreacion = fechaCreacion;
         this.estado = estado;
+        this.fechaBloqueo = null;
     }
 
-    public int getId() {
+    public Date getFechaBloqueo() {
+		return fechaBloqueo;
+	}
+
+	public void setFechaBloqueo(Date fechaBloqueo) {
+		this.fechaBloqueo = fechaBloqueo;
+	}
+
+	public int getId() {
         return id;
     }
 

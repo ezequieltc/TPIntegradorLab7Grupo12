@@ -1,6 +1,11 @@
 package Presentacion.Administrador.Prestamos;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Date;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -9,9 +14,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import Dominio.Cuota;
 import Dominio.Movimiento;
 import Dominio.Prestamo;
 import Dominio.TipoMovimiento;
+import NegocioImpl.CuotaNegocioImpl;
 import NegocioImpl.MovimientoNegocioImpl;
 import NegocioImpl.PrestamoNegocioImpl;
 import tipos.PrestamosStatus;
@@ -44,8 +51,8 @@ public class ServletAprobarPrestamo extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		PrestamoNegocioImpl prestamoNegocio = new PrestamoNegocioImpl();
-		
-
+		ArrayList<Cuota> cuotas = new ArrayList<Cuota>();
+		CuotaNegocioImpl cuotaNegocio = new CuotaNegocioImpl();
 		MovimientoNegocioImpl movimientoNegocio = new MovimientoNegocioImpl();
 		int id = Integer.parseInt(request.getParameter("prestamoID"));
 		Prestamo prestamo = prestamoNegocio.getPrestamoPorId(id);
@@ -55,6 +62,19 @@ public class ServletAprobarPrestamo extends HttpServlet {
 			double importe = prestamo.getImporte();
 			Movimiento movimiento = new Movimiento(prestamo.getCuenta().getId(), new TipoMovimiento(1,"Deposito"), new java.util.Date(System.currentTimeMillis()), "Aprobación de prestamo ID " + prestamo.getId(), importe, true);
 			movimientoNegocio.insertarMovimiento(movimiento);
+			for (int i = 0; i<prestamo.getCantidad_cuotas(); i++) {
+				Cuota cuotaTemp = new Cuota();
+				cuotaTemp.setId_prestamo(prestamo.getId());
+				cuotaTemp.setNumero_cuota(i+1);
+				cuotaTemp.setImporte(prestamo.getCuota_mensual());
+				LocalDate localDate = LocalDate.parse( new SimpleDateFormat("yyyy-MM-dd").format(prestamo.getFecha_alta()));
+				LocalDate fechaConUnMesMas = localDate.plusMonths(i+1);
+				Date nuevaFecha = Date.from(fechaConUnMesMas.atStartOfDay(ZoneId.systemDefault()).toInstant());
+				cuotaTemp.setFecha_pago(nuevaFecha);
+				cuotaTemp.setEstado(true);
+				cuotaNegocio.insertarCuota(cuotaTemp);
+			}
+			System.out.println(cuotas.toString());
 			request.getSession().setAttribute("mensajeExito", "¡El prestamo fue aprobado correctamente!");
 			request.getSession().setAttribute("mostrarPopUp", true);
 			request.getSession().setAttribute("popUpStatus", "success");
