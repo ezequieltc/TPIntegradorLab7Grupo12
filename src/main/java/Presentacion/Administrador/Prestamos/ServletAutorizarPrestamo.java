@@ -38,9 +38,6 @@ public class ServletAutorizarPrestamo extends HttpServlet {
 		listadoPrestamos = prestamoNegocio.getPrestamos();
 		request.getSession().setAttribute("listadoPrestamos", listadoPrestamos);
 		response.sendRedirect(request.getContextPath() + "/Administrador/Prestamos/AutorizarPrestamo.jsp"); 
-		//request.setAttribute("listadoPrestamos", listadoPrestamos);
-	    //RequestDispatcher rd = request.getRequestDispatcher("/Administrador/Prestamos/AutorizarPrestamo.jsp");
-	    //rd.forward(request, response);
 	}
 
 	/**

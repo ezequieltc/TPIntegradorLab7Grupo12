@@ -46,10 +46,15 @@ public class ServletRechazarPrestamo extends HttpServlet {
 		prestamo.setStatus(PrestamosStatus.RECHAZADO);
 		try {
 			prestamoNegocio.update(prestamo);
-			System.out.println("Actualizado correctamente");
+			request.getSession().setAttribute("mensajeExito", "¡El prestamo fue rechazado correctamente!");
+			request.getSession().setAttribute("mostrarPopUp", true);
+			request.getSession().setAttribute("popUpStatus", "success");
 			
 			}
 		catch (Exception e){
+			request.getSession().setAttribute("mensajeError", "¡Ha ocurrido un error!");
+			request.getSession().setAttribute("mostrarPopUp", true);
+			request.getSession().setAttribute("popUpStatus", "error");
 			}
 		response.sendRedirect(request.getContextPath() + "/Administrador/Prestamos/ServletAutorizarPrestamo"); 
 	}

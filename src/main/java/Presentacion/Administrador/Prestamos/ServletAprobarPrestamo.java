@@ -9,7 +9,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import Dominio.Movimiento;
 import Dominio.Prestamo;
+import Dominio.TipoMovimiento;
+import NegocioImpl.MovimientoNegocioImpl;
 import NegocioImpl.PrestamoNegocioImpl;
 import tipos.PrestamosStatus;
 
@@ -41,15 +44,26 @@ public class ServletAprobarPrestamo extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		PrestamoNegocioImpl prestamoNegocio = new PrestamoNegocioImpl();
+		
+
+		MovimientoNegocioImpl movimientoNegocio = new MovimientoNegocioImpl();
 		int id = Integer.parseInt(request.getParameter("prestamoID"));
 		Prestamo prestamo = prestamoNegocio.getPrestamoPorId(id);
 		prestamo.setStatus(PrestamosStatus.EN_CURSO);
 		try {
 			prestamoNegocio.update(prestamo);
-			System.out.println("Actualizado correctamente");
+			double importe = prestamo.getImporte();
+			Movimiento movimiento = new Movimiento(prestamo.getCuenta().getId(), new TipoMovimiento(1,"Deposito"), new java.util.Date(System.currentTimeMillis()), "Aprobación de prestamo ID " + prestamo.getId(), importe, true);
+			movimientoNegocio.insertarMovimiento(movimiento);
+			request.getSession().setAttribute("mensajeExito", "¡El prestamo fue aprobado correctamente!");
+			request.getSession().setAttribute("mostrarPopUp", true);
+			request.getSession().setAttribute("popUpStatus", "success");
 			
 			}
 		catch (Exception e){
+			request.getSession().setAttribute("mensajeError", "¡Ha ocurrido un error!");
+			request.getSession().setAttribute("mostrarPopUp", true);
+			request.getSession().setAttribute("popUpStatus", "error");
 			}
 		
 		response.sendRedirect(request.getContextPath() + "/Administrador/Prestamos/ServletAutorizarPrestamo"); 
