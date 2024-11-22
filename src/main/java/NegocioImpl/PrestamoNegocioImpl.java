@@ -41,6 +41,11 @@ public class PrestamoNegocioImpl implements IPrestamoNegocio {
 	public ArrayList<Prestamo> getPrestamos(){
 		return prestamoDao.getPrestamos();
 	}
+
+	@Override
+	public ArrayList<Prestamo> getPrestamos(int idUsuario) {
+		return prestamoDao.getPrestamos(idUsuario);
+	}
 	
 
 }

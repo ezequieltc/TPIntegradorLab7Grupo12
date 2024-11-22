@@ -1,3 +1,9 @@
+<%@page import="NegocioImpl.PrestamoNegocioImpl"%>
+<%@page import="Negocio.IPrestamoNegocio"%>
+<%@page import="Dominio.*"%>
+<%@page import="DaoImpl.PrestamoDaoImpl"%>
+<%@page import="Dao.IPrestamoDao"%>
+<%@page import="tipos.PrestamosStatus" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -38,6 +44,46 @@
 	 td {
 	 text-align: center;
 	 }
+	   th, td {
+    text-align: center; /* Centrado de texto */
+    vertical-align: middle; /* Alineación vertical */
+    padding: 0.5rem; /* Espaciado en las celdas */
+  }
+
+  .status-pendiente {
+    background-color: #FFC107;
+    color: #000;
+    font-size: 0.8rem;
+    padding: 0.25rem 0.5rem;
+  }
+
+  .status-autorizado {
+    background-color: #28A745;
+    color: #FFF;
+    font-size: 0.8rem;
+    padding: 0.25rem 0.5rem;
+  }
+
+  .status-rechazado {
+    background-color: #DC3545;
+    color: #FFF;
+    font-size: 0.8rem;
+    padding: 0.25rem 0.5rem;
+  }
+
+  .status-deuda {
+    background-color: #FD7E14;
+    color: #FFF;
+    font-size: 0.8rem;
+    padding: 0.25rem 0.5rem;
+  }
+
+  .status-en-curso {
+    background-color: #007BFF;
+    color: #FFF;
+    font-size: 0.8rem;
+    padding: 0.25rem 0.5rem;
+  }
   </style>
 
 </head>
@@ -62,28 +108,36 @@
             </tr>
         </thead>
         <tbody>
-        
+        <%
+        Persona persona1 = (Persona)request.getSession().getAttribute("persona");
+        IPrestamoNegocio prestamos = new PrestamoNegocioImpl();
+        for(Prestamo prestamo : prestamos.getPrestamos(persona1.getId())){
+        	
+
+        %>
             <tr>
-                <td style="text-align: center;">2011-04-25</td>
-                <td style="text-align: center;">$320,800</td>
-                <td style="text-align: center;">15</td>
-                <td style="text-align: center;">24</td>
-                <td><div class="tagDeuda">Deuda</div></td>
+                <td style="text-align: center;"><%=prestamo.getFecha_alta() %></td>
+                <td style="text-align: center;"><%=prestamo.getImporte() %></td>
+                <td style="text-align: center;"><%=prestamo.getCuota_mensual() %></td>
+                <td style="text-align: center;"><%=prestamo.getCantidad_cuotas() %></td>
+<% if(prestamo.getStatus().equals(PrestamosStatus.PAGO)){ %>
+        <td><span class="listaPrestamos status-autorizado">Pago</span></td>
+        <% }
+        else if(prestamo.getStatus().equals(PrestamosStatus.PENDIENTE)){%>
+        <td><span class="listaPrestamos status-pendiente">Pendiente</span></td>
+        <% }
+        else if(prestamo.getStatus().equals(PrestamosStatus.DEUDA)){
+        %>
+        <td><span class="listaPrestamos status-deuda">Deuda</span></td>
+        <% }
+        else if(prestamo.getStatus().equals(PrestamosStatus.RECHAZADO)){ %>
+        <td><span class="listaPrestamos status-rechazado">Rechazado</span></td>
+        <%} 
+        else{ %>
+        <td><span class="listaPrestamos status-en-curso">En Curso</span></td>
+        <%}%></div></td>
             </tr>
-            <tr>
-                <td style="text-align: center;">2020-07-12</td>
-                <td style="text-align: center;">$20,000</td>
-                <td style="text-align: center;">12</td>
-                <td style="text-align: center;">12</td>
-                <td><div class="tagPago">Pago</div></td>
-            </tr>
-            <tr>
-                <td style="text-align: center;">2024-01-05</td>
-                <td style="text-align: center;">$1.020.800</td>
-                <td style="text-align: center;">5</td>
-                <td style="text-align: center;">84</td>
-                <td><div class="tagDeuda">Deuda</div></td>
-            </tr>
+		<%} %>
         </tbody>
     </table>
 

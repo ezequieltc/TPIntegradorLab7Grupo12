@@ -10,6 +10,6 @@ public interface IPrestamoDao {
 	public boolean update(Prestamo prestamo);
 	public Prestamo getPrestamoPorId(int id);
 	public ArrayList<Prestamo> getPrestamos();
-	
+	public ArrayList<Prestamo> getPrestamos(int idUsuario);
 
 }

@@ -22,6 +22,7 @@ public class PrestamoDaoImpl implements IPrestamoDao{
 	PersonaDaoImpl personaDao;
 	CuentaDaoImpl cuentaDao;
 	private static final String read = "SELECT * FROM VW_Prestamos ORDER BY id_Prestamo";
+	private static final String readByUserId = "SELECT * FROM VW_Prestamos where id_persona = ? ORDER BY id_Prestamo";
 	private static final String readId = "SELECT * FROM VW_Prestamos WHERE id_Prestamo = ?";
 	private static final String update = "UPDATE Prestamos SET cuotas_total = ?, status_prestamo = ? WHERE id_Prestamo = ? ";
 	private static final String delete = "UPDATE Prestamos SET estado = 0 WHERE id_Prestamo = ?";
@@ -160,6 +161,7 @@ public class PrestamoDaoImpl implements IPrestamoDao{
         boolean estado = resultSet.getBoolean("estado");
        
         Persona persona = personaDao.getPersona(resultSet.getInt("id_persona"));
+        
         return new Prestamo(id,cuenta, persona, fecha_alta, importe, cuota_mensual, cantidad_cuotas, total_pagado, status,estado);
     }
     
@@ -177,6 +179,26 @@ public class PrestamoDaoImpl implements IPrestamoDao{
     	}
     	return ultimoId + 1;
     }
+
+
+	@Override
+	public ArrayList<Prestamo> getPrestamos(int idUsuario) {
+		PreparedStatement statement;
+        ResultSet resultSet;
+        Connection conexion = Conexion.getConexion().getSQLConexion();
+        ArrayList<Prestamo> prestamosListado = new ArrayList<Prestamo>();
+          try {
+            statement = conexion.prepareStatement(readByUserId);
+            statement.setInt(1, idUsuario);
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                prestamosListado.add(getPrestamoFromResultSet(resultSet));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+		return prestamosListado;
+	}
 
 	
 
