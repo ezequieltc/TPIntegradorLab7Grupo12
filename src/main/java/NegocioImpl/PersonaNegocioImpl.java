@@ -48,9 +48,24 @@ public class PersonaNegocioImpl implements IPersonaNegocio{
 			personaDao.insert(persona);
 
 			conexion.commit();
+		
 		} catch (Exception e) {
 			e.printStackTrace();
 			conexion.rollback();
+
+			if (e.getMessage().contains("dni")) {
+				throw new RuntimeException("Hubo un error al registrar el cliente: el dni ya existe");
+			}
+			if (e.getMessage().contains("cuil")) {
+				throw new RuntimeException("Hubo un error al registrar el cliente: el cuil ya existe");
+			}
+			if (e.getMessage().contains("email")) {
+				throw new RuntimeException("Hubo un error al registrar el cliente: el email ya existe");
+			}
+			if (e.getMessage().contains("usuarios.usuario")) {
+				throw new RuntimeException("Hubo un error al registrar el cliente: el usuario ya existe");
+			}
+			
 			throw new RuntimeException("Hubo un error al registrar el cliente: " + e.getMessage());
 		}
 	}
