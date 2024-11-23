@@ -11,6 +11,7 @@ public interface ICuentaDao {
 	public boolean update(Cuenta cuenta);
 	public Cuenta getCuenta(int id);
 	public Cuenta getCuenta(String numberoCuenta, String cbu);
+	public Cuenta getCuentaTransferencia(String cbu);
 	public ArrayList<Cuenta> readAll();
 	public int calcularSiguienteId();
 	public ArrayList<Cuenta> getCuentasPorCliente(int Id);

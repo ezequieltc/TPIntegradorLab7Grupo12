@@ -5,12 +5,16 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 import Dao.IMovimientoDao;
+import Dominio.Cuenta;
 import Dominio.Movimiento;
+import Dominio.Persona;
 import Dominio.TipoMovimiento;
+import Dominio.Transferencia;
 import Dominio.DTO.PaginatedResponse;
 import servicios.ddbb.Conexion;
 
@@ -19,12 +23,31 @@ public class MovimientoDaoImpl implements IMovimientoDao {
     private static final String INSERT_MOVIMIENTO_SQL = 
         "INSERT INTO movimientos (id_cuenta, id_tipo_movimiento, fecha, detalle, importe, estado) " +
         "VALUES (?, ?, ?, ?, ?, ?)";
+    private static final String INSERT_TRANSFERENCIA_SQL =
+        "INSERT INTO transferencias (id_movimiento_origen, id_movimiento_destino) " +
+        "VALUES (?, ?)";
 
     private static final String SELECT_MOVIMIENTOS_POR_CUENTA_SQL = 
         "SELECT m.id_movimiento, m.id_cuenta, tm.id_tipo_movimiento, tm.descripcion, m.fecha, m.detalle, m.importe, m.estado " +
         "FROM movimientos m " +
         "INNER JOIN tiposmovimiento tm ON m.id_tipo_movimiento = tm.id_tipo_movimiento " +
         "WHERE m.id_cuenta = ?";
+
+    private static final String SELECT_MOVIMIENTOS_MAS_TRANSFERENCIAS_SQL =
+	"SELECT m.id_movimiento, m.id_cuenta, tm.id_tipo_movimiento, tm.descripcion, m.fecha, m.detalle, "
+     + "m.importe, tr.id_transferencia, cd.cbu AS cbuDestino, cd.numero_cuenta AS nroCuentaDestino, "
+     + "pd.apellido AS apellidoDestino, pd.nombre AS nombreDestino, co.cbu AS cbuOrigen, "
+     + "co.numero_cuenta AS nroCuentaOrigen, po.apellido AS apellidoOrigen, po.nombre AS nombreOrigen "
+     + "FROM movimientos m "
+     + "INNER JOIN tiposmovimiento tm ON m.id_tipo_movimiento = tm.id_tipo_movimiento "
+     + "LEFT JOIN transferencias tr ON tr.id_movimiento_origen = m.id_movimiento OR tr.id_movimiento_destino = m.id_movimiento "
+     + "LEFT JOIN movimientos md ON tr.id_movimiento_destino = md.id_movimiento "
+     + "LEFT JOIN cuentas cd ON md.id_cuenta = cd.id_cuenta "
+     + "LEFT JOIN personas pd ON pd.id_usuario = cd.id_cliente "
+     + "LEFT JOIN movimientos mo ON tr.id_movimiento_origen = mo.id_movimiento "
+     + "LEFT JOIN cuentas co ON mo.id_cuenta = co.id_cuenta "
+     + "LEFT JOIN personas po ON po.id_usuario = co.id_cliente "
+     + "WHERE m.id_cuenta = ?;";
     
     private static final String COUNT_MOVIMIENTOS_POR_CUENTA_SQL =
     	"SELECT COUNT(*) AS total " +
@@ -63,6 +86,46 @@ public class MovimientoDaoImpl implements IMovimientoDao {
             throw new Exception("Error al insertar movimiento: " + e.getMessage(), e);
         }
     }
+    
+    public void txInsertarMovimiento(Movimiento movimiento) throws Exception {
+    	Connection conexion = Conexion.getConexion().getSQLConexion();
+        PreparedStatement statement = conexion.prepareStatement(INSERT_MOVIMIENTO_SQL, Statement.RETURN_GENERATED_KEYS);
+        try {
+
+                statement.setInt(1, movimiento.getIdCuenta());
+                statement.setInt(2, movimiento.getTipoMovimiento().getId());
+                statement.setDate(3, new java.sql.Date(movimiento.getFecha().getTime()));
+                statement.setString(4, movimiento.getDetalle());
+                statement.setDouble(5, movimiento.getImporte());
+                statement.setBoolean(6, movimiento.getEstado());
+                int rowsInserted = statement.executeUpdate();
+                if (rowsInserted > 0) {
+                    ResultSet generatedKeys = statement.getGeneratedKeys();
+                    if (generatedKeys.next()) {
+                        movimiento.setId(generatedKeys.getInt(1));
+                    } else {
+                        throw new SQLException("No se pudo obtener la clave generada para el usuario.");
+                    }
+                } else {
+                    throw new SQLException("La inserción del usuario falló, no se insertaron filas.");
+                }
+            } catch (SQLException e) {
+                throw new Exception("Error al insertar movimiento: " + e.getMessage(), e);
+            }
+        }
+
+    @Override
+    public void insertarTransferencia(Transferencia transferencia) throws Exception {
+        Connection conexion = Conexion.getConexion().getSQLConexion();
+        PreparedStatement statement = conexion.prepareStatement(INSERT_TRANSFERENCIA_SQL);
+        try {
+            statement.setInt(1, transferencia.getMovimientoOrigen().getId());
+            statement.setInt(2, transferencia.getMovimientoDestino().getId());
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new Exception("Error al insertar transferencia: " + e.getMessage(), e);
+        }
+    }
 
     // Método para listar movimientos por cuenta
     @Override
@@ -70,7 +133,7 @@ public class MovimientoDaoImpl implements IMovimientoDao {
         List<Movimiento> movimientos = new ArrayList<>();
         int totalMovimientosPorCuenta = 0;
         Connection conexion = Conexion.getConexion().getSQLConexion();
-    	PreparedStatement statement = conexion.prepareStatement(SELECT_MOVIMIENTOS_POR_CUENTA_SQL);
+    	PreparedStatement statement = conexion.prepareStatement(SELECT_MOVIMIENTOS_MAS_TRANSFERENCIAS_SQL);
         try{
 
             statement.setInt(1, idCuenta);
@@ -84,10 +147,53 @@ public class MovimientoDaoImpl implements IMovimientoDao {
                     Date fecha = resultSet.getDate("fecha");
                     String detalle = resultSet.getString("detalle");
                     Double importe = resultSet.getDouble("importe");
-                    Boolean estado = resultSet.getBoolean("estado");
-
+                    
+                    String cbuDestino = resultSet.getString("cbuDestino");
+                    String nroCuentaDestino = resultSet.getString("nroCuentaDestino");
+                    String apellidoDestino = resultSet.getString("apellidoDestino");
+                    String nombreDestino = resultSet.getString("nombreDestino");
+                    
+                    String cbuOrigen = resultSet.getString("cbuOrigen");
+                    String nroCuentaOrigen = resultSet.getString("nroCuentaOrigen");
+                    String apellidoOrigen = resultSet.getString("apellidoOrigen");
+                    String nombreOrigen = resultSet.getString("nombreOrigen");
+                    
+                    int idTransferencia = resultSet.getInt("id_transferencia");
+                    
                     TipoMovimiento tipoMovimiento = new TipoMovimiento(tipoId, descripcion);
-                    Movimiento movimiento = new Movimiento(cuentaId, tipoMovimiento, fecha, detalle, importe, estado);
+                    Movimiento movimiento = new Movimiento(cuentaId, tipoMovimiento, fecha, detalle, importe, true);
+
+                    
+                    if (cbuDestino != null) {
+                        Transferencia transferencia = new Transferencia();
+                        Cuenta cuentaDestino = new Cuenta();
+                        Cuenta cuentaOrigen = new Cuenta();
+                        
+                        Persona personaDestino = new Persona();
+                        Persona personaOrigen = new Persona();
+                        
+                        personaDestino.setNombre(nombreDestino);
+                        personaDestino.setApellido(apellidoDestino);
+                        
+                        personaOrigen.setApellido(apellidoOrigen);
+                        personaOrigen.setNombre(nombreOrigen);
+
+                        cuentaDestino.setNumeroCuenta(nroCuentaDestino);
+                        cuentaDestino.setCbu(cbuDestino);
+                        cuentaDestino.setPersona(personaDestino);
+                        
+                        cuentaOrigen.setNumeroCuenta(nroCuentaOrigen);
+                        cuentaOrigen.setCbu(cbuOrigen);
+                        cuentaOrigen.setPersona(personaOrigen);
+                        
+
+                        transferencia.setCuentaDestino(cuentaDestino);
+                        transferencia.setCuentaOrigen(cuentaOrigen);
+                        transferencia.setId(idTransferencia);
+                        movimiento.setTransferencia(transferencia);
+                    }
+
+                   
                     movimiento.setId(id);
                     movimientos.add(movimiento);
                 }

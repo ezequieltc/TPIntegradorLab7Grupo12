@@ -12,5 +12,6 @@ public interface ICuentaNegocio {
     public ArrayList<Cuenta> getCuentasPorCliente(int Id);
     public Cuenta getCuenta(int id);
     public Cuenta getCuenta(String numberoCuenta, String cbu);
+    public Cuenta getCuentaTransferencia(String cbu);
     public void transferir(Cuenta cuentaOrigen, Cuenta cuentaDestino, float monto) throws Exception;
 }

@@ -115,10 +115,22 @@
                     if (movimientos != null && movimientos.getData() != null && !movimientos.getData().isEmpty()) {
                         for (Movimiento movimiento : movimientos.getData()) {
                 %>
-                    <tr>
+                    <tr>    
                         <td><%= movimiento.getFecha() %></td>
                         <td><%= movimiento.getTipoMovimiento().getDescripcion() %></td>
-                        <td><%= movimiento.getDetalle() %></td>
+                        <td>
+                        	<% if (movimiento.getTransferencia() == null) {%>
+                        		<%= movimiento.getDetalle() %>
+                        	<%} else { 
+                        	
+                        		if (movimiento.getImporte() > 0) {
+                        		%>
+                        		  <%= movimiento.getTransferencia().getCuentaOrigen().getPersona().getNombre() %> <%= movimiento.getTransferencia().getCuentaOrigen().getPersona().getApellido() %> te envío dinero
+                        		  desde el CBU: <%= movimiento.getTransferencia().getCuentaOrigen().getCbu() %>
+                        	<%} else { %>
+                        		   Enviaste dinero a la cuenta de <%= movimiento.getTransferencia().getCuentaDestino().getPersona().getNombre() %> <%= movimiento.getTransferencia().getCuentaDestino().getPersona().getApellido() %> con el CBU: <%= movimiento.getTransferencia().getCuentaDestino().getCbu() %>
+                        		<% }}%>
+                        </td>
                         <td><%= movimiento.getImporte() %></td>
                         <td><%= movimiento.getEstado() ? "Activo" : "Inactivo" %></td>
                     </tr>
@@ -144,8 +156,9 @@
         
 
   <script type="text/javascript" src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
-
 <script>
+
+
 new DataTable('#example', {
     initComplete: function () {
         this.api()
@@ -190,6 +203,7 @@ new DataTable('#example', {
         }
     
 });
+
 
 </script>
     </body>

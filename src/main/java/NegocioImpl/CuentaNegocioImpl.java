@@ -11,6 +11,7 @@ import DaoImpl.MovimientoDaoImpl;
 import Dominio.Cuenta;
 import Dominio.Movimiento;
 import Dominio.TipoMovimiento;
+import Dominio.Transferencia;
 import Negocio.ICuentaNegocio;
 import servicios.ddbb.Conexion;
 
@@ -57,23 +58,32 @@ public class CuentaNegocioImpl implements ICuentaNegocio {
     }
 
     @Override
+    public Cuenta getCuentaTransferencia(String cbu) {
+        Cuenta cuenta = cuentaDao.getCuentaTransferencia(cbu);
+        return cuenta;
+    }
+
+    @Override
     public void transferir(Cuenta cuentaOrigen, Cuenta cuentaDestino, float monto) throws Exception {
     	Connection conexion = Conexion.getConexion().getSQLConexion();
         try {
             conexion.setAutoCommit(false);
             // Get double from float
             Double importe = Double.valueOf(monto);
-            Movimiento movimientoNegativo = new Movimiento(cuentaOrigen.getId(), new TipoMovimiento(4, null), new Date(), "", importe * -1, true ); 
-            Movimiento movimientoPositivo = new Movimiento(cuentaDestino.getId(), new TipoMovimiento(4, null), new Date(), "", importe, true );
+            Movimiento movimientoNegativo = new Movimiento(cuentaOrigen.getId(), new TipoMovimiento(3, null), new Date(), "", importe * -1, true ); 
+            Movimiento movimientoPositivo = new Movimiento(cuentaDestino.getId(), new TipoMovimiento(3, null), new Date(), "", importe, true );
 
 
             // Insertar movimiento negativo de la cuenta origen
-            movimientoDao.insertarMovimiento(movimientoNegativo);
+            movimientoDao.txInsertarMovimiento(movimientoNegativo);
 
             // Insertar movimiento positivo de la cuenta destino
-            movimientoDao.insertarMovimiento(movimientoPositivo);
+            movimientoDao.txInsertarMovimiento(movimientoPositivo);
+
+            // Insertar transferencia
+            Transferencia transferencia = new Transferencia(movimientoNegativo, movimientoPositivo);
             
-            
+            movimientoDao.insertarTransferencia(transferencia);
 
             // Actualizar saldo de la cuenta origen
             cuentaOrigen.setSaldo(cuentaOrigen.getSaldo() - importe);

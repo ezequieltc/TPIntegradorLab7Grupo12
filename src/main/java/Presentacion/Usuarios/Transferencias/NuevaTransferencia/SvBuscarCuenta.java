@@ -36,7 +36,7 @@ public class SvBuscarCuenta extends HttpServlet {
 
         String nroCbu = (String)(request.getParameter("cbuDestino"));
         try {
-            Cuenta cuentaDestino = cuentasNegocio.getCuenta("", nroCbu == null ? "" : nroCbu);
+            Cuenta cuentaDestino = cuentasNegocio.getCuentaTransferencia(nroCbu == null ? "" : nroCbu);
             if (cuentaDestino == null){
 
                 throw new Exception("El CBU que ingresaste no se corresponde con ninguna cuenta.");

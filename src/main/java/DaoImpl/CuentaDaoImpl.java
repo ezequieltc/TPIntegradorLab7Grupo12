@@ -27,6 +27,8 @@ public class CuentaDaoImpl implements ICuentaDao {
     private static final String readCBU = "SELECT c.id_cuenta, c.id_cliente, c.id_tipo_cuenta, c.numero_cuenta, c.cbu, c.saldo, c.fecha_creacion, c.estado, p.id_persona FROM cuentas c inner join personas p on p.id_usuario = c.id_cliente WHERE cbu = ?";
     private static final String readNumeroCuenta = "SELECT c.id_cuenta, c.id_cliente, c.id_tipo_cuenta, c.numero_cuenta, c.cbu, c.saldo, c.fecha_creacion, c.estado, p.id_persona FROM cuentas c inner join personas p on p.id_usuario = c.id_cliente WHERE numero_cuenta = ?";
     private static final String siguiente = "SELECT MAX(id_cuenta) FROM cuentas";
+
+    private static final String SELECT_CUENTA_CBU_USUARIO_ACTIVO = "SELECT c.id_cuenta, c.id_cliente, c.id_tipo_cuenta, c.numero_cuenta, c.cbu, c.saldo, c.fecha_creacion, c.estado, p.id_persona FROM cuentas c inner join personas p on p.id_usuario = c.id_cliente WHERE p.estado = 1 AND cbu = ?";
     
     private static final String SELECT_CUENTAS_POR_USUARIO = 
             "SELECT * from cuentas c INNER JOIN personas p ON p.id_usuario = c.id_cliente WHERE c.estado = 1 AND p.id_usuario = ?";
@@ -238,6 +240,31 @@ public class CuentaDaoImpl implements ICuentaDao {
     	
     	return cuenta;
     }
+    
+    @Override
+    public Cuenta getCuentaTransferencia(String cbu) {
+        System.out.println("getCuenta(String numeroCuenta, String cbu)");
+    	Cuenta cuenta = null;
+    	Connection conexion = Conexion.getConexion().getSQLConexion();
+
+    	try {
+            PreparedStatement ps = conexion.prepareStatement(SELECT_CUENTA_CBU_USUARIO_ACTIVO);
+            ps.setString(1, cbu);
+            System.out.println("cbu = " + cbu);
+            System.out.println("readCBU = " + readCBU);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                cuenta = getCuentaFromResultSet(rs);
+            }
+    	}
+    	catch(SQLException e) {
+    		e.printStackTrace();
+    	}
+    	
+    	
+    	return cuenta;
+    }
+    
     
     
     @Override

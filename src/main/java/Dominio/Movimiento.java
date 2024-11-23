@@ -10,6 +10,7 @@ public class Movimiento {
     private String detalle;
     private Double importe;
     private Boolean estado;
+    private Transferencia transferencia;
 
     public Movimiento(int idCuenta, TipoMovimiento tipoMovimiento, Date fecha,
                       String detalle, Double importe, Boolean estado) {
@@ -19,6 +20,25 @@ public class Movimiento {
         this.detalle = detalle;
         this.importe = importe;
         this.estado = estado;
+    }
+
+    public Movimiento(int idCuenta, TipoMovimiento tipoMovimiento, Date fecha,
+                      String detalle, Double importe, Boolean estado, Transferencia transferencia) {
+        this.idCuenta = idCuenta;
+        this.tipoMovimiento = tipoMovimiento;
+        this.fecha = fecha;
+        this.detalle = detalle;
+        this.importe = importe;
+        this.estado = estado;
+        this.transferencia = transferencia;
+    }
+
+    public Transferencia getTransferencia() {
+        return transferencia;
+    }
+
+    public void setTransferencia(Transferencia transferencia) {
+        this.transferencia = transferencia;
     }
 
     // Getters y Setters
