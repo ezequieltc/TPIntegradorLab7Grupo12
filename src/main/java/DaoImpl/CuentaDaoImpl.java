@@ -19,7 +19,7 @@ public class CuentaDaoImpl implements ICuentaDao {
 
     private static final String insert = "INSERT INTO cuentas(id_cliente, id_tipo_cuenta, numero_cuenta, cbu, saldo, fecha_creacion, estado) VALUES(?, ?, ?, ?, ?, ?, ?)";
     private static final String delete = "UPDATE cuentas SET estado = ? WHERE id_cuenta = ?";
-    private static final String update = "UPDATE cuentas SET id_tipo_cuenta = ? WHERE id_cuenta = ?";
+    private static final String update = "UPDATE cuentas SET id_tipo_cuenta = ?, saldo = ? WHERE id_cuenta = ?";
     //private static final String readall = "SELECT * FROM cuentas";
     private static final String readall = "select * from cuentas c inner join personas p on p.id_usuario = c.id_cliente WHERE c.estado = 1 order by c.id_cuenta";
     private static final String readALlWithDeleted = "select * from cuentas c inner join personas p on p.id_usuario = c.id_cliente order by c.id_cuenta";
@@ -115,7 +115,8 @@ public class CuentaDaoImpl implements ICuentaDao {
         try {
             statement = conexion.prepareStatement(update);
             statement.setInt(1, cuenta.getTipoCuenta().getId());
-            statement.setInt(2, cuenta.getId());
+            statement.setDouble(2, cuenta.getSaldo());
+            statement.setInt(3, cuenta.getId());
             if (statement.executeUpdate() > 0) {
                 conexion.commit();
                 isUpdateExitoso = true;

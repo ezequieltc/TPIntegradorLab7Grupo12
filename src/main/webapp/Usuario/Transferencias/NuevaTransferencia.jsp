@@ -69,7 +69,7 @@
 <h2 class="my-4">Nueva Transferencia</h2>
 <div id="transferForm" class="w-100">
   <div class="step step-1">
-    <h4>Paso 1: Seleccionar Alias o CBU</h4>
+    <h4>Paso 1: Ingrese CBU</h4>
     <form action="${pageContext.request.contextPath}/Usuarios/Transferencias/NuevaTransferencia/SvBuscarCuenta" method="post">
       <div class="form-group">
         <label for="cbuDestino">CBU de Cuenta Destino</label>

@@ -44,7 +44,7 @@ public class ServletHomeUsuario extends HttpServlet {
 	    request.setAttribute("lista", cuentas);
 	    
 	    try {
-	        List<Movimiento> ultimosMovimientos = movimientoNegocio.obtenerUltimosMovimientos(persona.getId(), 5);
+	        List<Movimiento> ultimosMovimientos = movimientoNegocio.obtenerUltimosMovimientos(persona.getUsuario().getId(), 5);
 
 	        Map<Integer, Cuenta> cuentaMap = new HashMap<>();
 	        for (Cuenta cuenta : cuentas) {
