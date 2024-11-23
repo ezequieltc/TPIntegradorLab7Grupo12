@@ -83,6 +83,26 @@ public class PrestamoDaoImpl implements IPrestamoDao{
 	@Override
 	public boolean delete(Prestamo prestamo) {
 		boolean isDeleteExitoso = false;
+		
+		PreparedStatement statement;
+        Connection conexion = Conexion.getConexion().getSQLConexion();
+		try { 
+			statement = conexion.prepareStatement(delete); 
+			statement.setInt(1, prestamo.getId()); 
+			if (statement.executeUpdate() > 0) {
+				conexion.commit(); 
+				isDeleteExitoso = true; 
+				} 
+			} 
+		catch (SQLException e) {
+			e.printStackTrace(); 
+		try { conexion.rollback(); 
+			} 
+		catch (SQLException e1) {
+			e1.printStackTrace(); 
+			} 
+		}
+
 		return isDeleteExitoso;
 	}
 	

@@ -40,7 +40,7 @@
         <form id="PrestamoForm" action="${pageContext.request.contextPath}/Usuarios/Prestamos/ServletSolicitarPrestamo" method="POST" novalidate>
           <div class="mb-3">
             <label for="montoPrestamo" class="form-label">Monto del Préstamo</label>
-            <input type="number" class="form-control" name="montoPrestamo" id="montoPrestamo" min="0" placeholder="Ingrese el monto" required>
+            <input type="number" class="form-control" name="montoPrestamo" id="montoPrestamo" min="0" max="7000000" placeholder="Ingrese el monto" required>
           </div>
           <div class="mb-3">
 			<label for="cantCuotas" class="form-label">Cantidad de Cuotas</label>

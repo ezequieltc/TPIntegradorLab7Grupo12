@@ -82,7 +82,7 @@
           			SimpleDateFormat formatoFecha = new SimpleDateFormat("dd-MM-yyyy");
           			String fechaFormateada = formatoFecha.format(cuota.getFecha_pago());	
           				%>
-          		<option value="<%= cuota.getId() %>">Cuota Numero: <%= cuota.getNumero_cuota() %> - Vencimiento: <%= fechaFormateada %></option>
+          		<option value="<%= cuota.getId() %>">Cuota Numero: <%= cuota.getNumero_cuota() %> - Monto: $<%= cuota.getImporte() %> - Vencimiento: <%= fechaFormateada %></option>
           			
           		<% } %>
           	<% }%>
@@ -110,11 +110,32 @@
 <%@include file="../../components/post-body.jsp"%>
   </body>
   <script>
-  // Función para enviar el formulario automáticamente
+
+  function submitPrestamoForm() {
+	  const selectPrestamo = document.getElementById("selectPrestamoForm").value;
+	  const selectCuota = document.getElementById("selectCuota").value;
+	  const selectCuenta = document.getElementById("selectCuenta").value;
+
+	    if (selectPrestamo == 0) {
+	      alert("Por favor, seleccione un préstamo válido antes de continuar.");
+	      return;
+	    }
+
+	    document.getElementById("formPagarCuota").submit();
+  }
+  
   function verificarValores() {
-	  if(document.getElementById("selectPrestamoForm").value == 0 && document.getElementById("selectCuota").value == 0 && document.getElementById("selectCuenta").value == 0){
-		alert("ERROR")		
-}
+	    const form = document.getElementById("formPagarCuota");
+	    const selectPrestamo = document.getElementById("selectPrestamoForm").value;
+	    const selectCuota = document.getElementById("selectCuota").value;
+	    const selectCuenta = document.getElementById("selectCuenta").value;
+
+	    if (selectPrestamo == 0 || selectCuota == 0 || selectCuenta == 0) {
+	        alert("Por favor, complete todos los campos.");
+	        event.preventDefault();
+	    }
+	}
+
 
 </script>
 </html>
