@@ -103,7 +103,6 @@
 				</div>
 				<button type="submit" class="btn btn-primary">Acceder</button>
 				<br><br>
-				<a href="">¿Olvido su contraseña?</a>
 			</form>
 		</div>
 
