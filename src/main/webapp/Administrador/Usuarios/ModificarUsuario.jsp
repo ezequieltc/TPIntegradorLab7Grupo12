@@ -24,6 +24,7 @@
 </style>
 </head>
 <body>
+<% request.setAttribute("rolPermitido", UserTypes.ADMIN); %>
 <%@include file="../../components/pre-body.jsp"%>
 <%
     // Establecer el título de la página

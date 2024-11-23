@@ -78,18 +78,10 @@ public class ServletModificarEliminarCuenta extends HttpServlet {
 			int cuentaID= Integer.parseInt(request.getParameter("idCuenta"));
 			tipoCuentaList = tipoCuentaTemp.readAll();
 			cuentaTemp = cuentaNegocioTemp.getCuenta(cuentaID);
-			String tipoCuenta = request.getParameter("editTipoCuenta");
-			for(TipoCuenta tipoCuentas : tipoCuentaList) {
-				if(tipoCuentas.getDescripcion().equals(tipoCuenta)) {
-					cuentaTemp.setTipoCuenta(tipoCuentas);
-				}
-			}
-			cuentaTemp.setSaldo(Integer.parseInt(request.getParameter("editSaldo")));
-			SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
-
-//			Date fechaCreacion = formatoFecha.parse(request.getParameter("editFechaAltaCuenta"));
-//			cuentaTemp.setFechaCreacion(fechaCreacion);
+			int tipoCuenta = Integer.parseInt(request.getParameter("editTipoCuenta"));
+			cuentaTemp.setTipoCuenta(new TipoCuenta(tipoCuenta, ""));
 			cuentaNegocioTemp.update(cuentaTemp);
+			
 				}
 			catch (Exception e) {
 				request.getSession().setAttribute("mensajeError", "Ocurrió un error: " + e.getMessage());

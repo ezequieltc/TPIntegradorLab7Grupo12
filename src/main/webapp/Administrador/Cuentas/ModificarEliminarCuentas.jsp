@@ -8,6 +8,7 @@
     request.setAttribute("pageTitle", "Alta Cuenta");
 %>
 <head>
+<% request.setAttribute("rolPermitido", UserTypes.ADMIN); %>
 	<%@include file="../../components/header.jsp"%>
 	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
@@ -85,8 +86,8 @@
                             <div class="form-group">
                                 <label for="editTipoCuenta">Tipo de Cuenta</label>
                                 <select id="editTipoCuenta" class="form-control" name="editTipoCuenta">
-                                    <option value="caja de ahorro" <%= "caja de ahorro".equals(cuentaDatos.getTipoCuenta().getDescripcion()) ? "selected" : "" %>>Caja de Ahorro</option>
-                                    <option value="cuenta corriente" <%= "cuenta corriente".equals(cuentaDatos.getTipoCuenta().getDescripcion()) ? "selected" : "" %>>Cuenta Corriente</option>
+                                    <option value="1" <%= 1 == cuentaDatos.getTipoCuenta().getId() ? "selected" : "" %>>Cuenta Corriente</option>
+                                    <option value="2" <%= 2 == cuentaDatos.getTipoCuenta().getId() ? "selected" : "" %>>Caja de Ahorro</option>
                                 </select>
                             </div>
                             <div class="form-group">

@@ -4,6 +4,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+<% request.setAttribute("rolPermitido", UserTypes.ADMIN); %>
 	<%@include file="../../components/header.jsp"%>
 <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.css" />
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

@@ -13,6 +13,7 @@
     }
   %>
 <head>
+<% request.setAttribute("rolPermitido", UserTypes.ADMIN); %>
 <%@include  file="../../components/header.jsp"%>
   <style>
       .step {

@@ -1,5 +1,6 @@
 package Presentacion.Administrador.Home;
 
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,9 +13,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+
 import Dominio.Prestamo;
 import Dominio.Persona;
 import NegocioImpl.PrestamoNegocioImpl;
+import tipos.UserTypes;
 import Dominio.Cuenta;
 import Dominio.TipoCuenta;
 import NegocioImpl.CuentaNegocioImpl;
@@ -35,6 +38,17 @@ public class ServletHomeAdministrador extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
 
+    	Persona personaAuth = (Persona) request.getSession().getAttribute("persona");
+    	if (personaAuth == null){
+    		 response.sendRedirect(request.getContextPath() + "/Login.jsp");
+            return;
+    	}
+        boolean isAdmin = (boolean) request.getSession().getAttribute("isAdmin");
+        UserTypes rolPermitido = (UserTypes) request.getAttribute("rolPermitido");
+        if(personaAuth==null || (rolPermitido ==  UserTypes.ADMIN && !isAdmin)) {
+            response.sendRedirect(request.getContextPath() + "/Login.jsp");
+            return;
+        }	
         try {
             ArrayList<Prestamo> listadoPrestamos = prestamoNegocio.getPrestamos();
             Collections.sort(listadoPrestamos, new Comparator<Prestamo>() {

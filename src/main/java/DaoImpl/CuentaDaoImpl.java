@@ -19,7 +19,7 @@ public class CuentaDaoImpl implements ICuentaDao {
 
     private static final String insert = "INSERT INTO cuentas(id_cliente, id_tipo_cuenta, numero_cuenta, cbu, saldo, fecha_creacion, estado) VALUES(?, ?, ?, ?, ?, ?, ?)";
     private static final String delete = "UPDATE cuentas SET estado = ? WHERE id_cuenta = ?";
-    private static final String update = "UPDATE cuentas SET id_cliente = ?, id_tipo_cuenta = ?, numero_cuenta = ?, cbu = ?, saldo = ?, fecha_creacion = ?, estado = ? WHERE id_cuenta = ?";
+    private static final String update = "UPDATE cuentas SET id_tipo_cuenta = ? WHERE id_cuenta = ?";
     //private static final String readall = "SELECT * FROM cuentas";
     private static final String readall = "select * from cuentas c inner join personas p on p.id_usuario = c.id_cliente WHERE c.estado = 1 order by c.id_cuenta";
     private static final String readALlWithDeleted = "select * from cuentas c inner join personas p on p.id_usuario = c.id_cliente order by c.id_cuenta";
@@ -114,14 +114,8 @@ public class CuentaDaoImpl implements ICuentaDao {
         boolean isUpdateExitoso = false;
         try {
             statement = conexion.prepareStatement(update);
-            statement.setInt(1, cuenta.getPersona().getUsuario().getId());
-            statement.setInt(2, cuenta.getTipoCuenta().getId());
-            statement.setString(3, cuenta.getNumeroCuenta());
-            statement.setString(4, cuenta.getCbu());
-            statement.setDouble(5, cuenta.getSaldo());
-            statement.setDate(6, new java.sql.Date(cuenta.getFechaCreacion().getTime()));
-            statement.setBoolean(7, cuenta.isEstado());
-            statement.setInt(8, cuenta.getId());
+            statement.setInt(1, cuenta.getTipoCuenta().getId());
+            statement.setInt(2, cuenta.getId());
             if (statement.executeUpdate() > 0) {
                 conexion.commit();
                 isUpdateExitoso = true;
