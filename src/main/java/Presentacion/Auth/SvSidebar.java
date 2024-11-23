@@ -33,7 +33,7 @@ public class SvSidebar extends HttpServlet {
 
         session.setAttribute("sidebarMenu", menuItems);
         if (isAdmin) {
-            response.sendRedirect("Administrador/VistaHomeAdministrador.jsp");
+            response.sendRedirect("Administrador/Home/ServletHomeAdministrador");
         } else {
             response.sendRedirect("Usuarios/Home/ServletHomeUsuario");
         }
@@ -56,7 +56,7 @@ public class SvSidebar extends HttpServlet {
         );
 
         return Arrays.asList(
-            new MenuItem("Inicio", request.getContextPath() + "/Administrador/VistaHomeAdministrador.jsp"),
+            new MenuItem("Inicio", request.getContextPath() + "/Administrador/ServletHomeAdministrador"),
             new MenuItem("Informes y Reportes", request.getContextPath() + "/Administrador/InformesReportes.jsp"),
             new MenuItem("Cuentas", cuentasSubMenu),
             new MenuItem("Préstamos", prestamosSubMenu),
@@ -66,9 +66,6 @@ public class SvSidebar extends HttpServlet {
     }
 
     private List<MenuItem> getUserMenu(HttpServletRequest request) {
-        List<MenuItem> preferenciasSubMenu = Arrays.asList(
-            new MenuItem("Preferencias Usuario", request.getContextPath() + "/Usuario/Preferencias")
-        );
 
         List<MenuItem> prestamosSubMenu = Arrays.asList(
             new MenuItem("Préstamos", request.getContextPath() + "/Usuarios/Prestamos/ServletPrestamos"),
@@ -83,7 +80,6 @@ public class SvSidebar extends HttpServlet {
 
         return Arrays.asList(
             new MenuItem("Inicio", request.getContextPath() + "/Usuarios/Home/ServletHomeUsuario"),
-            new MenuItem("Preferencias", preferenciasSubMenu),
             new MenuItem("Préstamos", prestamosSubMenu),
             new MenuItem("Transferencias", transferenciasSubMenu),
             new MenuItem("Cerrar Sesión", request.getContextPath() + "/SvLogout")

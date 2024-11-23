@@ -4,101 +4,113 @@
 <%@ page isELIgnored="false" %>
 <!DOCTYPE html>
 <html>
-  <%
-    // Establecer el título de la página
-    request.setAttribute("pageTitle", "Modificar Usuario");
-  %>
+
 <head>
-<%@include  file="../../components/header.jsp"%>
+<%@include file="../../components/header.jsp"%>
+<style>
+    .card {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 16px;
+        background-color: #f9f9f9;
+        margin-bottom: 20px;
+    }
+    .card h4 {
+        margin-bottom: 12px;
+    }
+    .card p {
+        margin: 4px 0;
+    }
+</style>
 </head>
 <body>
-<%@include  file="../../components/pre-body.jsp"%>
+<%@include file="../../components/pre-body.jsp"%>
+<%
+    // Establecer el título de la página
+    request.setAttribute("pageTitle", "Modificar Usuario");
+	Persona personaModificada = (Persona) request.getAttribute("personaModificada");
+    boolean isUserActive = personaModificada.getUsuario().getEstado(); // Ajustar según cómo se obtenga el estado
+%>
     <h2 class="my-4">Modificar Usuario</h2>
-    <div id="modificationForm" class="w-100">
-      <div class="step step-1">
+
+    <!-- Información Personal como Card -->
+    <div class="card">
         <h4>Información Personal</h4>
-        <form action="${pageContext.request.contextPath}/Administrador/Usuarios/ServletModificarUsuario" method="post">
-        <input type="hidden" name="id" value="${persona.getId()}">
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="dni">DNI</label>
-                <input type="text" name="dni" class="form-control" readonly value="${persona.getDni()}">
-              </div>
-              <div class="form-group">
-                <label for="cuil">Cuil</label>
-                <input type="text" name="cuil" class="form-control"readonly value="${persona.getCuil()}">
-              </div>
-              <div class="form-group">
-                <label for="nombre">Nombre</label>
-                <input type="text" name="nombre" class="form-control" readonly value="${persona.getNombre()}">
-              </div>
-              <div class="form-group">
-                <label for="apellido">Apellido</label>
-                <input type="text" name="apellido" class="form-control"readonly value="${persona.getApellido()}">
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-              
-                <label for="sexo">Sexo</label>
-				<select name="sexo" class="form-control">
-    				<option value="1" <%= (persona.getTipoSexo().getId() == 1) ? "selected" : "" %>>Masculino</option>
-    				<option value="2" <%= (persona.getTipoSexo().getId() == 2) ? "selected" : "" %>>Femenino</option>
-    				<option value="3" <%= (persona.getTipoSexo().getId() == 3) ? "selected" : "" %>>Otro</option>
-				</select>
-              </div>
-              <div class="form-group">
-                <label for="nacionalidad">Nacionalidad</label>
-                <input type="text" name="nacionalidad" class="form-control" readonly value="${persona.getNacionalidad()}">
-              </div>
-              <div class="form-group">
-                <label for="fechaNacimiento">Fecha de Nacimiento</label>
-                <input type="date" name="fechaNacimiento" class="form-control" readonly value="${persona.getFechaNacimiento()}">
-              </div>
-            </div>
-          </div>
+        <p><strong>DNI:</strong> ${personaModificada.getDni()}</p>
+        <p><strong>Cuil:</strong> ${personaModificada.getCuil()}</p>
+        <p><strong>Nombre:</strong> ${personaModificada.getNombre()}</p>
+        <p><strong>Apellido:</strong> ${personaModificada.getApellido()}</p>
+        <p><strong>Sexo:</strong> ${personaModificada.getTipoSexo().getDescripcion()}</p>
+        <p><strong>Nacionalidad:</strong> ${personaModificada.getNacionalidad()}</p>
+        <p><strong>Fecha de Nacimiento:</strong> ${personaModificada.getFechaNacimiento()}</p>
+        <p><strong>Usuario:</strong> ${personaModificada.getUsuario().getUsuario()}</p>
+        <p><strong>Estado:</strong> 
+            <span style="color: <%= isUserActive ? "green" : "red" %>;">
+                <%= isUserActive ? "Activo" : "Bloqueado" %>
+            </span>
+        </p>
+    </div>
 
-          
+    <!-- Formulario Editable -->
     <div id="registrationForm" class="w-100">
-      <div class="step step-1">
-        <h4>Información de Contacto</h4>
-        
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="direccion">Dirección</label>
-                <input type="text" name="direccion" class="form-control" value="${persona.getDireccion()}">
-              </div>
-              <div class="form-group">
-                <label for="localidad">Localidad</label>
-                <input type="text" name="localidad" class="form-control" value="${persona.getLocalidad()}">
-              </div>
-              <div class="form-group">
-                <label for="provincia">Provincia</label>
-                <input type="text" name="provincia" class="form-control" value="${persona.getProvincia()}">
-              </div>
+        <div class="step step-1">
+            <h4>Información de Contacto</h4>
+            <form action="${pageContext.request.contextPath}/Administrador/Usuarios/ServletModificarUsuario" method="post">
+                <input type="hidden" name="id" value="${personaModificada.getId()}">
 
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="email">Correo Electrónico</label>
-                <input type="text" name="email" class="form-control" value="${persona.getEmail()}">
-              </div>
-              <div class="form-group">
-                <label for="telefono">Teléfono</label>
-                <input type="text" name="telefono" class="form-control" value="${persona.getTelefono()}">
-              </div>
-            </div>
-          </div>
-          <div class="step-actions" style="margin-top: 10px">
-            <button type="submit" class="btn btn-success" name="btnConfirmarModificacionUsuario">Guardar Cambios</button>
-            <a href="${pageContext.request.contextPath}/Administrador/Usuarios/ServletUsuarios" class="btn btn-danger">Cancelar</a>
-          </div>
-        
-      </div>
-      </div>
-      </form>
-      <%@include  file="../../components/post-body.jsp"%>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="direccion">Dirección</label>
+                            <input type="text" name="direccion" class="form-control" value="${personaModificada.getDireccion()}">
+                        </div>
+                        <div class="form-group">
+                            <label for="localidad">Localidad</label>
+                            <input type="text" name="localidad" class="form-control" value="${personaModificada.getLocalidad()}">
+                        </div>
+                        <div class="form-group">
+                            <label for="provincia">Provincia</label>
+                            <input type="text" name="provincia" class="form-control" value="${personaModificada.getProvincia()}">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="email">Correo Electrónico</label>
+                            <input type="text" name="email" class="form-control" value="${personaModificada.getEmail()}">
+                        </div>
+                        <div class="form-group">
+                            <label for="telefono">Teléfono</label>
+                            <input type="text" name="telefono" class="form-control" value="${personaModificada.getTelefono()}">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botones de Acción -->
+                <div class="step-actions" style="margin-top: 10px">
+                    <button type="submit" class="btn btn-success" name="btnConfirmarModificacionUsuario">Guardar Cambios</button>
+                    
+                    <% if (personaModificada.isEstado()) { %>
+                        <button type="button" class="btn btn-danger" onclick="confirmarDesactivacion()">Eliminar Usuario - <%= personaModificada.isEstado() %></button>
+                    <% } if (!personaModificada.getUsuario().getEstado()) { %>
+                        <button type="button" class="btn btn-primary" onclick="confirmarReactivacion()">Reactivar Usuario - <%= personaModificada.isEstado() %></button>
+                    <% } %>
+                </div>
+            </form>
+        </div>
+    </div>
+	<%@include file="../../components/post-body.jsp"%>
+    <script>
+        function confirmarDesactivacion() {
+            if (confirm('¿Está seguro de que desea desactivar este usuario?')) {
+                window.location.href = '<%= request.getContextPath() %>/Administrador/Usuarios/ServletEliminarPersona?id=<%= personaModificada.getId() %>';
+            }
+        }
+        function confirmarReactivacion() {
+            if (confirm('¿Está seguro de que desea reactivar este usuario?')) {
+                window.location.href = "<%= request.getContextPath() %>/Administrador/Usuarios/ServletReactivarUsuario?id=<%= personaModificada.getUsuario().getId() %>";
+            }
+        }
+    </script>
+
 </body>
 </html>

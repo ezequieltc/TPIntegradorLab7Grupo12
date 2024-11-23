@@ -56,7 +56,9 @@ public class MovimientoDaoImpl implements IMovimientoDao {
             statement.setDouble(5, movimiento.getImporte());
             statement.setBoolean(6, movimiento.getEstado());
 
-            statement.executeUpdate();
+            if (statement.executeUpdate() > 0) {
+                conexion.commit();
+            }
         } catch (SQLException e) {
             throw new Exception("Error al insertar movimiento: " + e.getMessage(), e);
         }

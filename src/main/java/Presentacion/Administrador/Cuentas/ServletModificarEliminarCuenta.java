@@ -87,8 +87,8 @@ public class ServletModificarEliminarCuenta extends HttpServlet {
 			cuentaTemp.setSaldo(Integer.parseInt(request.getParameter("editSaldo")));
 			SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
 
-			Date fechaCreacion = formatoFecha.parse(request.getParameter("editFechaAltaCuenta"));
-			cuentaTemp.setFechaCreacion(fechaCreacion);
+//			Date fechaCreacion = formatoFecha.parse(request.getParameter("editFechaAltaCuenta"));
+//			cuentaTemp.setFechaCreacion(fechaCreacion);
 			cuentaNegocioTemp.update(cuentaTemp);
 				}
 			catch (Exception e) {

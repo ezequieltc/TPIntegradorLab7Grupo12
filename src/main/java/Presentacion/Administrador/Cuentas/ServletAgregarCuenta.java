@@ -2,6 +2,8 @@ package Presentacion.Administrador.Cuentas;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -15,9 +17,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import Dominio.Cuenta;
+import Dominio.Movimiento;
 import Dominio.Persona;
 import Dominio.TipoCuenta;
+import Dominio.TipoMovimiento;
 import NegocioImpl.CuentaNegocioImpl;
+import NegocioImpl.MovimientoNegocioImpl;
 import NegocioImpl.PersonaNegocioImpl;
 import NegocioImpl.TipoCuentaNegocioImpl;
 
@@ -67,57 +72,42 @@ public class ServletAgregarCuenta extends HttpServlet {
 		cuentasList = cuentaNegocioTemp.readAll();
 		tipoCuentaList = tipoCuentaTemp.readAll();
 		
-		if(request.getParameter("crearCuenta")!= null) {
-			
-			
+		if(request.getParameter("crearCuenta") != null) {
+					
 			String dniUsuario = request.getParameter("dniUsuario");
 			int tipoCuenta = Integer.parseInt(request.getParameter("tipoCuenta"));
-			String fechaAltaCuenta = request.getParameter("fechaAltaCuenta");
-			String saldo = request.getParameter("saldo");
-			Persona cliente = null;
-			int cantCuentas = 0;
+			Persona cliente = new Persona();
+			LocalDate fechaHoy = LocalDate.now();
+			Date fechaCreacion = Date.from(fechaHoy.atStartOfDay(ZoneId.systemDefault()).toInstant());
 			Cuenta cuenta = new Cuenta();
+			MovimientoNegocioImpl movNegImpl = new MovimientoNegocioImpl();
+			final double importe = 10000;
+			
 			try {
-				for(Persona persona : personasList) {
-					if (persona.getDni().equals(dniUsuario)) {
-						cliente = persona;
-						break;
-					}
-				}
+				cliente = personaNegocioTemp.getPersonaPorDni(dniUsuario);
 				if(cliente == null) {
 					throw new Exception("La persona no existe");
 				}
 				
-				for (Cuenta cuentaTemp : cuentasList ) {
-					if(cuentaTemp.estado) {						
-						if(cuentaTemp.getPersona().getUsuario().getId() == cliente.getUsuario().getId()) {
-							cantCuentas++;
-						}
-					}
-				}
+				cuentasList = cuentaNegocioTemp.getCuentasPorCliente(cliente.getUsuario().getId());
 				
-				if(cantCuentas < 3) {
-					cuenta.setEstado(true);
-					SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
-					Date fechaCreacion = formatoFecha.parse(fechaAltaCuenta);
+				if(cuentasList.size()< 3) {
+					cuenta.setEstado(true);				
 					cuenta.setFechaCreacion(fechaCreacion);
 					cuenta.setId(cuentaNegocioTemp.calcularSiguienteId());
-					
-					for(TipoCuenta tipoCuentas : tipoCuentaList) {
-						if(tipoCuentas.getId() == tipoCuenta) {
-							cuenta.setTipoCuenta(tipoCuentas);
-						}
-					}
+					cuenta.setTipoCuenta(new TipoCuenta(tipoCuenta, ""));
+					cuenta.setSaldo(importe);
 					cuenta.setPersona(cliente);
-					cuenta.setSaldo(Integer.parseInt(saldo));
+					Movimiento movimiento = new Movimiento(cuenta.getId(), new TipoMovimiento(1, "Deposito"), fechaCreacion, "Alta de cuenta", importe, true);
+							
 					try {
 						cuentaNegocioTemp.insert(cuenta);
+						movNegImpl.insertarMovimiento(movimiento);
 					}
 					catch (Exception e) {
 						System.out.println(e.getMessage());
 					}
-					
-					
+										
 					request.getSession().setAttribute("mensajeExito", "¡Cuenta actualizada correctamente!");
 					request.getSession().setAttribute("mostrarPopUp", true);
 					request.getSession().setAttribute("popUpStatus", "success");

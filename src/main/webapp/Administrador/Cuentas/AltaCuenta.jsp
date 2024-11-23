@@ -67,21 +67,8 @@
 									</select>
 								</div>
 							</div>
-							<div class="col-md-6">
-								<div class="form-group">
-									<label for="fechaAltaCuenta">Fecha de Alta</label> 
-									<input type="date" id="fechaAltaCuenta" name="fechaAltaCuenta" class="form-control" required>
-								</div>
-								<div class="form-group">
-									<label for="saldo">Saldo Inicial</label> 
-									<div class="input-group mb-3">
-										<span class="input-group-text">$</span>
-										<input type="number" id="saldo" name="saldo" class="form-control" placeholder="$0" value="10000" step="1" min="0">
-									</div>
-								</div>
-							</div>
 						</div>
-						<div class="step-actions">
+						<div>
 							<button type="submit" class="btn btn-success" name="crearCuenta" id="crearCuenta" >Crear Cuenta</button>
 						</div>
 					</form>

@@ -2,8 +2,14 @@ package Presentacion.Administrador.Reportes;
 
 import java.io.IOException;
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -27,10 +33,10 @@ public class ServletReportes extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.getWriter().append("Served at: ").append(request.getContextPath());
+        request.getRequestDispatcher("/Administrador/InformesReportes.jsp").forward(request, response);
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String tipoReporte = request.getParameter("tipoReporte");
         String fechaDesde = request.getParameter("fechaDesde");
         String fechaHasta = request.getParameter("fechaHasta");
@@ -39,18 +45,18 @@ public class ServletReportes extends HttpServlet {
         System.out.println("Fecha Desde: " + fechaDesde);
         System.out.println("Fecha Hasta: " + fechaHasta);
 
-        if (tipoReporte == null || fechaDesde == null || fechaHasta == null || tipoReporte.isEmpty()) {
-            request.setAttribute("error", "Todos los campos son obligatorios.");
+        if (tipoReporte == null || tipoReporte.isEmpty()) {
+            request.setAttribute("error", "Debe seleccionar un tipo de reporte.");
             request.getRequestDispatcher("/Administrador/InformesReportes.jsp").forward(request, response);
             return;
         }
-        
+
         try {
             if (tipoReporte.equals("prestamos")) {
                 Date fechaInicioDate = Date.valueOf(fechaDesde);
                 Date fechaFinDate = Date.valueOf(fechaHasta);
                 PrestamoDaoImpl prestamoDao = new PrestamoDaoImpl();
-                ArrayList<Prestamo> prestamos = prestamoDao.getPrestamos();         
+                ArrayList<Prestamo> prestamos = prestamoDao.getPrestamos();
                 Iterator<Prestamo> iterator = prestamos.iterator();
                 while (iterator.hasNext()) {
                     Prestamo prestamo = iterator.next();
@@ -59,18 +65,51 @@ public class ServletReportes extends HttpServlet {
                     }
                 }
 
-                //VERIFICAR LOS PRESTAMOSS
-                System.out.println("Préstamos después del filtrado:");
+                double montoTotal = 0;
+                int numeroPrestamos = prestamos.size();
+                int aprobados = 0;
+                int pendientes = 0;
+                int rechazados = 0;
+                Map<String, Integer> prestamosPorMes = new TreeMap<>();
+                SimpleDateFormat monthFormat = new SimpleDateFormat("MM-yyyy");
+
                 for (Prestamo prestamo : prestamos) {
-                    System.out.println(prestamo);
+                    montoTotal += prestamo.getImporte();
+
+                    String status = prestamo.getStatus().toString();
+                    if (status.equalsIgnoreCase("En_curso")) {
+                        aprobados++;
+                    } else if (status.equalsIgnoreCase("Pendiente")) {
+                        pendientes++;
+                    } else if (status.equalsIgnoreCase("Rechazado")) {
+                        rechazados++;
+                    }
+
+                    String mes = monthFormat.format(prestamo.getFecha_alta());
+                    prestamosPorMes.put(mes, prestamosPorMes.getOrDefault(mes, 0) + 1);
                 }
+
+                double montoPromedio = numeroPrestamos > 0 ? montoTotal / numeroPrestamos : 0;
+
+                request.setAttribute("montoTotalPrestamos", montoTotal);
+                request.setAttribute("numeroPrestamos", numeroPrestamos);
+                request.setAttribute("montoPromedioPrestamos", montoPromedio);
+                request.setAttribute("aprobados", aprobados);
+                request.setAttribute("pendientes", pendientes);
+                request.setAttribute("rechazados", rechazados);
+                request.setAttribute("prestamosPorMes", prestamosPorMes);
+
                 request.setAttribute("reporte", prestamos);
-                
-            }else if (tipoReporte.equals("cuentas")) {
+
+            } else if (tipoReporte.equals("cuentas")) {
                 Date fechaInicioDate = Date.valueOf(fechaDesde);
                 Date fechaFinDate = Date.valueOf(fechaHasta);
                 CuentaNegocioImpl cuentaNegocio = new CuentaNegocioImpl();
+                PrestamoDaoImpl prestamoDao = new PrestamoDaoImpl();
+
                 ArrayList<Cuenta> cuentas = cuentaNegocio.readAll();
+                ArrayList<Prestamo> prestamos = prestamoDao.getPrestamos();
+
                 Iterator<Cuenta> iterator = cuentas.iterator();
                 while (iterator.hasNext()) {
                     Cuenta cuenta = iterator.next();
@@ -78,14 +117,41 @@ public class ServletReportes extends HttpServlet {
                         iterator.remove();
                     }
                 }
-                System.out.println("Cuentas después del filtrado:");
+
+                int numeroCuentas = cuentas.size();
+                double saldoTotal = 0;
+                int cuentasActivas = 0;
+                int cuentasInactivas = 0;
+                int cuentasCorriente = 0;
+                int cuentasCajaAhorro = 0;           
                 for (Cuenta cuenta : cuentas) {
-                    System.out.println(cuenta);
+                    saldoTotal += cuenta.getSaldo();
+                    if (cuenta.isEstado()) {
+                        cuentasActivas++;
+                    } else {
+                        cuentasInactivas++;
+                    }
+                    if (cuenta.getTipoCuenta().getDescripcion().equalsIgnoreCase("Cuenta Corriente")) {
+                        cuentasCorriente++;
+                    } else if (cuenta.getTipoCuenta().getDescripcion().equalsIgnoreCase("Caja de Ahorro")) {
+                        cuentasCajaAhorro++;
+                    }                   
                 }
-                request.setAttribute("reporte", cuentas);
                 
+               MovimientoNegocioImpl movimientoNegocio = new MovimientoNegocioImpl();
+               ArrayList<Movimiento> movimientos = (ArrayList<Movimiento>) movimientoNegocio.obtenerTodosLosMovimientos();         
+                double saldoPromedio = numeroCuentas > 0 ? saldoTotal / numeroCuentas : 0;
+
+                request.setAttribute("numeroCuentas", numeroCuentas);
+                request.setAttribute("saldoPromedioCuentas", saldoPromedio);
+                request.setAttribute("cuentasActivas", cuentasActivas);
+                request.setAttribute("cuentasInactivas", cuentasInactivas);
+                request.setAttribute("cuentasCorriente", cuentasCorriente);
+                request.setAttribute("cuentasCajaAhorro", cuentasCajaAhorro);
+
+                request.setAttribute("reporte", cuentas);
             } else if (tipoReporte.equals("movimientos")) {
-            	Date fechaInicioDate = Date.valueOf(fechaDesde);
+                Date fechaInicioDate = Date.valueOf(fechaDesde);
                 Date fechaFinDate = Date.valueOf(fechaHasta);
                 MovimientoNegocioImpl movimientoNegocio = new MovimientoNegocioImpl();
                 ArrayList<Movimiento> movimientos = (ArrayList<Movimiento>) movimientoNegocio.obtenerTodosLosMovimientos();
@@ -97,12 +163,31 @@ public class ServletReportes extends HttpServlet {
                     }
                 }
 
-                System.out.println("Movimientos después del filtrado:");
+                int contadorTransferencias = 0;
+                int contadorRetiros = 0;
+                int contadorDepositos = 0;
+                double montoTotal = 0;
+                int numeroMovimientos = movimientos.size();
                 for (Movimiento movimiento : movimientos) {
-                    System.out.println(movimiento);
-                }
-                request.setAttribute("reporte", movimientos);
+                    montoTotal += movimiento.getImporte();
+                    String tipo = movimiento.getTipoMovimiento().getDescripcion();
 
+                    if (tipo.equalsIgnoreCase("Transferencia recibida") || tipo.equalsIgnoreCase("Transferencia enviada")) {
+                        contadorTransferencias++;
+                    } else if (tipo.equalsIgnoreCase("Retiro")) {
+                        contadorRetiros++;
+                    } else if (tipo.equalsIgnoreCase("Deposito")) {
+                        contadorDepositos++;
+                    }
+                }
+                double montoPromedio = numeroMovimientos > 0 ? montoTotal / numeroMovimientos : 0;               	                          
+                request.setAttribute("montoTotalMovimientos", montoTotal);
+                request.setAttribute("numeroMovimientos", numeroMovimientos);
+                request.setAttribute("montoPromedioMovimientos", montoPromedio);
+                request.setAttribute("contadorTransferencias", contadorTransferencias);
+                request.setAttribute("contadorRetiros", contadorRetiros);
+                request.setAttribute("contadorDepositos", contadorDepositos);
+                request.setAttribute("reporte", movimientos);
             } else {
                 request.setAttribute("error", "El tipo de reporte seleccionado no es válido.");
             }
@@ -110,10 +195,9 @@ public class ServletReportes extends HttpServlet {
             request.getRequestDispatcher("/Administrador/InformesReportes.jsp").forward(request, response);
 
         } catch (Exception e) {
-            e.printStackTrace();
             request.setAttribute("error", "Error al procesar los datos: " + e.getMessage());
+            e.printStackTrace();
             request.getRequestDispatcher("/Administrador/InformesReportes.jsp").forward(request, response);
         }
     }
-
 }
