@@ -38,7 +38,7 @@ public class ServletHomeUsuario extends HttpServlet {
 		CuentaNegocioImpl cuentasNegocio = new CuentaNegocioImpl();
 		MovimientoNegocioImpl movimientoNegocio = new MovimientoNegocioImpl();
 		
-		session.setAttribute("id", persona.getId());
+		session.setAttribute("id", persona.getUsuario().getId());
 		
 		List<Cuenta> cuentas = cuentasNegocio.getCuentasPorCliente(persona.getUsuario().getId());
 	    request.setAttribute("lista", cuentas);
