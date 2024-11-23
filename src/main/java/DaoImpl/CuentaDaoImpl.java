@@ -21,7 +21,7 @@ public class CuentaDaoImpl implements ICuentaDao {
     private static final String delete = "UPDATE cuentas SET estado = ? WHERE id_cuenta = ?";
     private static final String update = "UPDATE cuentas SET id_cliente = ?, id_tipo_cuenta = ?, numero_cuenta = ?, cbu = ?, saldo = ?, fecha_creacion = ?, estado = ? WHERE id_cuenta = ?";
     //private static final String readall = "SELECT * FROM cuentas";
-    private static final String readall = "select * from cuentas c inner join personas p on p.id_usuario = c.id_cliente order by c.id_cuenta";
+    private static final String readall = "select * from cuentas c inner join personas p on p.id_usuario = c.id_cliente WHERE c.estado = 1 order by c.id_cuenta";
     private static final String read = "SELECT c.id_cuenta, c.id_cliente, c.id_tipo_cuenta, c.numero_cuenta, c.cbu, c.saldo, c.fecha_creacion, c.estado, p.id_persona FROM cuentas c inner join personas p on p.id_usuario = c.id_cliente WHERE id_cuenta = ?";
     private static final String readCBU = "SELECT c.id_cuenta, c.id_cliente, c.id_tipo_cuenta, c.numero_cuenta, c.cbu, c.saldo, c.fecha_creacion, c.estado, p.id_persona FROM cuentas c inner join personas p on p.id_usuario = c.id_cliente WHERE cbu = ?";
     private static final String readNumeroCuenta = "SELECT c.id_cuenta, c.id_cliente, c.id_tipo_cuenta, c.numero_cuenta, c.cbu, c.saldo, c.fecha_creacion, c.estado, p.id_persona FROM cuentas c inner join personas p on p.id_usuario = c.id_cliente WHERE numero_cuenta = ?";
