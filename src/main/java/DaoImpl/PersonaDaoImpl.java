@@ -31,6 +31,8 @@ public class PersonaDaoImpl implements IPersonaDao {
 	//private static final String readall = "select * from personas where estado = 1 limit ? offset ?";
 	private static final String read = "select id_persona, id_usuario, id_sexo, dni, cuil, nombre, apellido, nacionalidad, fecha_nacimiento,"
 			+ "direccion, localidad, provincia, email, telefono, estado from personas where id_persona = ? and estado = 1";
+	private static final String readDni = "select id_persona, id_usuario, id_sexo, dni, cuil, nombre, apellido, nacionalidad, fecha_nacimiento,"
+			+ "direccion, localidad, provincia, email, telefono, estado from personas where dni = ?";
 	private static final String readByUser = "select id_persona, id_usuario, id_sexo, dni, cuil, nombre, apellido, nacionalidad, fecha_nacimiento,"
 			+ "direccion, localidad, provincia, email, telefono, estado from personas where id_usuario = ? and estado = 1";
 	private static final String siguiente = "select max(id_persona) from personas";
@@ -289,6 +291,46 @@ public class PersonaDaoImpl implements IPersonaDao {
         }
 
         return ultimoId + 1;
+	}
+	
+	public Persona getPersonaPorDni(String dni) {
+		Persona persona = null;
+	    try {
+	        Conexion conn = Conexion.getConexion();
+	        Connection connection = conn.getSQLConexion();
+	        PreparedStatement ps = connection.prepareStatement(readDni);
+	        ps.setString(1, dni);
+	        ResultSet rs = ps.executeQuery();
+
+	        if (rs.next()) {
+	            persona = new Persona();
+	            persona.setId(rs.getInt("id_persona"));
+	            
+	            int usuarioId = rs.getInt("id_usuario");
+	            Usuario usuario = usuarioDao.getUsuario(usuarioId);
+	            persona.setUsuario(usuario);
+	            
+	            int tipoSexoId = rs.getInt("id_sexo");
+	            TipoSexo tipoSexo = tipoSexoDao.getTipoSexo(tipoSexoId);
+	            persona.setTipoSexo(tipoSexo);
+	            
+	            persona.setDni(rs.getString("dni"));
+	            persona.setCuil(rs.getString("cuil"));
+	            persona.setNombre(rs.getString("nombre"));
+	            persona.setApellido(rs.getString("apellido"));
+	            persona.setNacionalidad(rs.getString("nacionalidad"));
+	            persona.setFechaNacimiento(rs.getDate("fecha_nacimiento"));
+	            persona.setDireccion(rs.getString("direccion"));
+	            persona.setLocalidad(rs.getString("localidad"));
+	            persona.setProvincia(rs.getString("provincia"));
+	            persona.setEmail(rs.getString("email"));
+	            persona.setTelefono(rs.getString("telefono"));
+	            persona.setEstado(rs.getBoolean("estado"));
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return persona;
 	}
 
 }

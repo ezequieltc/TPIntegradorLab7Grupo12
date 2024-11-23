@@ -21,7 +21,7 @@ import NegocioImpl.CuentaNegocioImpl;
 import java.util.List;
 
 
-@WebServlet("/Administrador/ServletHomeAdministrador")
+@WebServlet("/Administrador/Home/ServletHomeAdministrador")
 public class ServletHomeAdministrador extends HttpServlet {
     private static final long serialVersionUID = 1L;
     PrestamoNegocioImpl prestamoNegocio = new PrestamoNegocioImpl();

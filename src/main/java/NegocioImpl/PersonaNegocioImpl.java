@@ -115,6 +115,10 @@ public class PersonaNegocioImpl implements IPersonaNegocio{
 	public Persona getPersona(int id) {
 		return personaDao.getPersona(id);
 	}
+	
+	public Persona getPersonaPorDni(String dni) {
+		return personaDao.getPersonaPorDni(dni);
+	}
 
 
 }

@@ -33,7 +33,7 @@ public class SvSidebar extends HttpServlet {
 
         session.setAttribute("sidebarMenu", menuItems);
         if (isAdmin) {
-            response.sendRedirect("Administrador/ServletHomeAdministrador");
+            response.sendRedirect("Administrador/Home/ServletHomeAdministrador");
         } else {
             response.sendRedirect("Usuarios/Home/ServletHomeUsuario");
         }

@@ -6,6 +6,7 @@
 <%@ page import="Dominio.Cuenta" %>
 <%@ page import="Dominio.TipoCuenta" %>
 
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -59,7 +60,7 @@
             </thead>
             <tbody>
                 <%
-                    try {
+                    
                         List<Prestamo> prestamos = (List<Prestamo>) request.getAttribute("listadoPrestamos");
                         if (prestamos != null && !prestamos.isEmpty()) {
                             for (Prestamo prestamo : prestamos) {
@@ -80,10 +81,7 @@
                 </tr>
                 <%
                         }
-                    } catch (Exception e) {
-                        out.println("<tr><td colspan='5'>Error al mostrar los préstamos: " + e.getMessage() + "</td></tr>");
-                        e.printStackTrace();
-                    }
+                   
                 %>
             </tbody>
         </table>
@@ -102,8 +100,8 @@
             </thead>
             <tbody>
                 <%
-                    try {
-                        List<Cuenta> cuentas = (List<Cuenta>) request.getAttribute("listadoCuentas");
+                    
+                        List<Cuenta> cuentas = (List<Cuenta>) request.getAttribute("listadoCuentas");         		
                         if (cuentas != null && !cuentas.isEmpty()) {
                             for (Cuenta cuenta : cuentas) {
                 %>
@@ -123,10 +121,7 @@
                 </tr>
                 <%
                         }
-                    } catch (Exception e) {
-                        out.println("<tr><td colspan='5'>Error al mostrar las cuentas: " + e.getMessage() + "</td></tr>");
-                        e.printStackTrace();
-                    }
+                   
                 %>
             </tbody>
         </table>

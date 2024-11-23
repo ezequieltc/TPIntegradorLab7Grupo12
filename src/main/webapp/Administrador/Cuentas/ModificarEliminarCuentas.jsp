@@ -91,7 +91,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="editFechaAltaCuenta">Fecha de Alta</label>
-                                <input type="date" id="editFechaAltaCuenta" name="editFechaAltaCuenta" class="form-control" required value="<%= cuentaDatos.getFechaCreacion() %>">
+                                <input type="date" id="editFechaAltaCuenta" name="editFechaAltaCuenta" class="form-control" required value="<%= cuentaDatos.getFechaCreacion() %>" readonly>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -105,7 +105,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="editSaldo">Saldo</label>
-                                <input type="number" id="editSaldo" name="editSaldo" class="form-control" min="0" required value="<%= cuentaDatos.getSaldo() %>">
+                                <input type="number" id="editSaldo" name="editSaldo" class="form-control" min="0" required readonly value="<%= cuentaDatos.getSaldo() %>">
                             </div>
                             <div class="form-group">
                                 <label for="editEstadoCuenta">Estado Cuenta</label>
