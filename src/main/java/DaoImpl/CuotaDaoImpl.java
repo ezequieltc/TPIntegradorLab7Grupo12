@@ -94,7 +94,7 @@ public class CuotaDaoImpl implements ICuotaDao {
         }
         
         prestamo = prestamoNegocio.getPrestamoPorId(cuota.getId_prestamo());
-        Movimiento movimiento = new Movimiento(cuenta.getId(), new TipoMovimiento(2,"Pago"), new java.util.Date(System.currentTimeMillis()), "Pago de cuota número: " + cuota.getNumero_cuota() + " del prestamo número: " + prestamo.getId(), cuota.getImporte(), true);
+        Movimiento movimiento = new Movimiento(cuenta.getId(), new TipoMovimiento(2,"Pago"), new java.util.Date(System.currentTimeMillis()), "Pago de cuota número: " + cuota.getNumero_cuota() + " del prestamo número: " + prestamo.getId(), cuota.getImporte()*-1, true);
         movimientoNegocio.insertarMovimiento(movimiento);
         double nuevoSaldo = cuenta.getSaldo() - cuota.getImporte();
         cuenta.setSaldo(nuevoSaldo);
