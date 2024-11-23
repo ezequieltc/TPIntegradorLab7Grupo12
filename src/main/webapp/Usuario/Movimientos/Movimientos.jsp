@@ -9,25 +9,48 @@
         <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
         <%@include  file="../../components/header.jsp"%>
         <title>BancArg - Movimientos</title>
-          <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.css" />
-  <script type="text/javascript" src="https://code.jquery.com/jquery-3.7.1.js"></script>
-  <script type="text/javascript" src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
-  
-  <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+         <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.css" />
+
         <style>
+  .main-content {
+    flex: 1;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 
-           	td {
-	 			text-align: center;
-	 		}
+  .filtro-container {
+    padding: 1rem;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: space-around;
+    width: 90%;
+  }
 
-            .select-container {
-                margin-bottom: 20px;
-                text-align: center;
-            }
-                        .btn-container {
-                margin-top: 30px;
-                text-align: center;
-            }
+  .filtro-container select {
+    padding: 0.5rem;
+    border-radius: 4px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  th, td {
+    text-align: center; /* Centrado de texto */
+    vertical-align: middle; /* Alineación vertical */
+    padding: 0.5rem; /* Espaciado en las celdas */
+  }
+  .table-container {
+    width: 100%;
+    overflow-x: auto;
+    text-align: center;
+  }
             .btn-volver {
                 padding: 10px 20px;
                 background-color: #007bff;
@@ -47,6 +70,7 @@
     <body>
         <%@include  file="../../components/pre-body.jsp"%>
 
+        <h2>Últimos Movimientos</h2>
         <div class="select-container">
             <form id="formCuentas" method="POST" action="ServletMovimientos">
                 <label for="idCuenta">Seleccione una cuenta:</label>
@@ -69,9 +93,14 @@
             </form>
         </div>
 
-        <h2>Últimos Movimientos</h2>
+      <div class="table-container">
+  <div id="filtrosPadre" class="row">
+  	<div id="filtros" class="column">
+
+  	</div>
+  </div>
 	<table id="example" class="display" style="width:85%">
-            <thead>
+            <thead class="table-light" style="text-align: center;">
                 <tr>
                     <th>Fecha</th>
                     <th>Tipo</th>
@@ -113,43 +142,54 @@
 
         <%@include  file="../../components/post-body.jsp"%>
         
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script type="text/javascript" src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+
 <script>
-	new DataTable('#example', {
-	    initComplete: function () {
-	        this.api()
-	            .columns()
-	            .every(function () {
-	                let column = this;
+new DataTable('#example', {
+    initComplete: function () {
+        this.api()
+            .columns()
+            .every(function () {
+                let column = this;
+                if(column.header().textContent != "Acciones")
+                	{
 	                let title = column.header().textContent;
-	 
-	                // Create input element
+	 				
+	                // Crear el input de filtro
 	                let input = document.createElement('input');
-	                input.placeholder = title;
-	                column.header().replaceChildren(input);
-	 
+	                let headerWidth = column.header().offsetWidth; // Ancho del encabezado
+	                input.style.width = "${headerWidth}px";
+
+	                input.style.margin = "10px";       
+	                input.placeholder = "Filtrar por " + title;
+	                input.className = 'column'; // Puedes agregar una clase para estilizar el input si lo deseas
+
+	                // Añadir el input al div con id "prueba"
+	                let pruebaDiv = document.getElementById("filtros");
+	                pruebaDiv.appendChild(input); // Agrega el input al div
 	                // Event listener for user input
 	                input.addEventListener('keyup', () => {
 	                    if (column.search() !== this.value) {
 	                        column.search(input.value).draw();
 	                    }
 	                });
-	            });
-	    },
-	    language: {
-	        info: 'Mostrando pagina _PAGE_ de _PAGES_',
-	        infoEmpty: 'No hay resultados disponibles',
-	        infoFiltered: '(filtrados desde _MAX_ resultados totales)',
-	        lengthMenu: ' _MENU_ Resultados por Pagina',
-	        zeroRecords: 'Ups! Parece que no hay nada',
-	        search: 'Buscar'
-	    },
-	        layout: {
-	            topEnd: null
-	        }
-	    
-	});
+                	}
+            });
+    },
+    language: {
+        info: 'Mostrando pagina _PAGE_ de _PAGES_',
+        infoEmpty: 'No hay resultados disponibles',
+        infoFiltered: '(filtrados desde _MAX_ resultados totales)',
+        lengthMenu: ' _MENU_ Resultados por Pagina',
+        zeroRecords: 'Ups! Parece que no hay nada',
+        search: 'Buscar'
+    },
+        layout: {
+            topEnd: null
+        }
+    
+});
 
 </script>
     </body>

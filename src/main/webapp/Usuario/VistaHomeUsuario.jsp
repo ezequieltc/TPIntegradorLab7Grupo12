@@ -9,46 +9,62 @@
         <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 		<%@include  file="../../components/header.jsp"%>
 <title>BancArg - Home Usuario</title>
-    <style>
-      table {
-        margin-top: 30px;
-        width: 100%;
-        background-color: white;
-        border-radius: 5px;
-        overflow: hidden;
-        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-      }
-      th,
-      td {
-        padding: 15px;
-        text-align: left;
-      }
-      th {
-        background-color: #007bff;
-        color: white;
-      }
-      .dropdown-menu {
-        position: absolute;
-        display: none;
-        z-index: 1000;
-      }
-      .table-row {
-        cursor: pointer;
-      }
-    </style>
-  </head>
+<link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.css" />
+<style>
+  .main-content {
+    flex: 1;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .filtro-container {
+    padding: 1rem;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: space-around;
+    width: 90%;
+  }
+
+  .filtro-container select {
+    padding: 0.5rem;
+    border-radius: 4px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  th, td {
+    text-align: center !important; /* Centrado de texto */
+    vertical-align: middle !important; /* Alineación vertical */
+    padding: 0.5rem; /* Espaciado en las celdas */
+  }
+  .table-container {
+    width: 100%;
+    overflow-x: auto;
+    text-align: center;
+  }
+      </style>
+	</head>
   <body>
   <%@include  file="../../components/pre-body.jsp"%>
 
     <div class="content">
-      <h3 class="text-center">Resumen de Cuentas</h3>
+      <h3>Resumen de Cuentas</h3>
 
-      <table class="table table-bordered table-hover">
-        <thead>
+      <table class="dataTable display">
+        <thead class="table-light" style="text-align: center;">
           <tr>
             <th>Tipo de Cuenta</th>
             <th>Nro de Cuenta</th>
             <th>Saldo</th>
+            <th></th>
           </tr>
         </thead>
 <tbody>
@@ -57,18 +73,18 @@
     if (cuentas != null) {
       for (Cuenta cuenta : cuentas) { 
   %>
-        <tr
-          class="table-row"
-          onclick="enviarFormulario(<%= cuenta.getId() %>)"
-          data-toggle="dropdown"
-          data-account="<%= cuenta.getTipoCuenta().getDescripcion() %>"
-          data-account-number="<%= cuenta.getNumeroCuenta() %>"
-          data-balance="<%= cuenta.getSaldo() %>"
-          data-id-cuenta="<%= cuenta.getId() %>"
-        >
+        <tr>
           <td><%= cuenta.getTipoCuenta().getDescripcion() %></td>
           <td><%= cuenta.getNumeroCuenta() %></td>
           <td><%= cuenta.getSaldo() %></td>
+          <td>
+            <form action="ServletMovimientos" method="POST">
+              <input type="hidden" name="idCuenta" value="<%= cuenta.getId() %>">
+              <button class="btn btn-primary btn-sm" type="submit">
+                Ver Movimientos
+              </button>
+            </form>
+          </td>
         </tr>
   <% 
       }
@@ -76,9 +92,9 @@
   %>
 </tbody>
       </table>
-<h3 class="text-center">Últimos Movimientos</h3>
-            <table class="table table-bordered table-hover">
-                <thead>
+<h3>Últimos Movimientos</h3>
+            <table class="dataTable display">
+                <thead class="table-light" style="text-align: center;">
                     <tr>
                         <th>Nro de Cuenta</th>
                         <th>Tipo de Movimiento</th>
@@ -104,58 +120,48 @@
                     %>
                 </tbody>
             </table>
-      <div class="dropdown-menu" id="accountOptionsMenu">
-        <a class="dropdown-item" href="#">Movimientos</a>
-        <a class="dropdown-item" href="#">Transferir</a>
-      </div>
-    </div>
-<form id="formMovimientos" method="GET" action="ServletMovimientos">
-    <input type="hidden" name="idCuenta" id="idCuenta">
-</form>
-    <script>
-    document.querySelectorAll(".table-row").forEach(function (row) {
-        row.addEventListener("click", function (event) {
-            const menu = document.getElementById("accountOptionsMenu");
 
-        const idCuenta = row.dataset.idCuenta;
-        menu.dataset.idCuenta = idCuenta;
+<%@include  file="../../components/post-body.jsp"%>
 
-            menu.style.display = "block";
-            menu.style.top = event.clientY + "px";
-            menu.style.left = event.clientX + "px";
+<script type="text/javascript" src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+<script>
+document.querySelectorAll('.dataTable').forEach(table => {
+    new DataTable(table, {
+        initComplete: function () {
+            this.api()
+                .columns()
+                .every(function () {
+                    let column = this;
+                    let title = column.header().textContent;
 
-            document.addEventListener("click", function hideMenu(e) {
-                if (!menu.contains(e.target) && !row.contains(e.target)) {
-                    menu.style.display = "none";
-                    document.removeEventListener("click", hideMenu);
-                }
-            });
-        });
-    });
+                    // Crear el elemento input
+                    let input = document.createElement('input');
+                    input.placeholder = title;
+                    column.header().replaceChildren(input);
 
-    document.querySelector("#accountOptionsMenu").addEventListener("click", function (event) {
-        if (event.target.classList.contains("dropdown-item")) {
-            const idCuenta = this.dataset.idCuenta;
-
-            if (event.target.textContent.trim() === "Movimientos") {
-                const form = document.createElement("form");
-                form.method = "POST";
-                form.action = "ServletMovimientos";
-
-                const input = document.createElement("input");
-                input.type = "hidden";
-                input.name = "idCuenta";
-                input.value = idCuenta;
-
-                form.appendChild(input);
-                document.body.appendChild(form);
-                form.submit();
-            }
+                    // Listener para el input
+                    input.addEventListener('keyup', () => {
+                        if (column.search() !== input.value) {
+                            column.search(input.value).draw();
+                        }
+                    });
+                });
+        },
+        language: {
+            info: 'Mostrando página _PAGE_ de _PAGES_',
+            infoEmpty: 'No hay resultados disponibles',
+            infoFiltered: '(filtrados desde _MAX_ resultados totales)',
+            lengthMenu: ' _MENU_ Resultados por página',
+            zeroRecords: 'Ups! Parece que no hay nada',
+            search: 'Buscar'
+        },
+        layout: {
+            topEnd: null
         }
     });
-        
-    </script>
-    
-     <%@include  file="../../components/post-body.jsp"%>
+});
+	});
+
+</script>
   </body>
 </html>
