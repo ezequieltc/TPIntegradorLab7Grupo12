@@ -2,14 +2,8 @@ package Presentacion.Administrador.Reportes;
 
 import java.io.IOException;
 import java.sql.Date;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -45,16 +39,24 @@ public class ServletReportes extends HttpServlet {
         System.out.println("Fecha Desde: " + fechaDesde);
         System.out.println("Fecha Hasta: " + fechaHasta);
 
-        if (tipoReporte == null || tipoReporte.isEmpty()) {
-            request.setAttribute("error", "Debe seleccionar un tipo de reporte.");
-            request.getRequestDispatcher("/Administrador/InformesReportes.jsp").forward(request, response);
-            return;
+        if (tipoReporte == null || tipoReporte.isEmpty() || fechaDesde == null || fechaDesde.isEmpty() || fechaHasta == null || fechaHasta.isEmpty()) {
+        	 request.getSession().setAttribute("mensajeError", "Debe completar todos los campos del filtro.");
+             request.getSession().setAttribute("mostrarPopUp", true);
+             request.getSession().setAttribute("popUpStatus", "error");
+             response.sendRedirect(request.getContextPath() + "/Administrador/InformesReportes.jsp");
+             return;
         }
-
         try {
             if (tipoReporte.equals("prestamos")) {
                 Date fechaInicioDate = Date.valueOf(fechaDesde);
                 Date fechaFinDate = Date.valueOf(fechaHasta);
+                if (Date.valueOf(fechaDesde).after(Date.valueOf(fechaHasta))) {
+                    request.getSession().setAttribute("mensajeError", "La fecha de inicio no puede ser superior a la fecha de fin.");
+                    request.getSession().setAttribute("mostrarPopUp", true);
+                    request.getSession().setAttribute("popUpStatus", "error");
+                    response.sendRedirect(request.getContextPath() + "/Administrador/InformesReportes.jsp");
+                    return;
+                }
                 PrestamoDaoImpl prestamoDao = new PrestamoDaoImpl();
                 ArrayList<Prestamo> prestamos = prestamoDao.getPrestamos();
                 Iterator<Prestamo> iterator = prestamos.iterator();
@@ -69,10 +71,7 @@ public class ServletReportes extends HttpServlet {
                 int numeroPrestamos = prestamos.size();
                 int aprobados = 0;
                 int pendientes = 0;
-                int rechazados = 0;
-                Map<String, Integer> prestamosPorMes = new TreeMap<>();
-                SimpleDateFormat monthFormat = new SimpleDateFormat("MM-yyyy");
-
+                int rechazados = 0;               
                 for (Prestamo prestamo : prestamos) {
                     montoTotal += prestamo.getImporte();
 
@@ -83,27 +82,26 @@ public class ServletReportes extends HttpServlet {
                         pendientes++;
                     } else if (status.equalsIgnoreCase("Rechazado")) {
                         rechazados++;
-                    }
-
-                    String mes = monthFormat.format(prestamo.getFecha_alta());
-                    prestamosPorMes.put(mes, prestamosPorMes.getOrDefault(mes, 0) + 1);
+                    }                   
                 }
-
                 double montoPromedio = numeroPrestamos > 0 ? montoTotal / numeroPrestamos : 0;
-
                 request.setAttribute("montoTotalPrestamos", montoTotal);
                 request.setAttribute("numeroPrestamos", numeroPrestamos);
                 request.setAttribute("montoPromedioPrestamos", montoPromedio);
                 request.setAttribute("aprobados", aprobados);
                 request.setAttribute("pendientes", pendientes);
                 request.setAttribute("rechazados", rechazados);
-                request.setAttribute("prestamosPorMes", prestamosPorMes);
-
                 request.setAttribute("reporte", prestamos);
-
             } else if (tipoReporte.equals("cuentas")) {
                 Date fechaInicioDate = Date.valueOf(fechaDesde);
                 Date fechaFinDate = Date.valueOf(fechaHasta);
+                if (Date.valueOf(fechaDesde).after(Date.valueOf(fechaHasta))) {
+                    request.getSession().setAttribute("mensajeError", "La fecha de inicio no puede ser superior a la fecha de fin.");
+                    request.getSession().setAttribute("mostrarPopUp", true);
+                    request.getSession().setAttribute("popUpStatus", "error");
+                    response.sendRedirect(request.getContextPath() + "/Administrador/InformesReportes.jsp");
+                    return;
+                }
                 CuentaNegocioImpl cuentaNegocio = new CuentaNegocioImpl();
                 PrestamoDaoImpl prestamoDao = new PrestamoDaoImpl();
 
@@ -117,7 +115,6 @@ public class ServletReportes extends HttpServlet {
                         iterator.remove();
                     }
                 }
-
                 int numeroCuentas = cuentas.size();
                 double saldoTotal = 0;
                 int cuentasActivas = 0;
@@ -136,10 +133,7 @@ public class ServletReportes extends HttpServlet {
                     } else if (cuenta.getTipoCuenta().getDescripcion().equalsIgnoreCase("Caja de Ahorro")) {
                         cuentasCajaAhorro++;
                     }                   
-                }
-                
-               MovimientoNegocioImpl movimientoNegocio = new MovimientoNegocioImpl();
-               ArrayList<Movimiento> movimientos = (ArrayList<Movimiento>) movimientoNegocio.obtenerTodosLosMovimientos();         
+                }               
                 double saldoPromedio = numeroCuentas > 0 ? saldoTotal / numeroCuentas : 0;
 
                 request.setAttribute("numeroCuentas", numeroCuentas);
@@ -153,6 +147,13 @@ public class ServletReportes extends HttpServlet {
             } else if (tipoReporte.equals("movimientos")) {
                 Date fechaInicioDate = Date.valueOf(fechaDesde);
                 Date fechaFinDate = Date.valueOf(fechaHasta);
+                if (Date.valueOf(fechaDesde).after(Date.valueOf(fechaHasta))) {
+                    request.getSession().setAttribute("mensajeError", "La fecha de inicio no puede ser superior a la fecha de fin.");
+                    request.getSession().setAttribute("mostrarPopUp", true);
+                    request.getSession().setAttribute("popUpStatus", "error");
+                    response.sendRedirect(request.getContextPath() + "/Administrador/InformesReportes.jsp");
+                    return;
+                }
                 MovimientoNegocioImpl movimientoNegocio = new MovimientoNegocioImpl();
                 ArrayList<Movimiento> movimientos = (ArrayList<Movimiento>) movimientoNegocio.obtenerTodosLosMovimientos();
                 Iterator<Movimiento> iterator = movimientos.iterator();
@@ -162,7 +163,6 @@ public class ServletReportes extends HttpServlet {
                         iterator.remove();
                     }
                 }
-
                 int contadorTransferencias = 0;
                 int contadorRetiros = 0;
                 int contadorDepositos = 0;

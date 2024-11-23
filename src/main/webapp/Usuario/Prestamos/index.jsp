@@ -99,7 +99,7 @@
     <a href="${pageContext.request.contextPath}/Usuarios/Prestamos/ServletSolicitarPrestamo" class="btn btn-primary">Nuevo Prestamo</a>
 
 	<table id="example" class="display" style="width:85%">
-        <thead>
+        <thead class="table-light" style="text-align: center;">
             <tr>
                 <th>Fecha</th>
                 <th>importe</th>
@@ -156,11 +156,11 @@
 	                column.header().replaceChildren(input);
 	 
 	                // Event listener for user input
-	                input.addEventListener('keyup', () => {
+	               /* input.addEventListener('keyup', () => {
 	                    if (column.search() !== this.value) {
 	                        column.search(input.value).draw();
 	                    }
-	                });
+	                });*/
 	            });
 	    },
 	    language: {
@@ -176,7 +176,6 @@
 	        }
 	    
 	});
-
 </script>
 
 

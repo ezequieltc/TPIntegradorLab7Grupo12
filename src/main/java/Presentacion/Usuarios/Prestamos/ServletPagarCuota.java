@@ -67,32 +67,28 @@ public class ServletPagarCuota extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		String action = request.getParameter("buttonSubmit");
 		int idPrestamo = 0;
 		int numeroCuota = 0;
 		int idCuenta = 0;
 		int idCuota = 0;
-		if(idPrestamo == 0) {
-			request.getSession().setAttribute("mensajeError", "Debe completar todos los campos");
-			request.getSession().setAttribute("popUpStatus", "error");
-			request.getSession().setAttribute("mostrarPopUp", true);
-			response.sendRedirect(request.getContextPath() + "/Usuario/Prestamos/VistaPagarCuotas.jsp");
-			return;
-		}
-			
 		ArrayList<Cuota> cuotasPrestamo = new ArrayList<Cuota>();
 		Cuenta cuentaTemp = new Cuenta();
 		Prestamo prestamo = new Prestamo();
 		Cuota cuota = new Cuota();
-		if(Integer.parseInt(request.getParameter("selectPrestamo")) != 0) {
-			idPrestamo = Integer.parseInt(request.getParameter("selectPrestamo"));
-			prestamo = prestamoNegocio.getPrestamoPorId(idPrestamo);
-			cuotasPrestamo = cuotaNegocio.listadoCuotasPorIdPrestamo(idPrestamo);
-			System.out.println("Cuotas: " + cuotasPrestamo);
-			request.getSession().setAttribute("prestamoSeleccionado",idPrestamo);
-			request.getSession().setAttribute("cuotasPrestamo",cuotasPrestamo);
-			response.sendRedirect(request.getContextPath() + "/Usuario/Prestamos/VistaPagarCuotas.jsp");
+		if("pagar".equals(action)==false) {
+			
+			if(Integer.parseInt(request.getParameter("selectPrestamo")) != 0) {
+				idPrestamo = Integer.parseInt(request.getParameter("selectPrestamo"));
+				prestamo = prestamoNegocio.getPrestamoPorId(idPrestamo);
+				cuotasPrestamo = cuotaNegocio.listadoCuotasPorIdPrestamo(idPrestamo);
+				request.getSession().setAttribute("prestamoSeleccionado",idPrestamo);
+				request.getSession().setAttribute("cuotasPrestamo",cuotasPrestamo);
+				response.sendRedirect(request.getContextPath() + "/Usuarios/Prestamos/ServletPagarCuota");
+				return;
+			}
 		}
-		String action = request.getParameter("buttonSubmit");
+		System.out.println("Accion: " + action);
 		if ("pagar".equals(action)) {
 			System.out.println("Este es el id prestamo: " + idPrestamo);
 			idPrestamo = Integer.parseInt(request.getParameter("selectPrestamo"));
@@ -120,7 +116,7 @@ public class ServletPagarCuota extends HttpServlet {
 				request.getSession().setAttribute("popUpStatus", "error");
 				request.getSession().setAttribute("mostrarPopUp", true);
 			}
-			response.sendRedirect(request.getContextPath() + "/Usuario/Prestamos/VistaPagarCuotas.jsp");
+			response.sendRedirect(request.getContextPath() + "/Usuarios/Prestamos/ServletPagarCuota");
 
 		}
 	}
