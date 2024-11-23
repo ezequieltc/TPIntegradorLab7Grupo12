@@ -2,6 +2,7 @@ package NegocioImpl;
 
 import java.util.ArrayList;
 
+import Dominio.Cuenta;
 import Dominio.Cuota;
 import Dao.ICuotaDao;
 import DaoImpl.CuotaDaoImpl;
@@ -50,6 +51,39 @@ public class CuotaNegocioImpl {
 		
 		return listadoCuotas;
 
+	}
+	
+	public ArrayList<Cuota> listadoCuotasPorIdPrestamo(int id){
+		ArrayList<Cuota> listadoCuotas = new ArrayList<Cuota>();
+		try {
+			listadoCuotas = cuotaDao.listarCuotasPorIdPrestamo(id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return listadoCuotas;
+	}
+	
+	public Cuota getCuotaPorId(int id) {
+		Cuota cuota = new Cuota();
+		try {
+			cuota = cuotaDao.getCuotaPorId(id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return cuota;
+	}
+	
+	public boolean pagarCuota(Cuota cuota, Cuenta cuenta) {
+		try {
+			cuotaDao.pagarCuota(cuota, cuenta);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+		
+		return true;
 	}
 	
 }

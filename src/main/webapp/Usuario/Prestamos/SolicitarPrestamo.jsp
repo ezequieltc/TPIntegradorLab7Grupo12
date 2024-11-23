@@ -40,7 +40,7 @@
         <form id="PrestamoForm" action="${pageContext.request.contextPath}/Usuarios/Prestamos/ServletSolicitarPrestamo" method="POST" novalidate>
           <div class="mb-3">
             <label for="montoPrestamo" class="form-label">Monto del Préstamo</label>
-            <input type="number" class="form-control" name="montoPrestamo" id="montoPrestamo" placeholder="Ingrese el monto" required>
+            <input type="number" class="form-control" name="montoPrestamo" id="montoPrestamo" min="0" placeholder="Ingrese el monto" required>
           </div>
           <div class="mb-3">
 			<label for="cantCuotas" class="form-label">Cantidad de Cuotas</label>
@@ -98,7 +98,12 @@
 	      alert("Por favor, complete todos los campos correctamente.");
 	      return;
 	    }
-
+		
+	    if (montoPrestamo < 0) {
+	        alert("El monto del préstamo no puede ser negativo.");
+	        return;
+	    }
+	    
 	    const tasaAnual = 0.72;  // Tasa efectiva anual del 72%
 
 	    // Convertir la tasa anual efectiva a tasa mensual
