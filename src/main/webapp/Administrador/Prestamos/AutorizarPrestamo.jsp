@@ -210,31 +210,6 @@
         <p><strong>Apellido:</strong> <%= prestamoModal.getPersona().getApellido() %></p>
         <p><strong>Teléfono:</strong> <%= prestamoModal.getPersona().getTelefono() %></p>
         <p><strong>Correo Electrónico:</strong> <%= prestamoModal.getPersona().getEmail() %></p>
-        <h6>Historial de Pagos de Cuotas</h6>
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Monto de Cuota</th>
-              <th>Fecha Vencimiento</th>
-              <th>Fecha Pago</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>$8,000</td>
-              <td>01/01/2024</td>
-              <td>01/01/2024</td>
-            </tr>
-            <tr>
-              <td>$8,000</td>
-              <td>01/02/2024</td>
-              <td>01/02/2024</td>
-            </tr>
-            <tr>
-              <td>$8,000</td>
-              <td>01/03/2024</td>
-              <td>03/03/2024</td>
-            </tr>
           </tbody>
         </table>
         <% } else { %>
