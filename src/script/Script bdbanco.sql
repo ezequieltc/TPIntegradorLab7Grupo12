@@ -84,24 +84,14 @@ constraint foreign key(id_cuenta) references cuentas(id_cuenta),
 constraint foreign key(id_tipo_movimiento) references tiposmovimiento(id_tipo_movimiento)
 );
  
+ 
 create table transferencias
 (
 id_transferencia int primary key not null auto_increment,
-cuenta_origen int not null,
-cuenta_destino int not null,
-importe decimal not null,
-fecha date not null,
-estado boolean not null,
-constraint foreign key(cuenta_origen) references cuentas(id_cuenta),
-constraint foreign key(cuenta_destino) references cuentas(id_cuenta)
-);
- 
-create table transferencias_x_cuenta
-(
-id_transferencia int not null,
-id_cuenta int not null,
-constraint foreign key(id_transferencia) references transferencias(id_transferencia),
-constraint foreign key(id_cuenta) references cuentas(id_cuenta)
+id_movimiento_origen int not null,
+id_movimiento_destino int not null,
+constraint foreign key(id_movimiento_origen) references movimientos(id_movimiento),
+constraint foreign key(id_movimiento_destino) references movimientos(id_movimiento)
 );
  
 create table  prestamos
@@ -118,14 +108,6 @@ status_prestamo ENUM('PAGO', 'PENDIENTE', 'DEUDA', 'RECHAZADO', 'EN_CURSO') NOT 
 estado boolean not null,
 constraint foreign key(id_cliente) references personas(id_usuario),
 constraint foreign key(id_cuenta) references cuentas(id_cuenta)
-);
- 
-create table prestamos_x_usuario
-(
-id_prestamo int primary key not null,
-id_usuario int not null,
-constraint foreign key(id_prestamo) references prestamos(id_prestamo),
-constraint foreign key(id_usuario) references usuarios(id_usuario)
 );
  
 create table cuotas
@@ -181,7 +163,7 @@ insert into cuentas (id_cliente, id_tipo_cuenta, numero_cuenta, cbu, saldo, fech
  
 insert into tiposmovimiento (descripcion) values 
 ('Deposito'),
-('Retiro'),
+('Pago'),
 ('Transferencia recibida'),
 ('Transferencia enviada');
  
@@ -209,11 +191,7 @@ insert into prestamos (id_cliente, id_cuenta, fecha_alta, importe, cuota_mensual
 (2, 1, '2024-03-01', 5000.00, 450.00, 0, 12, "EN_CURSO", true),
 (3, 2, '2024-03-05', 10000.00, 900.00, 0, 12 , "EN_CURSO", true),
 (4, 3, '2024-03-10', 20000.00, 1800.00, 0, 12, "EN_CURSO", true);
- 
-insert into prestamos_x_usuario (id_prestamo, id_usuario) values 
-(1, 2),
-(2, 3),
-(3, 4);
+
  
 insert into cuotas (id_prestamo, numero_cuota, importe, fecha_pago, estado) values 
 (1, 1, 450.00, '2024-04-01', true),

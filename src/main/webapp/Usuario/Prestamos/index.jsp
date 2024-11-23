@@ -4,6 +4,7 @@
 <%@page import="DaoImpl.PrestamoDaoImpl"%>
 <%@page import="Dao.IPrestamoDao"%>
 <%@page import="tipos.PrestamosStatus" %>
+<%@ page import="java.util.ArrayList" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -109,11 +110,8 @@
         </thead>
         <tbody>
         <%
-        Persona persona1 = (Persona)request.getSession().getAttribute("persona");
-        IPrestamoNegocio prestamos = new PrestamoNegocioImpl();
-        for(Prestamo prestamo : prestamos.getPrestamos(persona1.getId())){
-        	
-
+        ArrayList<Prestamo> prestamos = (ArrayList<Prestamo>)request.getAttribute("prestamos");
+        for(Prestamo prestamo : prestamos){
         %>
             <tr>
                 <td style="text-align: center;"><%=prestamo.getFecha_alta() %></td>

@@ -8,6 +8,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -34,7 +36,7 @@ public class ServletReportes extends HttpServlet {
         request.getRequestDispatcher("/Administrador/InformesReportes.jsp").forward(request, response);
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String tipoReporte = request.getParameter("tipoReporte");
         String fechaDesde = request.getParameter("fechaDesde");
         String fechaHasta = request.getParameter("fechaHasta");
@@ -62,6 +64,7 @@ public class ServletReportes extends HttpServlet {
                         iterator.remove();
                     }
                 }
+
                 double montoTotal = 0;
                 int numeroPrestamos = prestamos.size();
                 int aprobados = 0;
@@ -72,30 +75,41 @@ public class ServletReportes extends HttpServlet {
 
                 for (Prestamo prestamo : prestamos) {
                     montoTotal += prestamo.getImporte();
+
                     String status = prestamo.getStatus().toString();
-                    if (status.equalsIgnoreCase("En_Curso")) {
+                    if (status.equalsIgnoreCase("En_curso")) {
                         aprobados++;
                     } else if (status.equalsIgnoreCase("Pendiente")) {
                         pendientes++;
                     } else if (status.equalsIgnoreCase("Rechazado")) {
                         rechazados++;
-                    }                  
+                    }
+
+                    String mes = monthFormat.format(prestamo.getFecha_alta());
+                    prestamosPorMes.put(mes, prestamosPorMes.getOrDefault(mes, 0) + 1);
                 }
 
                 double montoPromedio = numeroPrestamos > 0 ? montoTotal / numeroPrestamos : 0;
+
                 request.setAttribute("montoTotalPrestamos", montoTotal);
                 request.setAttribute("numeroPrestamos", numeroPrestamos);
                 request.setAttribute("montoPromedioPrestamos", montoPromedio);
                 request.setAttribute("aprobados", aprobados);
                 request.setAttribute("pendientes", pendientes);
                 request.setAttribute("rechazados", rechazados);
+                request.setAttribute("prestamosPorMes", prestamosPorMes);
+
                 request.setAttribute("reporte", prestamos);
 
             } else if (tipoReporte.equals("cuentas")) {
                 Date fechaInicioDate = Date.valueOf(fechaDesde);
                 Date fechaFinDate = Date.valueOf(fechaHasta);
                 CuentaNegocioImpl cuentaNegocio = new CuentaNegocioImpl();
+                PrestamoDaoImpl prestamoDao = new PrestamoDaoImpl();
+
                 ArrayList<Cuenta> cuentas = cuentaNegocio.readAll();
+                ArrayList<Prestamo> prestamos = prestamoDao.getPrestamos();
+
                 Iterator<Cuenta> iterator = cuentas.iterator();
                 while (iterator.hasNext()) {
                     Cuenta cuenta = iterator.next();
@@ -104,37 +118,36 @@ public class ServletReportes extends HttpServlet {
                     }
                 }
 
-                // Calcular estadísticas
                 int numeroCuentas = cuentas.size();
                 double saldoTotal = 0;
                 int cuentasActivas = 0;
                 int cuentasInactivas = 0;
-                Map<String, Integer> cuentasPorMes = new TreeMap<>();
-                SimpleDateFormat monthFormat = new SimpleDateFormat("MM-yyyy");
-
+                int cuentasCorriente = 0;
+                int cuentasCajaAhorro = 0;           
                 for (Cuenta cuenta : cuentas) {
                     saldoTotal += cuenta.getSaldo();
-
-                    // Contar por estado
                     if (cuenta.isEstado()) {
                         cuentasActivas++;
                     } else {
                         cuentasInactivas++;
                     }
-
-                    // Contar cuentas por mes
-                    String mes = monthFormat.format(cuenta.getFechaCreacion());
-                    cuentasPorMes.put(mes, cuentasPorMes.getOrDefault(mes, 0) + 1);
+                    if (cuenta.getTipoCuenta().getDescripcion().equalsIgnoreCase("Cuenta Corriente")) {
+                        cuentasCorriente++;
+                    } else if (cuenta.getTipoCuenta().getDescripcion().equalsIgnoreCase("Caja de Ahorro")) {
+                        cuentasCajaAhorro++;
+                    }                   
                 }
-
+                
+               MovimientoNegocioImpl movimientoNegocio = new MovimientoNegocioImpl();
+               ArrayList<Movimiento> movimientos = (ArrayList<Movimiento>) movimientoNegocio.obtenerTodosLosMovimientos();         
                 double saldoPromedio = numeroCuentas > 0 ? saldoTotal / numeroCuentas : 0;
 
-                // Pasar estadísticas al JSP
                 request.setAttribute("numeroCuentas", numeroCuentas);
                 request.setAttribute("saldoPromedioCuentas", saldoPromedio);
                 request.setAttribute("cuentasActivas", cuentasActivas);
                 request.setAttribute("cuentasInactivas", cuentasInactivas);
-                request.setAttribute("cuentasPorMes", cuentasPorMes);
+                request.setAttribute("cuentasCorriente", cuentasCorriente);
+                request.setAttribute("cuentasCajaAhorro", cuentasCajaAhorro);
 
                 request.setAttribute("reporte", cuentas);
             } else if (tipoReporte.equals("movimientos")) {
@@ -150,34 +163,30 @@ public class ServletReportes extends HttpServlet {
                     }
                 }
 
-                // Calcular estadísticas
+                int contadorTransferencias = 0;
+                int contadorRetiros = 0;
+                int contadorDepositos = 0;
                 double montoTotal = 0;
                 int numeroMovimientos = movimientos.size();
-                Map<String, Double> montoPorTipo = new HashMap<>();
-                Map<String, Integer> movimientosPorMes = new TreeMap<>();
-                SimpleDateFormat monthFormat = new SimpleDateFormat("MM-yyyy");
-
                 for (Movimiento movimiento : movimientos) {
                     montoTotal += movimiento.getImporte();
-
-                    // Acumular montos por tipo de movimiento
                     String tipo = movimiento.getTipoMovimiento().getDescripcion();
-                    montoPorTipo.put(tipo, montoPorTipo.getOrDefault(tipo, 0.0) + movimiento.getImporte());
 
-                    // Contar movimientos por mes
-                    String mes = monthFormat.format(movimiento.getFecha());
-                    movimientosPorMes.put(mes, movimientosPorMes.getOrDefault(mes, 0) + 1);
+                    if (tipo.equalsIgnoreCase("Transferencia recibida") || tipo.equalsIgnoreCase("Transferencia enviada")) {
+                        contadorTransferencias++;
+                    } else if (tipo.equalsIgnoreCase("Retiro")) {
+                        contadorRetiros++;
+                    } else if (tipo.equalsIgnoreCase("Deposito")) {
+                        contadorDepositos++;
+                    }
                 }
-
-                double montoPromedio = numeroMovimientos > 0 ? montoTotal / numeroMovimientos : 0;
-
-                // Pasar estadísticas al JSP
+                double montoPromedio = numeroMovimientos > 0 ? montoTotal / numeroMovimientos : 0;               	                          
                 request.setAttribute("montoTotalMovimientos", montoTotal);
                 request.setAttribute("numeroMovimientos", numeroMovimientos);
                 request.setAttribute("montoPromedioMovimientos", montoPromedio);
-                request.setAttribute("montoPorTipo", montoPorTipo);
-                request.setAttribute("movimientosPorMes", movimientosPorMes);
-
+                request.setAttribute("contadorTransferencias", contadorTransferencias);
+                request.setAttribute("contadorRetiros", contadorRetiros);
+                request.setAttribute("contadorDepositos", contadorDepositos);
                 request.setAttribute("reporte", movimientos);
             } else {
                 request.setAttribute("error", "El tipo de reporte seleccionado no es válido.");
@@ -187,6 +196,7 @@ public class ServletReportes extends HttpServlet {
 
         } catch (Exception e) {
             request.setAttribute("error", "Error al procesar los datos: " + e.getMessage());
+            e.printStackTrace();
             request.getRequestDispatcher("/Administrador/InformesReportes.jsp").forward(request, response);
         }
     }

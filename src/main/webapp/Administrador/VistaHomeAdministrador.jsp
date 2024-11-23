@@ -42,8 +42,6 @@
 
     <div class="container">
         <h2 class="text-center">Panel del Administrador</h2>
-
-        <!-- Tabla de Préstamos -->
         <h5 class="titulo">Préstamos Recientes</h5>
         <% 
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -66,11 +64,31 @@
                             for (Prestamo prestamo : prestamos) {
                 %>
                 <tr>
+                    <tr>
                     <td><%= prestamo.getId() %></td>
                     <td><%= (prestamo.getPersona() != null) ? prestamo.getPersona().getNombre() + " " + prestamo.getPersona().getApellido() : "Sin nombre" %></td>
                     <td><%= prestamo.getImporte() %></td>
                     <td><%= dateFormat.format(prestamo.getFecha_alta()) %></td>
-                    <td><%= prestamo.getStatus() %></td>
+                    <td>
+                        <%
+                            String status = prestamo.getStatus().toString();
+                            String displayStatus = "";
+
+                            if (status.equalsIgnoreCase("EN_CURSO")) {
+                                displayStatus = "Aceptado";
+                            } else if (status.equalsIgnoreCase("PENDIENTE")) {
+                                displayStatus = "Pendiente";
+                            } else if (status.equalsIgnoreCase("RECHAZADO")) {
+                                displayStatus = "Rechazado";
+                            } else if (status.equalsIgnoreCase("PAGO")) {
+                            	displayStatus = "Pago";
+                            } else {
+                                displayStatus = status;
+                            }
+                        %>
+                        <%= displayStatus %>
+                    </td>
+                </tr>
                 </tr>
                 <%
                             }
@@ -85,8 +103,6 @@
                 %>
             </tbody>
         </table>
-
-        <!-- Tabla de Cuentas -->
         <h5 class="titulo" style="margin-top: 40px;">Altas de Cuenta Recientes</h5>
         <table class="table table-bordered table-hover">
             <thead>
