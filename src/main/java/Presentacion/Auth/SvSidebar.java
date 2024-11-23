@@ -56,7 +56,7 @@ public class SvSidebar extends HttpServlet {
         );
 
         return Arrays.asList(
-            new MenuItem("Inicio", request.getContextPath() + "/Administrador/ServletHomeAdministrador"),
+            new MenuItem("Inicio", request.getContextPath() + "/Administrador/Home/ServletHomeAdministrador"),
             new MenuItem("Informes y Reportes", request.getContextPath() + "/Administrador/InformesReportes.jsp"),
             new MenuItem("Cuentas", cuentasSubMenu),
             new MenuItem("Préstamos", prestamosSubMenu),
