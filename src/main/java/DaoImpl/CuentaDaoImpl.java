@@ -22,10 +22,17 @@ public class CuentaDaoImpl implements ICuentaDao {
     private static final String update = "UPDATE cuentas SET id_cliente = ?, id_tipo_cuenta = ?, numero_cuenta = ?, cbu = ?, saldo = ?, fecha_creacion = ?, estado = ? WHERE id_cuenta = ?";
     //private static final String readall = "SELECT * FROM cuentas";
     private static final String readall = "select * from cuentas c inner join personas p on p.id_usuario = c.id_cliente WHERE c.estado = 1 order by c.id_cuenta";
+    private static final String readALlWithDeleted = "select * from cuentas c inner join personas p on p.id_usuario = c.id_cliente order by c.id_cuenta";
     private static final String read = "SELECT c.id_cuenta, c.id_cliente, c.id_tipo_cuenta, c.numero_cuenta, c.cbu, c.saldo, c.fecha_creacion, c.estado, p.id_persona FROM cuentas c inner join personas p on p.id_usuario = c.id_cliente WHERE id_cuenta = ?";
     private static final String readCBU = "SELECT c.id_cuenta, c.id_cliente, c.id_tipo_cuenta, c.numero_cuenta, c.cbu, c.saldo, c.fecha_creacion, c.estado, p.id_persona FROM cuentas c inner join personas p on p.id_usuario = c.id_cliente WHERE cbu = ?";
     private static final String readNumeroCuenta = "SELECT c.id_cuenta, c.id_cliente, c.id_tipo_cuenta, c.numero_cuenta, c.cbu, c.saldo, c.fecha_creacion, c.estado, p.id_persona FROM cuentas c inner join personas p on p.id_usuario = c.id_cliente WHERE numero_cuenta = ?";
     private static final String siguiente = "SELECT MAX(id_cuenta) FROM cuentas";
+    
+    private static final String SELECT_CUENTAS_POR_USUARIO = 
+            "SELECT * from cuentas c INNER JOIN personas p ON p.id_usuario = c.id_cliente WHERE c.estado = 1 AND p.id_usuario = ?";
+
+    
+    
     
     private PersonaDaoImpl personaDao;
     private TipoCuentaDaoImpl tipoCuentaDao;
@@ -44,7 +51,7 @@ public class CuentaDaoImpl implements ICuentaDao {
         Connection conexion = Conexion.getConexion().getSQLConexion();
         boolean isInsertExitoso = false;
         ArrayList<Cuenta> cuentasAll;
-        cuentasAll = readAll();
+        cuentasAll = readAllWithDeleted();
         if(cuentasAll.isEmpty()) {
         	numeroDeCuenta = 1000;
         	CBU = 1000000000000001L;  	
@@ -145,6 +152,23 @@ public class CuentaDaoImpl implements ICuentaDao {
         }
         return cuentas;
     }
+    
+    public ArrayList<Cuenta> readAllWithDeleted() {
+        PreparedStatement statement;
+        ResultSet resultSet;
+        ArrayList<Cuenta> cuentas = new ArrayList<>();
+        Connection conexion = Conexion.getConexion().getSQLConexion();
+        try {
+            statement = conexion.prepareStatement(readALlWithDeleted);
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                cuentas.add(getCuentaFromResultSet(resultSet));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return cuentas;
+    }
 
     private Cuenta getCuentaFromResultSet(ResultSet resultSet) throws SQLException {
         int id = resultSet.getInt("id_cuenta");
@@ -234,16 +258,21 @@ public class CuentaDaoImpl implements ICuentaDao {
     
     @Override
     public ArrayList<Cuenta> getCuentasPorCliente(int Id){
-    	ArrayList<Cuenta> cuentasTemp = new ArrayList<Cuenta>();
-    	cuentasTemp = readAll();
-    	Iterator<Cuenta> iterator = cuentasTemp.iterator();
-    	while (iterator.hasNext()) {
-    	    Cuenta cuenta = iterator.next();
-    	    if (cuenta.getPersona().getUsuario().getId() != Id) {
-    	        iterator.remove();
-    	    }
-    	}
-    	return cuentasTemp;
-    	    	
+    	 PreparedStatement statement;
+         ResultSet resultSet;
+         ArrayList<Cuenta> cuentas = new ArrayList<>();
+         Connection conexion = Conexion.getConexion().getSQLConexion();
+         try {
+             statement = conexion.prepareStatement(SELECT_CUENTAS_POR_USUARIO);
+             statement.setInt(1, Id);
+             resultSet = statement.executeQuery();
+             while (resultSet.next()) {
+                 cuentas.add(getCuentaFromResultSet(resultSet));
+             }
+         } catch (SQLException e) {
+             e.printStackTrace();
+         }
+     	return cuentas;
+    	    
     }
 }
