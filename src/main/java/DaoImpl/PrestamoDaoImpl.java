@@ -29,7 +29,7 @@ public class PrestamoDaoImpl implements IPrestamoDao{
 	PersonaDaoImpl personaDao;
 	CuentaDaoImpl cuentaDao;
 	private static final String read = "SELECT * FROM VW_Prestamos ORDER BY id_Prestamo";
-	private static final String readByUserId = "SELECT * FROM VW_Prestamos where id_persona = ? and estado = 1 ORDER BY id_Prestamo";
+	private static final String readByUserId = "SELECT * FROM VW_Prestamos where id_persona = ? ORDER BY id_Prestamo";
 	private static final String readId = "SELECT * FROM VW_Prestamos WHERE id_Prestamo = ?  and estado = 1";
 	private static final String update = "UPDATE Prestamos SET cuotas_total = ?, status_prestamo = ? WHERE id_Prestamo = ?  and estado = 1 ";
 	private static final String delete = "UPDATE Prestamos SET estado = 0 WHERE id_Prestamo = ? ";
