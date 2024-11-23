@@ -3,6 +3,10 @@
 <%@ page import="tipos.UserTypes" %>
 <%
 	Persona personaAuth = (Persona) request.getSession().getAttribute("persona");
+	if (personaAuth == null){
+		 response.sendRedirect(request.getContextPath() + "/Login.jsp");
+        return;
+	}
     boolean isAdmin = (boolean) request.getSession().getAttribute("isAdmin");
     UserTypes rolPermitido = (UserTypes) request.getAttribute("rolPermitido");
     if(personaAuth==null || (rolPermitido ==  UserTypes.ADMIN && !isAdmin)) {

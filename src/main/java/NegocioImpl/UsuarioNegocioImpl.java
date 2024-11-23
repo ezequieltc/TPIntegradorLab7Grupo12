@@ -1,5 +1,7 @@
 package NegocioImpl;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import Dao.IUsuarioDao;
@@ -7,6 +9,7 @@ import DaoImpl.UsuarioDaoImpl;
 import Dominio.Usuario;
 import Dominio.DTO.PaginatedResponse;
 import Negocio.IUsuarioNegocio;
+import servicios.ddbb.Conexion;
 
 public class UsuarioNegocioImpl implements IUsuarioNegocio{
 
@@ -47,11 +50,31 @@ public class UsuarioNegocioImpl implements IUsuarioNegocio{
 		return usuarioDao.calcularSiguienteId();
 	}
 
-	//@Override
-	/*public ArrayList<Usuario> readAll() {
-		// TODO Auto-generated method stub
-		return null;
-	}*/
+	@Override
+	public void reactivarUsuario(int id) throws SQLException {
+		Connection conexion = Conexion.getConexion().getSQLConexion();
+		try {
+			conexion.setAutoCommit(false);
+
+			// get usuario
+			Usuario usuario = usuarioDao.getUsuario(id);
+
+			if (usuario == null) {
+				throw new Exception("El usuario no existe");
+			}
+
+			// actualizar estado
+			usuario.setEstado(true);
+			usuarioDao.update(usuario);
+			
+			conexion.commit();
+
+		}catch (Exception e) {
+			e.printStackTrace();
+			conexion.rollback();
+			throw new RuntimeException("Hubo un error al reactivar el usuario: " + e.getMessage());
+		}
+	}
 
 
 }

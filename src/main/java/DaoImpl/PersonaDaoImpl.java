@@ -27,12 +27,12 @@ public class PersonaDaoImpl implements IPersonaDao {
 	private static final String delete = "update personas set estado = ? WHERE id_usuario = ?";
 	private static final String update = "update personas set id_usuario = ?, id_sexo = ?, dni = ?, cuil = ?, nombre = ?, apellido = ?, "
 	        + "nacionalidad = ?, fecha_nacimiento = ?, direccion = ?, localidad = ?, provincia = ?, email = ?, telefono = ?, estado = ? WHERE id_persona = ?";
-	private static final String readall = "select * from personas";
+	private static final String readall = "select * from personas where estado = 1";
 	//private static final String readall = "select * from personas where estado = 1 limit ? offset ?";
 	private static final String read = "select id_persona, id_usuario, id_sexo, dni, cuil, nombre, apellido, nacionalidad, fecha_nacimiento,"
-			+ "direccion, localidad, provincia, email, telefono, estado from personas where id_persona = ?";
+			+ "direccion, localidad, provincia, email, telefono, estado from personas where id_persona = ? and estado = 1";
 	private static final String readByUser = "select id_persona, id_usuario, id_sexo, dni, cuil, nombre, apellido, nacionalidad, fecha_nacimiento,"
-			+ "direccion, localidad, provincia, email, telefono, estado from personas where id_usuario = ?";
+			+ "direccion, localidad, provincia, email, telefono, estado from personas where id_usuario = ? and estado = 1";
 	private static final String siguiente = "select max(id_persona) from personas";
 	private static final String count = "select count(*) as total FROM personas";
 	private TipoSexoDaoImpl tipoSexoDao;

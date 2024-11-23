@@ -71,10 +71,32 @@ public class PersonaNegocioImpl implements IPersonaNegocio{
 	}
 
 	@Override
-	public boolean delete(int id) {
-	    boolean estado = false;
-	    estado = personaDao.delete(id);
-	    return estado;
+	public void eliminarPersona(int id)  throws SQLException {
+		Connection conexion = Conexion.getConexion().getSQLConexion();
+		try {
+			conexion.setAutoCommit(false);
+
+			// get persona
+			Persona persona = personaDao.getPersona(id);
+			if (persona == null) {
+				throw new Exception("La persona no existe");
+			}
+
+			// delete usuario
+			Usuario usuario = persona.getUsuario();
+			usuarioDao.delete(usuario);
+
+
+			// delete persona
+			personaDao.delete(id);
+			
+			conexion.commit();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			conexion.rollback();
+			throw new RuntimeException("Hubo un error al eliminar la persona: " + e.getMessage());
+		}
 	}
 
 	@Override
@@ -93,5 +115,6 @@ public class PersonaNegocioImpl implements IPersonaNegocio{
 	public Persona getPersona(int id) {
 		return personaDao.getPersona(id);
 	}
+
 
 }

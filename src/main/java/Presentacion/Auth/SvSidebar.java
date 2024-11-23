@@ -66,9 +66,6 @@ public class SvSidebar extends HttpServlet {
     }
 
     private List<MenuItem> getUserMenu(HttpServletRequest request) {
-        List<MenuItem> preferenciasSubMenu = Arrays.asList(
-            new MenuItem("Preferencias Usuario", request.getContextPath() + "/Usuario/Preferencias")
-        );
 
         List<MenuItem> prestamosSubMenu = Arrays.asList(
             new MenuItem("Préstamos", request.getContextPath() + "/Usuario/Prestamos"),
@@ -83,7 +80,6 @@ public class SvSidebar extends HttpServlet {
 
         return Arrays.asList(
             new MenuItem("Inicio", request.getContextPath() + "/Usuarios/Home/ServletHomeUsuario"),
-            new MenuItem("Preferencias", preferenciasSubMenu),
             new MenuItem("Préstamos", prestamosSubMenu),
             new MenuItem("Transferencias", transferenciasSubMenu),
             new MenuItem("Cerrar Sesión", request.getContextPath() + "/SvLogout")

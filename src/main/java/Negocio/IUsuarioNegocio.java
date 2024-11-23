@@ -1,5 +1,6 @@
 package Negocio;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import Dominio.Usuario;
@@ -10,4 +11,5 @@ public interface IUsuarioNegocio {
 	public boolean delete(Usuario usuario);
 	public boolean update(Usuario usuario);
 	public PaginatedResponse<Usuario> readAll(int pagina);
+	public void reactivarUsuario(int id) throws SQLException;
 }
