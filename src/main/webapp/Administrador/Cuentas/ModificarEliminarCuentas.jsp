@@ -122,9 +122,9 @@
                         <% if (cuentaDatos.isEstado()) { %>
                         <button type="submit" class="btn btn-warning" name="modificarCuenta" id="modificarCuenta" onclick="return confirm('¿Está seguro de que desea actualizar los datos de esta cuenta?')">Modificar Cuenta</button>
                             <button type="submit" class="btn btn-danger" name="eliminarCuenta" id="eliminarCuenta" onclick="return confirm('¿Está seguro de que desea eliminar esta cuenta?')">Eliminar Cuenta</button>
-                        <% } else { %>
-                            <button type="submit" class="btn btn-success" name="reactivarCuenta" id="reactivarCuenta" onclick="return confirm('¿Está seguro de que desea reactivar esta cuenta?')">Reactivar Cuenta</button>
-                        <% } %>
+                         <% } %> <%--else { %> --%>
+<!--                             <button type="submit" class="btn btn-success" name="reactivarCuenta" id="reactivarCuenta" onclick="return confirm('¿Está seguro de que desea reactivar esta cuenta?')">Reactivar Cuenta</button> -->
+<%--                         <% } %> --%>
                     </div>
                     </div>
                 </form>
