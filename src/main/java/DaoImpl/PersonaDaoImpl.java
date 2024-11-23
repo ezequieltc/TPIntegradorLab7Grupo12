@@ -149,7 +149,10 @@ public class PersonaDaoImpl implements IPersonaDao {
 			resultSet = statement.executeQuery();
 			while(resultSet.next())
 			{
-				personas.add(getPersona(resultSet));
+				Persona _persona = getPersona(resultSet);
+				if (_persona.getUsuario().getTipoUsuario().getId() != 1) {
+					personas.add(getPersona(resultSet));					
+				}
 			}
 		} 
 		catch (SQLException e) 

@@ -54,29 +54,40 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response) 
 // TODO Auto-generated method stub
 	PersonaNegocioImpl pNeg = new PersonaNegocioImpl();
 	TipoSexoNegocioImpl tSex = new TipoSexoNegocioImpl();
-	if(request.getParameter("btnConfirmarModificacionUsuario") != null) {
-		int id = Integer.parseInt(request.getParameter("id"));
-		int idSexo = Integer.parseInt(request.getParameter("sexo"));
+	int id = Integer.parseInt(request.getParameter("id"));
+	int idSexo = Integer.parseInt(request.getParameter("sexo"));
 
-		Persona persona = pNeg.getPersona(id);
-		TipoSexo sexo = tSex.getTipoSexo(idSexo);
-		System.out.println(sexo.getId());
+	Persona persona = pNeg.getPersona(id);
+	TipoSexo sexo = tSex.getTipoSexo(idSexo);
+	System.out.println(sexo.getId());
 
-		//System.out.println("BotÃ³n Guardar presionado, redirigiendo a /ServletUsuarios");
+	//System.out.println("BotÃ³n Guardar presionado, redirigiendo a /ServletUsuarios");
 
-		persona.setTipoSexo(sexo);;
-		        persona.setDireccion(request.getParameter("direccion"));
-		        persona.setLocalidad(request.getParameter("localidad"));
-		        persona.setProvincia(request.getParameter("provincia"));
-		        persona.setEmail(request.getParameter("email"));
-		        persona.setTelefono(request.getParameter("telefono"));
-		        
-		pNeg.update(persona);
+	persona.setTipoSexo(sexo);;
+	        persona.setDireccion(request.getParameter("direccion"));
+	        persona.setLocalidad(request.getParameter("localidad"));
+	        persona.setProvincia(request.getParameter("provincia"));
+	        persona.setEmail(request.getParameter("email"));
+	        persona.setTelefono(request.getParameter("telefono"));
+	
+	        try {
+	    		pNeg.update(persona);
+	    		
+	            request.getSession().setAttribute("mensajeExito", "¡Usuario modificado exitosamente!");
+	            request.getSession().setAttribute("mostrarPopUp", true);
+	            request.getSession().setAttribute("popUpStatus", "success");
 
-		request.setAttribute("persona", persona);
-		RequestDispatcher rd = request.getRequestDispatcher("/Administrador/Usuarios/ServletUsuarios");
-		rd.forward(request, response);
-		}
+	        }catch(Exception e) {
+                request.getSession().setAttribute("mensajeError", e.getMessage());
+    			request.getSession().setAttribute("popUpStatus", "error");
+    			request.getSession().setAttribute("mostrarPopUp", true);
+	        }
+	        
+
+	
+
+	request.setAttribute("persona", persona);
+	response.sendRedirect(request.getContextPath() + "/Administrador/Usuarios/ServletUsuarios");
+	}
 }
 
-}

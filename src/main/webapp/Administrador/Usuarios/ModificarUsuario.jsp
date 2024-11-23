@@ -41,6 +41,8 @@
         <p><strong>Nombre:</strong> ${personaModificada.getNombre()}</p>
         <p><strong>Apellido:</strong> ${personaModificada.getApellido()}</p>
         <p><strong>Sexo:</strong> ${personaModificada.getTipoSexo().getDescripcion()}</p>
+        
+       	
         <p><strong>Nacionalidad:</strong> ${personaModificada.getNacionalidad()}</p>
         <p><strong>Fecha de Nacimiento:</strong> ${personaModificada.getFechaNacimiento()}</p>
         <p><strong>Usuario:</strong> ${personaModificada.getUsuario().getUsuario()}</p>
@@ -57,7 +59,7 @@
             <h4>Información de Contacto</h4>
             <form action="${pageContext.request.contextPath}/Administrador/Usuarios/ServletModificarUsuario" method="post">
                 <input type="hidden" name="id" value="${personaModificada.getId()}">
-
+				<input type="hidden" name="sexo" value="${personaModificada.getTipoSexo().getId() }">
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
@@ -90,9 +92,9 @@
                     <button type="submit" class="btn btn-success" name="btnConfirmarModificacionUsuario">Guardar Cambios</button>
                     
                     <% if (personaModificada.isEstado()) { %>
-                        <button type="button" class="btn btn-danger" onclick="confirmarDesactivacion()">Eliminar Usuario - <%= personaModificada.isEstado() %></button>
+                        <button type="button" class="btn btn-danger" onclick="confirmarDesactivacion()">Eliminar Usuario</button>
                     <% } if (!personaModificada.getUsuario().getEstado()) { %>
-                        <button type="button" class="btn btn-primary" onclick="confirmarReactivacion()">Reactivar Usuario - <%= personaModificada.isEstado() %></button>
+                        <button type="button" class="btn btn-primary" onclick="confirmarReactivacion()">Reactivar Usuario</button>
                     <% } %>
                 </div>
             </form>
