@@ -167,36 +167,3 @@ insert into tiposmovimiento (descripcion) values
 ('Transferencia recibida'),
 ('Transferencia enviada');
  
-insert into movimientos (id_cuenta, id_tipo_movimiento, fecha, detalle, importe, estado) values 
-(1, 1, '2024-02-05', 'deposito inicial', 1000.00, true),
-(1, 2, '2024-02-10', 'retiro en cajero', 500.00, true),
-(2, 3, '2024-02-12', 'transferencia recibida', 2000.00, true),
-(2, 4, '2024-02-14', 'transferencia enviada', 1500.00, true),
-(3, 1, '2024-03-01', 'deposito ahorro', 3000.00, true);
- 
-insert into transferencias (cuenta_origen, cuenta_destino, importe, fecha, estado) values 
-(1, 2, 200.00, '2024-02-15', true),
-(2, 3, 300.00, '2024-03-01', true),
-(3, 1, 500.00, '2024-03-05', true);
- 
-insert into transferencias_x_cuenta (id_transferencia, id_cuenta) values 
-(1, 1),
-(1, 2),
-(2, 2),
-(2, 3),
-(3, 3),
-(3, 1);
- 
-insert into prestamos (id_cliente, id_cuenta, fecha_alta, importe, cuota_mensual, cuotas_total, cantidad_cuotas, status_prestamo, estado) values 
-(2, 1, '2024-03-01', 5000.00, 450.00, 0, 12, "EN_CURSO", true),
-(3, 2, '2024-03-05', 10000.00, 900.00, 0, 12 , "EN_CURSO", true),
-(4, 3, '2024-03-10', 20000.00, 1800.00, 0, 12, "EN_CURSO", true);
-
- 
-insert into cuotas (id_prestamo, numero_cuota, importe, fecha_pago, estado) values 
-(1, 1, 450.00, '2024-04-01', true),
-(1, 2, 450.00, '2024-05-01', true),
-(2, 1, 900.00, '2024-04-05', true),
-(2, 2, 900.00, '2024-05-05', true),
-(3, 1, 1800.00, '2024-04-10', true),
-(3, 2, 1800.00, '2024-05-10', true);
