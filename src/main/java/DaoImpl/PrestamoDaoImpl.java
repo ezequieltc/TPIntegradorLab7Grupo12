@@ -2,6 +2,7 @@ package DaoImpl;
 
 import Dao.IPrestamoDao;
 import Dominio.Cuenta;
+import Dominio.Cuota;
 import Dominio.Movimiento;
 import Dominio.Persona;
 import Dominio.Prestamo;
@@ -13,8 +14,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
+
+import NegocioImpl.CuentaNegocioImpl;
+import NegocioImpl.CuotaNegocioImpl;
 import NegocioImpl.MovimientoNegocioImpl;
 
 public class PrestamoDaoImpl implements IPrestamoDao{
@@ -22,10 +29,10 @@ public class PrestamoDaoImpl implements IPrestamoDao{
 	PersonaDaoImpl personaDao;
 	CuentaDaoImpl cuentaDao;
 	private static final String read = "SELECT * FROM VW_Prestamos ORDER BY id_Prestamo";
-	private static final String readByUserId = "SELECT * FROM VW_Prestamos where id_persona = ? ORDER BY id_Prestamo";
-	private static final String readId = "SELECT * FROM VW_Prestamos WHERE id_Prestamo = ?";
-	private static final String update = "UPDATE Prestamos SET cuotas_total = ?, status_prestamo = ? WHERE id_Prestamo = ? ";
-	private static final String delete = "UPDATE Prestamos SET estado = 0 WHERE id_Prestamo = ?";
+	private static final String readByUserId = "SELECT * FROM VW_Prestamos where id_persona = ? and estado = 1 ORDER BY id_Prestamo";
+	private static final String readId = "SELECT * FROM VW_Prestamos WHERE id_Prestamo = ?  and estado = 1";
+	private static final String update = "UPDATE Prestamos SET cuotas_total = ?, status_prestamo = ? WHERE id_Prestamo = ?  and estado = 1 ";
+	private static final String delete = "UPDATE Prestamos SET estado = 0 WHERE id_Prestamo = ? ";
 	private static final String insert = "INSERT INTO Prestamos(id_cliente, id_cuenta, fecha_alta, importe, cuota_mensual, cuotas_total, cantidad_cuotas,status_prestamo, estado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	
 	public PrestamoDaoImpl() {
@@ -38,12 +45,12 @@ public class PrestamoDaoImpl implements IPrestamoDao{
 	public boolean insert(Prestamo prestamo) {
 		Prestamo prestamoInsert = prestamo;
 		MovimientoNegocioImpl movimientoNegocio = new MovimientoNegocioImpl();
+		
 		PreparedStatement statement;
         Connection conexion = Conexion.getConexion().getSQLConexion();
         boolean isInsertExitoso = false;
         prestamoInsert.setFecha_alta(new java.sql.Date(System.currentTimeMillis()));
         prestamoInsert.setStatus(PrestamosStatus.PENDIENTE);
-        prestamoInsert.setTotal_pagado(0);
         prestamoInsert.setEstado(true);
         System.out.println("El siguiente ID es:" + getSiguienteID());
 		try { 
@@ -69,6 +76,7 @@ public class PrestamoDaoImpl implements IPrestamoDao{
 			e1.printStackTrace(); 
 			} 
 		}
+
         return isInsertExitoso;
 		
 	}
@@ -80,6 +88,11 @@ public class PrestamoDaoImpl implements IPrestamoDao{
 	
 	@Override
 	public boolean update(Prestamo prestamo) {
+		MovimientoNegocioImpl movimientoNegocio = new MovimientoNegocioImpl();
+		CuotaNegocioImpl cuotaNegocio = new CuotaNegocioImpl();
+		CuentaNegocioImpl cuentaNegocio = new CuentaNegocioImpl();
+		Cuenta cuentaTemp = new Cuenta();
+		cuentaTemp = cuentaNegocio.getCuenta(prestamo.getCuenta().getId());
 		PreparedStatement statement;
 		Connection conexion = Conexion.getConexion().getSQLConexion();
 		boolean isUpdateExitoso = false;
@@ -106,8 +119,25 @@ public class PrestamoDaoImpl implements IPrestamoDao{
 				e1.printStackTrace();
 			}
 		}
-		
-		
+
+		for (int i = 0; i<prestamo.getCantidad_cuotas(); i++) {
+			Cuota cuotaTemp = new Cuota();
+			cuotaTemp.setId_prestamo(prestamo.getId());
+			cuotaTemp.setNumero_cuota(i+1);
+			cuotaTemp.setImporte(prestamo.getCuota_mensual());
+			LocalDate localDate = LocalDate.parse( new SimpleDateFormat("yyyy-MM-dd").format(prestamo.getFecha_alta()));
+			LocalDate fechaConUnMesMas = localDate.plusMonths(i+1);
+			Date nuevaFecha = Date.from(fechaConUnMesMas.atStartOfDay(ZoneId.systemDefault()).toInstant());
+			cuotaTemp.setFecha_pago(nuevaFecha);
+			cuotaTemp.setEstado(true);
+			cuotaNegocio.insertarCuota(cuotaTemp);
+		}
+		double importe = prestamo.getImporte();
+		Movimiento movimiento = new Movimiento(prestamo.getCuenta().getId(), new TipoMovimiento(1,"Deposito"), new java.util.Date(System.currentTimeMillis()), "Aprobación de prestamo ID " + prestamo.getId(), importe, true);
+		movimientoNegocio.insertarMovimiento(movimiento);
+		double nuevoSaldo = cuentaTemp.getSaldo() + prestamo.getImporte();
+		cuentaTemp.setSaldo(nuevoSaldo);
+		cuentaNegocio.update(cuentaTemp);
 		return isUpdateExitoso;
 		
 	}

@@ -59,21 +59,6 @@ public class ServletAprobarPrestamo extends HttpServlet {
 		prestamo.setStatus(PrestamosStatus.EN_CURSO);
 		try {
 			prestamoNegocio.update(prestamo);
-			double importe = prestamo.getImporte();
-			Movimiento movimiento = new Movimiento(prestamo.getCuenta().getId(), new TipoMovimiento(1,"Deposito"), new java.util.Date(System.currentTimeMillis()), "Aprobación de prestamo ID " + prestamo.getId(), importe, true);
-			movimientoNegocio.insertarMovimiento(movimiento);
-			for (int i = 0; i<prestamo.getCantidad_cuotas(); i++) {
-				Cuota cuotaTemp = new Cuota();
-				cuotaTemp.setId_prestamo(prestamo.getId());
-				cuotaTemp.setNumero_cuota(i+1);
-				cuotaTemp.setImporte(prestamo.getCuota_mensual());
-				LocalDate localDate = LocalDate.parse( new SimpleDateFormat("yyyy-MM-dd").format(prestamo.getFecha_alta()));
-				LocalDate fechaConUnMesMas = localDate.plusMonths(i+1);
-				Date nuevaFecha = Date.from(fechaConUnMesMas.atStartOfDay(ZoneId.systemDefault()).toInstant());
-				cuotaTemp.setFecha_pago(nuevaFecha);
-				cuotaTemp.setEstado(true);
-				cuotaNegocio.insertarCuota(cuotaTemp);
-			}
 			System.out.println(cuotas.toString());
 			request.getSession().setAttribute("mensajeExito", "¡El prestamo fue aprobado correctamente!");
 			request.getSession().setAttribute("mostrarPopUp", true);

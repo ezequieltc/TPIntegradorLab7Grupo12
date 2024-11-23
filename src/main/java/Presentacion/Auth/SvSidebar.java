@@ -69,7 +69,7 @@ public class SvSidebar extends HttpServlet {
 
         List<MenuItem> prestamosSubMenu = Arrays.asList(
             new MenuItem("Préstamos", request.getContextPath() + "/Usuarios/Prestamos/ServletPrestamos"),
-            new MenuItem("Pagar Cuotas", request.getContextPath() + "/Usuario/Prestamos/VistaPagarCuotas.jsp"),
+            new MenuItem("Pagar Cuotas", request.getContextPath() + "/Usuarios/Prestamos/ServletPagarCuota"),
             new MenuItem("Solicitar Préstamo", request.getContextPath() + "/Usuarios/Prestamos/ServletSolicitarPrestamo")
         );
 

@@ -64,9 +64,10 @@ public class ServletSolicitarPrestamo extends HttpServlet {
 		float tasaMensual = (float) Math.pow(1 + tasaAnual, 1.0 / 12.0) - 1;
 		float pagoMensual = montoPrestamo * (tasaMensual / (float) (1 - Math.pow(1 + tasaMensual, -cantCuotas)));
 		float pagoTotal = pagoMensual * cantCuotas;
-		prestamoTemp.setImporte(pagoTotal);
+		prestamoTemp.setImporte(montoPrestamo);
 		prestamoTemp.setCuota_mensual(pagoMensual);
 		prestamoTemp.setCantidad_cuotas(cantCuotas);
+		prestamoTemp.setTotal_pagado(pagoTotal);
 		try {
 			prestamoNegocio.insert(prestamoTemp);
 			request.getSession().setAttribute("mensajeExito", "¡Su prestamo fue solicitado correctamente! Ahora solo te queda esperar a que lo aprueben.");
